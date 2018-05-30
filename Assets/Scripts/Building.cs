@@ -2,136 +2,129 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour {
+public class Building : MonoBehaviour
+{
     [System.Serializable]
     public class Build
     {
-        public float x;
-        public float y;
+        public float MaxX
+        {
+            get { return this.Center.x + this.Size.x * 0.5f; }
+        }
+        public float MinX
+        {
+            get { return this.Center.x - this.Size.x * 0.5f; }
+        }
+        public float MaxZ
+        {
+            get { return this.Center.y + this.Size.z * 0.5f; }
+        }
+        public float MinZ
+        {
+            get { return this.Center.y - this.Size.z * 0.5f; }
+        }
 
-        public float sx;
-        public float sy;
-        public float sh;
+        public Vector2 Center;
+        public Vector3 Size;
+
+
+        public bool IsSuffer(Build other)
+        {
+            return other.MaxX <= this.MaxX && other.MinX >= this.MinX && other.MaxZ <= this.MaxZ && other.MinZ >= this.MinZ;
+        }
     }
 
-    public float centerX = 0f;
-    public float centerY = 0f;
-    public float fieldX = 10f;
-    public float fieldY = 10f;
+    public float groundHeight = 1f;
+    public float groundX = 10f;
+    public float groundY = 10f;
+    public float groundRateX = 0.5f;
+    public float groundRateY = 0.5f;
 
+    [Space]
+    public float mainHeight = 25f;
+
+    [Space]
     public List<Build> builds = new List<Build>();
 
 
     private void Awake()
     {
-        var sx = Random.Range(this.fieldX * 0.6f, this.fieldX * 0.8f);
-        var sy = Random.Range(this.fieldY * 0.6f, this.fieldY * 0.8f);
-
-        var x = this.centerX + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, (this.fieldX - sx) / 2f);
-        var y = this.centerY + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, (this.fieldY - sy) / 2f);
-
-        this.builds.Add(new Build()
+        // ground
+        var groundSize = new Vector2(
+            this.groundX * Random.Range(this.groundRateX, 1f),
+            this.groundY * Random.Range(this.groundRateY, 1f)
+        );
+        var ground = new Build()
         {
-            x = x,
-            y = y,
-            sx = sx,
-            sy = sy,
-            sh = Random.Range(40f, 50f)
-        });
-
-
-        // bottom
-        var d = (y - sy * 0.5f) - (this.centerY - this.fieldY * 0.5f);
-        if(d > sy * 0.2f)
+            Center = Vector2.zero,
+            Size = new Vector3(groundSize.x, this.groundHeight, groundSize.y)
+        };
+        this.builds.Add(ground);
+        
+        do
         {
-            var bx = Random.Range(sx * 0.2f, sx * 0.5f);
+            var rate = new Vector2(Random.Range(0.5f, 0.75f), Random.Range(0.5f, 0.75f));
+
+            var size = new Vector2(
+                groundSize.x * rate.x,
+                groundSize.y * rate.y
+            );
+
+            var half = size * 0.5f;
+            var pos = new Vector2(
+                Random.Range(ground.MinX + half.x, ground.MaxX - half.x),
+                Random.Range(ground.MinZ + half.y, ground.MaxZ - half.y)
+            );
 
             this.builds.Add(new Build()
             {
-                x = x + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, bx * 0.5f),
-                y = y - Random.Range(sy * 0.1f, d),
-                sx = bx,
-                sy = sy,
-                sh = Random.Range(15f, 40f)
+                Center = pos,
+                Size = new Vector3(size.x, Random.value * this.mainHeight, size.y)
             });
+
+
+            //var half = size * 0.5f;
+            //var pos = new Vector2(Random.Range(0f, half.x), Random.Range(0f, half.y));
+
+            //pos.x = Mathf.Clamp(pos.x, 0f, size.x);
+            //pos.y = Mathf.Clamp(pos.y, 0f, size.y);
+
+            //this.builds.Add(new Build()
+            //{
+            //    Center = new Vector2(pos.x * (Random.value < 0.5f ? -1 : 1), pos.y * (Random.value < 0.5f ? -1 : 1)),
+            //    Size = new Vector3(size.x, Random.value * this.mainHeight, size.y)
+            //});
         }
-
-        // top
-        d = (this.centerY + this.fieldY * 0.5f) - (y + sy * 0.5f);
-        if(d > sy * 0.2f)
-        {
-            var bx = Random.Range(sx * 0.2f, sx * 0.5f);
-
-            this.builds.Add(new Build()
-            {
-                x = x + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, bx * 0.5f),
-                y = y + Random.Range(sy * 0.1f, d),
-                sx = bx,
-                sy = sy,
-                sh = Random.Range(15f, 40f)
-            });
-        }
-
-        // left
-        d = (x - sx * 0.5f) - (this.centerX - this.fieldX * 0.5f);
-        if(d > sx * 0.2f)
-        {
-            var by = Random.Range(sy * 0.2f, sy * 0.5f);
-
-            this.builds.Add(new Build()
-            {
-                x = x - Random.Range(sx * 0.1f, d),
-                y = y + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, by * 0.5f),
-                sx = sx,
-                sy = by,
-                sh = Random.Range(15f, 40f)
-            });
-        }
-
-        // right
-        d = (this.centerX + this.fieldX * 0.5f) - (x + sx * 0.5f);
-        if(d > sx * 0.2f)
-        {
-            var by = Random.Range(sy * 0.2f, sy * 0.5f);
-
-            this.builds.Add(new Build()
-            {
-                x = x + Random.Range(sx * 0.1f, d),
-                y = y + (Random.value > 0.5f ? 1f : -1f) * Random.Range(0f, by * 0.5f),
-                sx = sx,
-                sy = by,
-                sh = Random.Range(15f, 40f)
-            });
-        }
+        while(false);
     }
-    
+
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(
-            new Vector3(this.centerX, 0f, this.centerY),
-            new Vector3(this.fieldX, 0f, this.fieldY)
-        );
-
         if(this.builds.Count <= 0)
         {
             return;
         }
 
-        Gizmos.color = Color.blue;
-        var b = this.builds[0];
-        Gizmos.DrawWireCube(
-            new Vector3(b.x, 0f, b.y),
-            new Vector3(b.sx, 0f, b.sy)
-        );
-        Gizmos.DrawCube(new Vector3(b.x, 0f, b.y), new Vector3(0.5f, 0.1f, 0.5f));
-
-        Gizmos.color = Color.red;
-        foreach(var bb in this.builds)
+        for(var i = 0; i < this.builds.Count; i++)
         {
-            Gizmos.DrawWireCube(
-                new Vector3(bb.x, 0f, bb.y),
-                new Vector3(bb.sx, 0f, bb.sy)
-            );
+            this.BuildGizmos(this.builds[i]);
         }
+    }
+
+    private void BuildGizmos(Build build)
+    {
+        var y = build.Size.y * 0.5f;
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawCube(
+            new Vector3(build.Center.x, y, build.Center.y),
+            build.Size
+        );
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(
+            new Vector3(build.Center.x, y, build.Center.y),
+            build.Size
+        );
     }
 }
