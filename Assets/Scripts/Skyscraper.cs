@@ -1,60 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class Skyscraper : MonoBehaviour {
+public class Skyscraper : MonoBehaviour
+{
     [System.Serializable]
-    public class Build
+    public struct Build
     {
         public float MaxX
         {
-            get { return this.Center.x + this.Size.x * 0.5f; }
+            get { return this.center.x + this.size.x * 0.5f; }
         }
         public float MinX
         {
-            get { return this.Center.x - this.Size.x * 0.5f; }
+            get { return this.center.x - this.size.x * 0.5f; }
         }
         public float MaxZ
         {
-            get { return this.Center.y + this.Size.z * 0.5f; }
+            get { return this.center.y + this.size.z * 0.5f; }
         }
         public float MinZ
         {
-            get { return this.Center.y - this.Size.z * 0.5f; }
+            get { return this.center.y - this.size.z * 0.5f; }
         }
 
-        public Vector2 BottomLeft
-        {
-            get { return new Vector2(this.MinX, this.MinZ); }
-        }
-        public Vector2 BottomRight
-        {
-            get { return new Vector2(this.MaxX, this.MinZ); }
-        }
-        public Vector2 TopLeft
-        {
-            get { return new Vector2(this.MinX, this.MaxZ); }
-        }
-        public Vector2 TopRight
-        {
-            get { return new Vector2(this.MaxX, this.MaxZ); }
-        }
-
-        public Vector2 Center;
-        public Vector3 Size;
-
-
-        public bool IsSuffer(Build other)
-        {
-            return other.MaxX <= this.MaxX && other.MinX >= this.MinX && other.MaxZ <= this.MaxZ && other.MinZ >= this.MinZ;
-        }
-
-        public bool IsContains(Vector2 point)
-        {
-            return point.x >= this.MinX && point.x <= this.MaxX && point.y >= this.MinZ && point.y <= this.MaxZ;
-        }
+        public Vector3 center;
+        public Color color;
+        public Vector3 size;
     }
-
 
     public float groundHeight = 1f;
     public float groundX = 10f;
@@ -66,73 +40,103 @@ public class Skyscraper : MonoBehaviour {
     public float mainHeight = 25f;
     [Space]
     public List<Build> builds = new List<Build>();
+    [Space]
+    public Material mat = null;
+
+    private ComputeBuffer buffer = null;
 
 
     private void Awake()
     {
+        //this.CreateBuild(Vector3.zero);
+        //this.CreateBuild(new Vector3(this.groundX + 5f, 0f, 0f));
+
+        this.builds.Add(new Build
+        {
+            center = new Vector3(0f, 0.5f, 0f),
+            color = Color.white,
+            size = new Vector3(10f, 1f, 10f)
+        });
+        this.builds.Add(new Build
+        {
+            center = new Vector3(0f, 5f, 0f),
+            color = Color.black,
+            size = new Vector3(5f, 10f, 5f)
+        });
+
+        this.builds.Add(new Build
+        {
+            center = new Vector3(20f, 0.5f, 0f),
+            color = Color.white,
+            size = new Vector3(10f, 1f, 10f)
+        });
+        this.builds.Add(new Build
+        {
+            center = new Vector3(20f, 5f, 0f),
+            color = Color.black,
+            size = new Vector3(5f, 10f, 5f)
+        });
+    }
+    
+    private void Start()
+    {
+        this.buffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
+        this.buffer.SetData(this.builds.ToArray());
+    }
+
+    private void OnRenderObject()
+    {
+        this.mat.SetPass(0);
+        this.mat.SetBuffer("_data", this.buffer);
+        this.mat.SetInt("_parts_count", 2);
+
+        Graphics.DrawProcedural(MeshTopology.Points, 2, (int)(this.buffer.count * 0.5f));
+    }
+
+    private void OnDestroy()
+    {
+        this.buffer.Release();
+    }
+
+    private void CreateBuild(Vector3 offset)
+    {
         // ground
-        var groundSize = new Vector2(
+        var groundSize = new Vector3(
             this.groundX * Random.Range(this.groundRateX, 1f),
+            this.groundHeight,
             this.groundY * Random.Range(this.groundRateY, 1f)
         );
         var ground = new Build()
         {
-            Center = Vector2.zero,
-            Size = new Vector3(groundSize.x, this.groundHeight, groundSize.y)
+            center = offset,
+            size = groundSize
         };
 
         var first = this.CreateBuild(ground);
-        this.builds.Add(first);
-
 
         this.builds.Add(ground);
-    }
-
-    private Build CreateBuild(Vector2 groundSize)
-    {
-        var rate = new Vector2(Random.Range(0.5f, 0.75f), Random.Range(0.5f, 0.75f));
-
-        var size = new Vector2(
-            groundSize.x * rate.x,
-            groundSize.y * rate.y
-        );
-
-        return new Build()
-        {
-            Center = Vector3.zero,
-            Size = new Vector3(size.x, Random.value * this.mainHeight, size.y)
-        };
+        this.builds.Add(first);
     }
 
     private Build CreateBuild(Build ground)
     {
-        var build = this.CreateBuild(new Vector2(ground.Size.x, ground.Size.z));
+        var rate = new Vector2(Random.Range(0.5f, 0.75f), Random.Range(0.5f, 0.75f));
 
-        var half = new Vector2(build.Size.x, build.Size.z) * 0.5f;
-        build.Center = new Vector2(
-            Random.Range(ground.MinX + half.x, ground.MaxX - half.x),
-            Random.Range(ground.MinZ + half.y, ground.MaxZ - half.y)
+        var size = new Vector3(
+            ground.size.x * rate.x,
+            Random.value * this.mainHeight,
+            ground.size.y * rate.y
         );
 
-        return build;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(this.builds.Count < 2)
+        var half = size * 0.5f;
+        return new Build()
         {
-            return;
-        }
-
-        this.BuildGizmos(this.builds[0], Color.white);
-        this.BuildGizmos(this.builds[this.builds.Count - 1], Color.red);
-    }
-
-    private void BuildGizmos(Build build, Color color)
-    {
-        var y = build.Size.y * 0.5f;
-
-        Gizmos.color = color;
-        Gizmos.DrawWireCube(new Vector3(build.Center.x, y, build.Center.y), build.Size);
+            size = size,
+            center = (new Vector3(
+                Random.Range(ground.MinX + half.x, ground.MaxX - half.x),
+                half.y,
+                Random.Range(ground.MinZ + half.z, ground.MaxZ - half.z)
+            ))
+        };
     }
 }

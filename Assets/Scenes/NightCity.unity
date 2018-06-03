@@ -192,6 +192,7 @@ MonoBehaviour:
   groundRateY: 0.5
   mainHeight: 25
   builds: []
+  mat: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
 --- !u!4 &344241699
 Transform:
   m_ObjectHideFlags: 0
