@@ -128,7 +128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &330041993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +190,8 @@ MonoBehaviour:
   groundY: 10
   groundRateX: 0.5
   groundRateY: 0.5
-  mainHeight: 25
+  mainHeight: 2
+  builds: []
 --- !u!4 &344241699
 Transform:
   m_ObjectHideFlags: 0
