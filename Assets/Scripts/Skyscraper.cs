@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
-{
+public class Skyscraper : MonoBehaviour {
     [System.Serializable]
     public class Build
     {
@@ -56,6 +55,7 @@ public class Building : MonoBehaviour
         }
     }
 
+
     public float groundHeight = 1f;
     public float groundX = 10f;
     public float groundY = 10f;
@@ -84,57 +84,8 @@ public class Building : MonoBehaviour
         var first = this.CreateBuild(ground);
         this.builds.Add(first);
 
-        //var counter = 0;
-        //do
-        //{
-        //    var build = this.CreateBuild(groundSize);
 
-        //    counter++;
-        //    for(var i = 0; i < this.builds.Count; i++)
-        //    {
-        //        var b = this.builds[i];
-
-        //        var min = new Vector2(b.MinX - ground.MinX, b.MinZ - ground.MinZ);
-        //        var max = new Vector2(ground.MaxX - b.MaxX, ground.MaxZ - b.MaxZ);
-
-        //        var isLeft = min.x > max.x;
-        //        var isBototm = min.y > max.y;
-
-        //        var randX = isLeft ? Random.Range(ground.MinX, b.MinX) : Random.Range(b.MaxX, ground.MaxX);
-        //        var randY = isBototm ? Random.Range(ground.MinZ, b.MinZ) : Random.Range(b.MaxZ, ground.MaxZ);
-
-        //        var half = new Vector2(build.Size.x, build.Size.z) * 0.5f;
-        //        build.Center = new Vector2(
-        //            randX - (isLeft ? -half.x : half.x),
-        //            randY - (isBototm ? -half.y : half.y)
-        //        );
-
-        //        bool bl = false, br = false, tl = false, tr = false;
-        //        for(var j = 0; j < this.builds.Count && !(bl & br & tl & tr); j = j + ((j + 1) == i ? 2 : 1))
-        //        {
-        //            bl = bl | this.builds[j].IsContains(build.BottomLeft);
-        //            br = br | this.builds[j].IsContains(build.BottomRight);
-        //            tl = tl | this.builds[j].IsContains(build.TopLeft);
-        //            tr = tr | this.builds[j].IsContains(build.TopRight);
-        //        }
-
-        //        if((bl & br & tl & tr) == false)
-        //        {
-        //            this.builds.Add(build);
-
-
-        //            this.builds.Add(ground);
-        //            return;
-
-
-
-        //            counter = 0;
-        //            break;
-        //        }
-        //    }
-        //}
-        //while(counter < 5);
-
+        this.builds.Add(ground);
     }
 
     private Build CreateBuild(Vector2 groundSize)
@@ -168,18 +119,13 @@ public class Building : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if(this.builds.Count <= 2)
+        if(this.builds.Count < 2)
         {
             return;
         }
 
         this.BuildGizmos(this.builds[0], Color.white);
         this.BuildGizmos(this.builds[this.builds.Count - 1], Color.red);
-        
-        for(var i = 1; i < this.builds.Count - 1; i++)
-        {
-            this.BuildGizmos(this.builds[i], Color.black);
-        }
     }
 
     private void BuildGizmos(Build build, Color color)
@@ -187,20 +133,6 @@ public class Building : MonoBehaviour
         var y = build.Size.y * 0.5f;
 
         Gizmos.color = color;
-        Gizmos.DrawWireCube(new Vector3(build.Center.x, y, build.Center.y), new Vector3(build.Size.x, 0.1f, build.Size.z));
-
-        //var y = build.Size.y * 0.5f;
-
-        //Gizmos.color = Color.black;
-        //Gizmos.DrawCube(
-        //    new Vector3(build.Center.x, y, build.Center.y),
-        //    build.Size
-        //);
-
-        //Gizmos.color = Color.white;
-        //Gizmos.DrawWireCube(
-        //    new Vector3(build.Center.x, y, build.Center.y),
-        //    build.Size
-        //);
+        Gizmos.DrawWireCube(new Vector3(build.Center.x, y, build.Center.y), build.Size);
     }
 }
