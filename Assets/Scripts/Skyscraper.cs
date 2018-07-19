@@ -28,6 +28,7 @@ public class Skyscraper : MonoBehaviour
         public Vector3 center;
         public Color color;
         public Vector3 size;
+        public Vector3 baseSize;
     }
 
     public float groundHeight = 1f;
@@ -54,27 +55,17 @@ public class Skyscraper : MonoBehaviour
         this.builds.Add(new Build
         {
             center = new Vector3(0f, 0.5f, 0f),
-            color = Color.white,
-            size = new Vector3(10f, 1f, 10f)
-        });
-        this.builds.Add(new Build
-        {
-            center = new Vector3(0f, 5f, 0f),
             color = Color.black,
-            size = new Vector3(5f, 10f, 5f)
+            size = new Vector3(5f, 10f, 5f),
+            baseSize = new Vector3(10f, 1f, 10f)
         });
 
         this.builds.Add(new Build
         {
             center = new Vector3(20f, 0.5f, 0f),
-            color = Color.white,
-            size = new Vector3(10f, 1f, 10f)
-        });
-        this.builds.Add(new Build
-        {
-            center = new Vector3(20f, 5f, 0f),
             color = Color.black,
-            size = new Vector3(5f, 10f, 5f)
+            size = new Vector3(5f, 10f, 5f),
+            baseSize = new Vector3(10f, 1f, 10f)
         });
     }
     
@@ -88,9 +79,8 @@ public class Skyscraper : MonoBehaviour
     {
         this.mat.SetPass(0);
         this.mat.SetBuffer("_data", this.buffer);
-        this.mat.SetInt("_parts_count", 2);
 
-        Graphics.DrawProcedural(MeshTopology.Points, 2, (int)(this.buffer.count * 0.5f));
+        Graphics.DrawProcedural(MeshTopology.Points, 1, this.buffer.count);
     }
 
     private void OnDestroy()

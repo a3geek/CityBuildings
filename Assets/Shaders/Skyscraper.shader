@@ -5,7 +5,7 @@
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType" = "Opaque" }
 		LOD 100
 
 		Pass
@@ -14,22 +14,24 @@
 			#include "UnityCG.cginc"
 			#include "./Consts/Cube.cginc"
 
+			#define DOUBLE_VERTEX_POSITION_COUNT VERTEX_POSITION_COUNT * 2
+
 			#pragma vertex vert
 			#pragma geometry geom
 			#pragma fragment frag
+			#pragma target 5.0
 
 			struct data
 			{
 				float3 center;
 				float4 color;
 				float3 size;
+				float3 baseSize;
 			};
 
 			struct v2g
 			{
-				float4 center : SV_POSITION;
-				float4 color : COLOR;
-				float3 size : ANY;
+				uint index : ANY;
 			};
 
 			struct g2f
@@ -38,47 +40,53 @@
 				float4 color : COLOR;
 			};
 
-			uniform int _parts_count;
-			StructuredBuffer<data> _data;
+			uniform StructuredBuffer<data> _data;
 
-			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
+			void AppendCube(in g2f v[DOUBLE_VERTEX_POSITION_COUNT], uniform int offset, inout TriangleStream<g2f> outStream)
 			{
-				v2g o;
-				data d = _data[_parts_count * inst + id];
-
-				o.center = float4(d.center, 1.0f);
-				o.color = d.color;
-				o.size = d.size;
-
-				return o;
-			}
-
-			[maxvertexcount(APPEND_VERTEX_COUNT)]
-			void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
-			{
-				v2g d = input[0];
-				g2f v[VERTEX_POSITION_COUNT];
-
-				for (int i = 0; i < VERTEX_POSITION_COUNT; i++)
-				{
-					float3 pos = d.center + _VertexPos[i] * d.size * 0.5f;
-
-					v[i].color = d.color;
-					v[i].pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0f));
-				}
-
-				for (i = 0; i < SURFACE_COUNT; i++)
+				for (int i = 0; i < SURFACE_COUNT; i++)
 				{
 					int index = i * VERETEX_COUNT_PER_SURFACE;
 
 					for (int j = 0; j < VERETEX_COUNT_PER_SURFACE; j++)
 					{
 						int idx = _VertexOrder[index + j];
-						outStream.Append(v[idx]);
+						outStream.Append(v[idx + offset]);
 					}
 
 					outStream.RestartStrip();
 				}
+			}
+
+			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
+			{
+				v2g o;
+				o.index = inst;
+
+				return o;
+			}
+
+			[maxvertexcount(APPEND_VERTEX_COUNT * 2)]
+			void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
+			{
+				data d = _data[input[0].index];
+
+				g2f v[DOUBLE_VERTEX_POSITION_COUNT];
+
+				for (int i = 0; i < VERTEX_POSITION_COUNT; i++)
+				{
+					float3 pos = d.center + _VertexPos[i] * d.size * 0.5f;
+					float3 basePos = d.center + _VertexPos[i] * d.baseSize * 0.5f;
+
+					v[i].color = d.color;
+					v[i].pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0f));
+
+					v[VERTEX_POSITION_COUNT + i].color = d.color;
+					v[VERTEX_POSITION_COUNT + i].pos = mul(UNITY_MATRIX_VP, float4(basePos, 1.0f));
+				}
+
+				AppendCube(v, 0, outStream);
+				AppendCube(v, VERTEX_POSITION_COUNT, outStream);
 			}
 
 			fixed4 frag(g2f i) : COLOR
