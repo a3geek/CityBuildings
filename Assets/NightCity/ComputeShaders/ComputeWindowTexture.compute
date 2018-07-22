@@ -16,8 +16,8 @@
 #define TotalWindowPixels (WindowWidth * WindowHeight)
 #define TotalWindowPixelsMap (1.0 / TotalWindowPixels)
 
-#include "./Random.cginc"
-#include "./ClassicPerlinNoise2D.cginc"
+#include "./Libs/Random.cginc"
+#include "./Libs/ClassicPerlinNoise2D.cginc"
 
 
 RWTexture2D<float4> windowTex;
