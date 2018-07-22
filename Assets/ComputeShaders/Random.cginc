@@ -1,4 +1,5 @@
 ﻿#ifndef IncludedRandom
+#define IncludedRandom
 
 	#define UIntMax 4294967295.0 // 0xffffffff
 	#define UIntMap (1.0 / UIntMax)
@@ -52,5 +53,3 @@
 		return rand(rand_state, max);
 	}
 #endif
-
-#define IncludedRandom

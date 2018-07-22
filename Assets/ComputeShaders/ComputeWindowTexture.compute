@@ -17,9 +17,12 @@
 #define TotalWindowPixelsMap (1.0 / TotalWindowPixels)
 
 #include "./Random.cginc"
+#include "./ClassicPerlinNoise2D.cginc"
 
-RWTexture2D<float4> window_tex;
-uint rand_seed;
+
+RWTexture2D<float4> windowTex;
+uint randSeed;
+float noiseFrequency;
 
 uint uiround(float v)
 {
@@ -50,14 +53,14 @@ void CSMain(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : 
 
 	if (x < BorderY || x >= WidthOff || y < BorderY || y >= HeightOff)
 	{
-		window_tex[dispatchThreadID.xy] = float4(0.0, 0.0, 0.0, 1.0);
+		windowTex[dispatchThreadID.xy] = float4(0.0, 0.0, 0.0, 1.0);
 		return;
 	}
 
 	float4 c = float4(1.0, 1.0, 1.0, 1.0);
 
-	uint shared_rand_state = rand_hash(groupID.x * groupID.x + groupID.y * groupID.y + rand_seed * rand_seed);
-	uint rand_state = rand_hash(xOff * xOff + yOff * yOff + rand_seed * rand_seed);
+	uint shared_rand_state = rand_hash(groupID.x * groupID.x + groupID.y * groupID.y + randSeed * randSeed);
+	uint rand_state = rand_hash(xOff * xOff + yOff * yOff + randSeed * randSeed);
 
 	// Put something in bottom.
 	if (rand01(shared_rand_state) < 0.6)
@@ -88,15 +91,17 @@ void CSMain(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : 
 		}
 	}
 
-	uint bright = uiround(rand(shared_rand_state, 10));
+	float width, height;
+	windowTex.GetDimensions(width, height);
+	float noise = perlinNoise(float2(groupID.x / width, groupID.y / height) * noiseFrequency) * 0.5 + 0.5;
 
-	window_tex[dispatchThreadID.xy] = c;
-	// darken
-	float dark_alpha = bright < 2 ? 0.2 : (
+	//// darken
+	uint bright = uiround(rand(shared_rand_state, 10) * noise);
+	float dark_alpha = bright < 1 ? 0.2 : (
 		bright < 4 ? 1.0 : (
-			bright < 8 ? 0.8 : 0.9
+			bright < 7 ? 0.8 : 0.9
 		)
 	);
 
-	window_tex[dispatchThreadID.xy] = color_blend(c, float4(0.0, 0.0, 0.0, dark_alpha));
+	windowTex[dispatchThreadID.xy] = color_blend(c, float4(0.0, 0.0, 0.0, dark_alpha));
 }
