@@ -24,7 +24,6 @@
 			struct data
 			{
 				float3 center;
-				float4 color;
 				float3 size;
 				float3 baseSize;
 			};
@@ -37,10 +36,11 @@
 			struct g2f
 			{
 				float4 pos : SV_POSITION;
-				float4 color : COLOR;
+				float2 uv : TEXCOORD0;
 			};
 
 			uniform StructuredBuffer<data> _data;
+			uniform sampler2D _windowTex;
 
 			void AppendCube(in g2f v[DOUBLE_VERTEX_POSITION_COUNT], uniform int offset, inout TriangleStream<g2f> outStream)
 			{
@@ -75,14 +75,19 @@
 
 				for (int i = 0; i < VERTEX_POSITION_COUNT; i++)
 				{
-					float3 pos = d.center + _VertexPos[i] * d.size * 0.5f;
 					float3 basePos = d.center + _VertexPos[i] * d.baseSize * 0.5f;
+					float3 pos = d.center + _VertexPos[i] * d.size * 0.5f;
 
-					v[i].color = d.color;
+					basePos.y += d.baseSize.y * 0.5f;
+					pos.y += d.baseSize.y * 0.5f + d.size.y * 0.5f;
+
+					float2 uv = _UvParam[i] * (64.0 / 1024.0);
+
 					v[i].pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0f));
+					v[i].uv = uv;
 
-					v[VERTEX_POSITION_COUNT + i].color = d.color;
 					v[VERTEX_POSITION_COUNT + i].pos = mul(UNITY_MATRIX_VP, float4(basePos, 1.0f));
+					v[VERTEX_POSITION_COUNT + i].uv = 0.0;
 				}
 
 				AppendCube(v, 0, outStream);
@@ -91,7 +96,7 @@
 
 			fixed4 frag(g2f i) : COLOR
 			{
-				return i.color;
+				return tex2D(_windowTex, i.uv);
 			}
 
 			ENDCG

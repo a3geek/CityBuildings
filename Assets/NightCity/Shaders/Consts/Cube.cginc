@@ -24,6 +24,18 @@ static const int3 _VertexPos[VERTEX_POSITION_COUNT] =
 	int3(+1, -1, +1),  // right_bottom_far ... 7
 };
 
+static const float2 _UvParam[VERTEX_POSITION_COUNT] =
+{
+	float2(1.0, 1.0),
+	float2(0.0, 1.0),
+	float2(1.0, 0.0),
+	float2(0.0, 0.0),
+	float2(1.0, 1.0),
+	float2(0.0, 1.0),
+	float2(1.0, 0.0),
+	float2(0.0, 0.0),
+};
+
 static const int _VertexOrder[VERETEX_ORDER_COUNT] =
 {
 	0, 1, 2, 3, // left
