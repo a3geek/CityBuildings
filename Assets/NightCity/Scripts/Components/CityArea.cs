@@ -38,7 +38,7 @@ namespace NightCity.Components
         private float sectionWidth = 10f;
         [SerializeField]
         private float sectionHeight = 10f;
-
+        
 
         protected override void Awake()
         {

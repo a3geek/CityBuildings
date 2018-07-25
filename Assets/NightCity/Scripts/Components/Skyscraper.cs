@@ -18,6 +18,7 @@ namespace NightCity.Components
             public Vector3 center;
             public Vector3 size;
             public Vector3 baseSize;
+            public Vector2 uvStep;
         }
 
         public const string PropData = "_data";
@@ -27,6 +28,11 @@ namespace NightCity.Components
         private Vector2 height = new Vector2(10f, 20f);
         [SerializeField]
         private float baseHeight = 2.5f;
+        [SerializeField]
+        private float widthPerWindow = 8f;
+        [SerializeField]
+        private float heightPerWindow = 8f;
+        [Space]
         [SerializeField]
         private Material material = null;
 
@@ -40,7 +46,7 @@ namespace NightCity.Components
             this.CreateBuilds();
 
             this.winTex = windowTexture;
-
+            
             this.buffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
             this.buffer.SetData(this.builds.ToArray());
         }
@@ -76,14 +82,29 @@ namespace NightCity.Components
                 var randX = Random.Range(0.3f, 0.7f);
                 var randZ = Random.Range(0.3f, 0.7f);
 
+                var sizeX = sec.Size.x * randX;
+                var sizeZ = sec.Size.z * randZ;
+
+                //sizeX = sizeX % this.widthPerWindow == 0f ? sizeX : (sizeX + sizeX % this.widthPerWindow > sec.Size.x ?
+                //    sizeX - (this.widthPerWindow - sizeX % this.widthPerWindow) : sizeX + sizeX % this.widthPerWindow);
+                //sizeZ = sizeZ % this.heightPerWindow == 0f ? sizeZ : (sizeZ + sizeZ % this.heightPerWindow > sec.Size.z ?
+                //    sizeZ - (this.heightPerWindow - sizeZ % this.heightPerWindow) : sizeZ + sizeZ % this.heightPerWindow);
+
+                sizeX = sizeX % this.widthPerWindow == 0f ? sizeX : sizeX + sizeX % this.widthPerWindow;
+                sizeZ = sizeZ % this.heightPerWindow == 0f ? sizeZ : sizeZ + sizeZ % this.heightPerWindow;
+
                 this.builds.Add(new Build()
                 {
                     center = sec.Center,
-                    size = new Vector3(sec.Size.x * randX, Random.Range(this.height.x, this.height.y), sec.Size.z * randZ),
+                    size = new Vector3(sizeX, Random.Range(this.height.x, this.height.y), sizeZ),
                     baseSize = new Vector3(
-                        sec.Size.x * (randX < 0.5f ? 0.5f : randX + 0.2f),
+                        sizeX + (sec.Size.x - sizeX) * 0.5f,
                         this.baseHeight,
-                        sec.Size.z * (randZ < 0.5f ? 0.5f : randZ + 0.2f)
+                        sizeZ + (sec.Size.z - sizeZ) * 0.5f
+                    ),
+                    uvStep = new Vector2(
+                        sizeX / this.widthPerWindow,
+                        sizeZ / this.heightPerWindow
                     )
                 });
             }
