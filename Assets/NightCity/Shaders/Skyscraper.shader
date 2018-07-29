@@ -26,6 +26,7 @@
 				float3 center;
 				float3 size;
 				float3 baseSize;
+				float3 uvStep;
 			};
 
 			struct v2g
@@ -42,22 +43,6 @@
 			uniform StructuredBuffer<data> _data;
 			uniform sampler2D _windowTex;
 
-			void AppendCube(in g2f v[DOUBLE_VERTEX_POSITION_COUNT], uniform int offset, inout TriangleStream<g2f> outStream)
-			{
-				for (int i = 0; i < SURFACE_COUNT; i++)
-				{
-					int index = i * VERETEX_COUNT_PER_SURFACE;
-
-					for (int j = 0; j < VERETEX_COUNT_PER_SURFACE; j++)
-					{
-						int idx = _VertexOrder[index + j];
-						outStream.Append(v[idx + offset]);
-					}
-
-					outStream.RestartStrip();
-				}
-			}
-
 			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
 			{
 				v2g o;
@@ -66,32 +51,47 @@
 				return o;
 			}
 
+			bool IsPowerOfTwo(int i)
+			{
+				return (i & (i - 1)) == 0;
+			}
+
+			void AppendCube(float3 center, float3 size, float3 uvStep, float yOffset, inout TriangleStream<g2f> outStream)
+			{
+				g2f v;
+
+				float wc = 1024.0 / 8.0;
+				float hc = 1024.0 / 8.0;
+				float dc = 1024.0 / 8.0;
+
+				for (int i = 0; i < SURFACE_COUNT; i++)
+				{
+					for (int j = 0; j < VERTEX_COUNT_PER_SURFACE; j++)
+					{
+						int idx = _VertexOrder[i][j];
+
+						float3 pos = center + _VertexPos[idx] * size * 0.5 + float3(0.0, yOffset, 0.0);
+						v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
+
+						v.uv = _UvParam[idx] * float2(
+							IsPowerOfTwo(i) == true ? uvStep.z / dc : uvStep.x / wc,
+							uvStep.y / hc
+						);
+
+						outStream.Append(v);
+					}
+
+					outStream.RestartStrip();
+				}
+			}
+
 			[maxvertexcount(APPEND_VERTEX_COUNT * 2)]
 			void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
 			{
 				data d = _data[input[0].index];
 
-				g2f v[DOUBLE_VERTEX_POSITION_COUNT];
-
-				for (int i = 0; i < VERTEX_POSITION_COUNT; i++)
-				{
-					float3 basePos = d.center + _VertexPos[i] * d.baseSize * 0.5f;
-					float3 pos = d.center + _VertexPos[i] * d.size * 0.5f;
-
-					basePos.y += d.baseSize.y * 0.5f;
-					pos.y += d.baseSize.y * 0.5f + d.size.y * 0.5f;
-
-					float2 uv = _UvParam[i] * (64.0 / 1024.0);
-
-					v[i].pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0f));
-					v[i].uv = uv;
-
-					v[VERTEX_POSITION_COUNT + i].pos = mul(UNITY_MATRIX_VP, float4(basePos, 1.0f));
-					v[VERTEX_POSITION_COUNT + i].uv = 0.0;
-				}
-
-				AppendCube(v, 0, outStream);
-				AppendCube(v, VERTEX_POSITION_COUNT, outStream);
+				AppendCube(d.center, d.baseSize, 0.0, d.baseSize.y * 0.5, outStream);
+				AppendCube(d.center, d.size, d.uvStep, d.baseSize.y * 0.5 + d.size.y * 0.5, outStream);
 			}
 
 			fixed4 frag(g2f i) : COLOR

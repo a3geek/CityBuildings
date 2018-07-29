@@ -5,12 +5,12 @@
 #define TOPOLOGY_COUNT_PER_SURFACE 2
 
 #define VERTEX_POSITION_COUNT 8
-#define VERETEX_COUNT_PER_SURFACE 4
+#define VERTEX_COUNT_PER_SURFACE 4
 #define SURFACE_COUNT 6
 
 #define APPEND_VERTEX_COUNT_PER_SURFACE (VERTEX_COUNT_PER_TOPOLOGY * TOPOLOGY_COUNT_PER_SURFACE) // 3 vertices per topology * 2 topology
 #define APPEND_VERTEX_COUNT (APPEND_VERTEX_COUNT_PER_SURFACE * SURFACE_COUNT) // 6  append vertices per surface * 6 surface
-#define VERETEX_ORDER_COUNT (VERETEX_COUNT_PER_SURFACE * SURFACE_COUNT) // 4 vertices per surface * 6 surface
+#define VERETEX_ORDER_COUNT (VERTEX_COUNT_PER_SURFACE * SURFACE_COUNT) // 4 vertices per surface * 6 surface
 
 static const int3 _VertexPos[VERTEX_POSITION_COUNT] =
 {
@@ -36,14 +36,14 @@ static const float2 _UvParam[VERTEX_POSITION_COUNT] =
 	float2(0.0, 0.0),
 };
 
-static const int _VertexOrder[VERETEX_ORDER_COUNT] =
+static const int _VertexOrder[SURFACE_COUNT][VERTEX_COUNT_PER_SURFACE] =
 {
-	0, 1, 2, 3, // left
-	5, 0, 7, 2, // far
-	4, 5, 6, 7, // right
-	1, 4, 3, 6, // near
-	0, 5, 1, 4, // top
-	3, 6, 2, 7  // bottom
+	{ 0, 1, 2, 3 }, // left
+	{ 5, 0, 7, 2 }, // far
+	{ 4, 5, 6, 7 }, // right
+	{ 1, 4, 3, 6 }, // near
+	{ 0, 5, 1, 4 }, // top
+	{ 3, 6, 2, 7 }  // bottom
 };
 
 #endif
