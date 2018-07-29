@@ -19,6 +19,7 @@ namespace NightCity.Components
             public Vector3 size;
             public Vector3 baseSize;
             public Vector3 uvStep;
+            public uint randSeed;
         }
 
         public const string PropData = "_data";
@@ -107,7 +108,8 @@ namespace NightCity.Components
                         wid / wpw,
                         hei / hpw,
                         dep / dpw
-                    )
+                    ),
+                    randSeed = (uint)(Random.value * uint.MaxValue)
                 });
             }
         }
