@@ -20,7 +20,7 @@ namespace NightCity.Components
         }
 
         [SerializeField]
-        private ComputeShader cs;
+        private ComputeShader cs = null;
         [SerializeField]
         private int width = 1024;
         [SerializeField]
@@ -40,8 +40,7 @@ namespace NightCity.Components
 
             this.Tex = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGB32)
             {
-                enableRandomWrite = true,
-                useMipMap = false
+                enableRandomWrite = true
             };
             this.Tex.Create();
 

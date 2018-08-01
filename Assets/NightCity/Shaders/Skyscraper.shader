@@ -53,17 +53,12 @@
 				return o;
 			}
 
-			bool IsPowerOfTwo(int i)
-			{
-				return (i & (i - 1)) == 0;
-			}
-
 			float GetOffset(uint randSeed, float base, float max)
 			{
 				float width = max - base;
-				int div = trunc(width / 8.0);
+				float div = width / 8.0;
 
-				return rand(randSeed, div) / max;
+				return trunc(rand(randSeed, div)) / max;
 			}
 
 			void AppendCube(float3 center, float3 size, float3 uvStep, uint randSeed, float yOffset, inout TriangleStream<g2f> outStream)
@@ -89,7 +84,7 @@
 						v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
 
 						v.uv = float2(randWD, randH) + _UvParam[idx] * float2(
-							IsPowerOfTwo(i) == true ? uvStep.z / dc : uvStep.x / wc,
+							i % 2.0 == 0.0 ? uvStep.z / dc : uvStep.x / wc,
 							uvStep.y / hc
 						);
 

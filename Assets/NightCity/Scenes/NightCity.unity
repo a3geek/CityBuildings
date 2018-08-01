@@ -350,6 +350,7 @@ MonoBehaviour:
   baseHeight: 2.5
   widthPerWindow: 8
   heightPerWindow: 8
+  depthPerWindow: 8
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
 --- !u!1 &1754051852
 GameObject:
