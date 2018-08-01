@@ -18,6 +18,18 @@ namespace NightCity.Components
         {
             get; private set;
         }
+        public int Width
+        {
+            get { return this.width; }
+        }
+        public int Height
+        {
+            get { return this.height; }
+        }
+        public Vector2Int WindowNumber
+        {
+            get { return new Vector2Int(this.width / ThreadX, this.height / ThreadY); }
+        }
 
         [SerializeField]
         private ComputeShader cs = null;

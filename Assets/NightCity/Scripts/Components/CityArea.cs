@@ -31,34 +31,50 @@ namespace NightCity.Components
         public List<Section> Sections { get; } = new List<Section>();
 
         [SerializeField]
-        private float fieldWidth = 1000f;
+        private Vector2 field = new Vector2(1000f, 1000f);
         [SerializeField]
-        private float fieldHeight = 1000f;
+        private Vector2 section = new Vector2(10f, 10f);
         [SerializeField]
-        private float sectionWidth = 10f;
-        [SerializeField]
-        private float sectionHeight = 10f;
+        private float roadWidth = 5f;
         
 
         protected override void Awake()
         {
             base.Awake();
+            
+            this.Init();
+        }
 
-            var stepW = this.fieldWidth / this.sectionWidth;
-            var stepH = this.fieldHeight / this.sectionHeight;
+        private void Init()
+        {
+            var road = Vector2.one * this.roadWidth;
+            var max = this.field - road;
 
-            var halfStepW = stepW * 0.5f;
-            var halfStepH = stepH * 0.5f;
+            var region = this.section + road;
+            var half = 0.5f * this.section;
 
-            for(var w = 0f; w < this.fieldWidth; w += stepW)
+            var stepup = max / region;
+            var step = new Vector2Int(Mathf.CeilToInt(stepup.x), Mathf.CeilToInt(stepup.y));
+
+            for(var w = 0; w < step.x; w++)
             {
-                for(var h = 0f; h < this.fieldHeight; h += stepH)
+                for(var h = 0; h < step.y; h++)
                 {
+                    var vec = new Vector2(w, h);
+
                     this.Sections.Add(new Section(
-                        new Vector2(w + halfStepW, h + halfStepH),
-                        new Vector2(stepW, stepH)
+                        vec * (road + half),
+                        half
                     ));
                 }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            foreach(var e in this.Sections)
+            {
+                Gizmos.DrawCube(e.Center, e.Size);
             }
         }
     }
