@@ -15,18 +15,26 @@ namespace NightCity.Components
         [Serializable]
         public struct Section
         {
+            public static float DefaultCenterY = 0f;
+            public static float DefaultSizeY = 0f;
+
+            public Vector3 BottomLeft
+            {
+                get { return this.Center - 0.5f * this.Size; }
+            }
+
             public Vector3 Center { get; }
             public Vector3 Size { get; }
 
 
             public Section(Vector2 center, Vector2 size)
             {
-                this.Center = new Vector3(center.x, 0f, center.y);
-                this.Size = new Vector3(size.x, 0f, size.y);
+                this.Center = new Vector3(center.x, DefaultCenterY, center.y);
+                this.Size = new Vector3(size.x, DefaultSizeY, size.y);
             }
         }
 
-        public const int ExecutionOrder = -3000;
+        public const int ExecutionOrder = -32000;
 
         public List<Section> Sections { get; } = new List<Section>();
 
@@ -41,7 +49,6 @@ namespace NightCity.Components
         protected override void Awake()
         {
             base.Awake();
-            
             this.Init();
         }
 
@@ -67,14 +74,6 @@ namespace NightCity.Components
                         half
                     ));
                 }
-            }
-        }
-
-        private void OnDrawGizmos()
-        {
-            foreach(var e in this.Sections)
-            {
-                Gizmos.DrawCube(e.Center, e.Size);
             }
         }
     }

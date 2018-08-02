@@ -8,14 +8,6 @@ using Random = UnityEngine.Random;
 
 namespace NightCity.Components
 {
-    public static class VectorUtil
-    {
-        public static Vector3 Surplus(this Vector3 v3, float v)
-        {
-            return new Vector3(v3.x % v, v3.y % v, v3.z % v);
-        }
-    }
-
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour
@@ -36,9 +28,14 @@ namespace NightCity.Components
         [SerializeField]
         private Vector2 height = new Vector2(10f, 20f);
         [SerializeField]
+        private Vector2Int numPerSection = new Vector2Int(2, 2);
+        [SerializeField]
+        private Vector2 sizeRate = new Vector2(0.8f, 1f);
+        [SerializeField]
         private int windowSize = 8;
         [SerializeField]
         private float baseHeight = 2.5f;
+
         [Space]
         [SerializeField]
         private Material material = null;
@@ -82,30 +79,43 @@ namespace NightCity.Components
         private void CreateBuilds()
         {
             var sections = CityArea.Instance.Sections;
-            
+
             for(var i = 0; i < sections.Count; i++)
             {
                 var section = sections[i];
+                this.CreateBuild(section);
+            }
+        }
 
-                var size = new Vector3(
-                    section.Size.x * Random.Range(0.3f, 0.7f),
-                    Random.Range(this.height.x, this.height.y),
-                    section.Size.z * Random.Range(0.3f, 0.7f)
-                );
-                size = size - size.Surplus(this.windowSize);
-                
-                this.builds.Add(new Build()
+        private void CreateBuild(CityArea.Section section)
+        {
+            var step = section.Size.XZ() / this.numPerSection;
+            Func<float> rater = () => Random.Range(this.sizeRate.x, this.sizeRate.y);
+
+            for(var i = 0; i < this.numPerSection.x; i++)
+            {
+                for(var j = 0; j < this.numPerSection.y; j++)
                 {
-                    center = section.Center,
-                    size = size,
-                    baseSize = size + new Vector3(
-                        (section.Size.x - size.x) * 0.5f,
-                        this.baseHeight - size.y,
-                        (section.Size.z - size.z) * 0.5f
-                    ),
-                    uvStep = size / this.windowSize,
-                    randSeed = (uint)(Random.value * uint.MaxValue)
-                });
+                    var baseSize = (step * new Vector2(rater(), rater())).ToVector3(this.baseHeight);
+
+                    var height = Random.Range(this.height.x, this.height.y);
+                    var size = (baseSize.XZ() - baseSize.XZ().Surplus(this.windowSize))
+                        .ToVector3(height - height % this.windowSize);
+
+                    var center = section.BottomLeft + (new Vector2(i, j) * step + 0.5f * baseSize.XZ() + new Vector2(
+                        Random.Range(0f, step.x - baseSize.x),
+                        Random.Range(0f, step.y - baseSize.z)
+                    )).ToVector3();
+
+                    this.builds.Add(new Build()
+                    {
+                        center = center,
+                        size = size,
+                        baseSize = baseSize,
+                        uvStep = size / this.windowSize,
+                        randSeed = (uint)(Random.value * uint.MaxValue)
+                    });
+                }
             }
         }
     }
