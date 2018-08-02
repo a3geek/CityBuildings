@@ -26,3 +26,6 @@ namespace NightCity
         }
     }
 }
+
+// 道幅は4mで2車線
+// ビルの高さはMinimumで30m（10階建て） (w*hは15*15くらいから）

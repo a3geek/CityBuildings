@@ -332,8 +332,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {x: 10000, y: 10000}
-  section: {x: 250, y: 500}
-  roadWidth: 100
+  section: {x: 1000, y: 3000}
+  roadWidth: 40
 --- !u!114 &1753058802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,8 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df842b6c64300d84b967fba995ea6373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: {x: 100, y: 200}
-  numPerSection: {x: 2, y: 4}
+  height: {x: 30, y: 300}
+  numPerSection: {x: 6, y: 18}
   sizeRate: {x: 0.8, y: 1}
   windowSize: 8
   baseHeight: 2.5
