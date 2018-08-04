@@ -51,6 +51,10 @@ namespace NightCity.Components
             this.windowSize = Mathf.IsPowerOfTwo(this.windowSize) ? this.windowSize : Mathf.NextPowerOfTwo(this.windowSize);
 
             this.CreateBuilds();
+            if(this.builds.Count <= 0)
+            {
+                return;
+            }
 
             this.buffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
             this.buffer.SetData(this.builds.ToArray());

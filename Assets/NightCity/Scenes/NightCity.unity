@@ -332,8 +332,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {x: 10000, y: 10000}
-  section: {x: 1000, y: 3000}
-  roadWidth: 40
+  sectionX: {x: 15, y: 60}
+  sectionY: {x: 15, y: 60}
+  mainRoadWidth: 80
+  subRoadWidth: 4
+  mainRate: 0.1
 --- !u!114 &1753058802
 MonoBehaviour:
   m_ObjectHideFlags: 0
