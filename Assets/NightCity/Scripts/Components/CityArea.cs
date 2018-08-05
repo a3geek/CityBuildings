@@ -82,8 +82,43 @@ namespace NightCity.Components
             this.Init();
         }
 
-        //private List<Road> CreateLanes(float min, float max, float left, float right, float top, float bottom)
-        //private List<Road> CreateLanes(Vector2 range, Vector4 field, Vector2 dir, Vector4 line)
+        private List<Road> CreateLanes(Vector2 section, Vector2 dir, Vector4 field)
+        {
+            var lanes = new List<Road>();
+            var main = this.mainRoadWidth;
+
+            var reverse = -1f * (dir - Vector2.one);
+
+            var bypass = false;
+            var last = field.y - main * 0.5f;
+            var step = field.x + main;
+            do
+            {
+                var sector = Random.Range(section.x, section.y);
+                step += sector;
+
+                if(step > last || last - step <= this.mainRoadWidth + section.x)
+                {
+                    step = last;
+                    break;
+                }
+
+                bypass = bypass ? false : Random.value < this.mainRate;
+                var width = bypass ? this.mainRoadWidth : this.subRoadWidth;
+
+                lanes.Add(new Road(
+                    (step + width * 0.5f) * dir + reverse * field.z,
+                    (step + width * 0.5f) * dir + reverse * field.w,
+                    width
+                ));
+
+                step += width;
+            }
+            while(true);
+
+            return lanes;
+        }
+
         private List<Road> CreateLanes(Vector4 section, Vector4 field)
         {
             var main = this.mainRoadWidth;
@@ -97,58 +132,13 @@ namespace NightCity.Components
                 new Road(new Vector2(field.x, field.w - main * 0.5f), new Vector2(field.y, field.w - main * 0.5f), main)
             };
 
-            var bypass = false;
-            var right = field.y - main * 0.5f;
-            var step = field.x + main;
-            do
-            {
-                var sector = Random.Range(section.x, section.y);
-                step += sector;
+            lanes.AddRange(this.CreateLanes(
+                new Vector2(section.x, section.y), new Vector2(1f, 0f), field
+            ));
 
-                if(step > right || right - step <= this.mainRoadWidth + section.x)
-                {
-                    step = right;
-                    break;
-                }
-
-                bypass = bypass ? false : Random.value < this.mainRate;
-                var width = bypass ? this.mainRoadWidth : this.subRoadWidth;
-
-                lanes.Add(new Road(
-                    new Vector2(step + width * 0.5f, field.z),
-                    new Vector2(step + width * 0.5f, field.w),
-                    width
-                ));
-
-                step += width;
-            }
-            while(true);
-
-            var bottom = field.w - main * 0.5f;
-            step = field.z + main;
-            do
-            {
-                var sector = Random.Range(section.z, section.w);
-                step += sector;
-
-                if(step > bottom || bottom - step <= this.mainRoadWidth + section.z)
-                {
-                    step = bottom;
-                    break;
-                }
-
-                bypass = bypass ? false : Random.value < this.mainRate;
-                var width = bypass ? this.mainRoadWidth : this.subRoadWidth;
-
-                lanes.Add(new Road(
-                    new Vector2(field.x, step + width * 0.5f),
-                    new Vector2(field.y, step + width * 0.5f),
-                    width
-                ));
-
-                step += width;
-            }
-            while(true);
+            lanes.AddRange(this.CreateLanes(
+                new Vector2(section.z, section.w), new Vector2(0f, 1f), new Vector4(field.z, field.w, field.x, field.y)
+            ));
 
             return lanes;
         }
