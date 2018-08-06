@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -58,7 +59,14 @@ namespace NightCity.Components
         public const int ExecutionOrder = -32000;
 
         public List<Section> Sections { get; } = new List<Section>();
-        public List<Road> roads { get; } = new List<Road>();
+        public List<Road> roads
+        {
+            get { return this.vertical.Concat(this.horizontal).ToList(); }
+        }
+
+        public List<Road> vertical { get; } = new List<Road>();
+        public List<Road> horizontal { get; } = new List<Road>();
+
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
@@ -89,7 +97,7 @@ namespace NightCity.Components
 
             var reverse = -1f * (dir - Vector2.one);
 
-            var bypass = false;
+            var bypass = true;
             var last = field.y - main * 0.5f;
             var step = field.x + main;
             do
@@ -119,44 +127,47 @@ namespace NightCity.Components
             return lanes;
         }
 
-        private List<Road> CreateLanes(Vector4 section, Vector4 field)
+        private void CreateLanes(Vector4 section, Vector4 field)
         {
             var main = this.mainRoadWidth;
 
-            var lanes = new List<Road>()
-            {
+            this.vertical.AddRange(new List<Road>(){
                 new Road(new Vector2(field.x + main * 0.5f, field.z), new Vector2(field.x + main * 0.5f, field.w), main),
-                new Road(new Vector2(field.y - main * 0.5f, field.z), new Vector2(field.y - main * 0.5f, field.w), main),
-
+                new Road(new Vector2(field.y - main * 0.5f, field.z), new Vector2(field.y - main * 0.5f, field.w), main)
+            });
+            this.horizontal.AddRange(new List<Road>()
+            {
                 new Road(new Vector2(field.x, field.z + main * 0.5f), new Vector2(field.y, field.z + main * 0.5f), main),
                 new Road(new Vector2(field.x, field.w - main * 0.5f), new Vector2(field.y, field.w - main * 0.5f), main)
-            };
-
-            lanes.AddRange(this.CreateLanes(
+            });
+            
+            this.vertical.AddRange(this.CreateLanes(
                 new Vector2(section.x, section.y), new Vector2(1f, 0f), field
             ));
 
-            lanes.AddRange(this.CreateLanes(
+            this.horizontal.AddRange(this.CreateLanes(
                 new Vector2(section.z, section.w), new Vector2(0f, 1f), new Vector4(field.z, field.w, field.x, field.y)
             ));
-
-            return lanes;
         }
 
         private void Init()
         {
-            this.roads.AddRange(this.CreateLanes(
+            this.CreateLanes(
                 new Vector4(this.sectionX.x, this.sectionX.y, this.sectionY.x, this.sectionY.y),
                 new Vector4(-this.field.x, this.field.x, -this.field.y, this.field.y)
-            ));
-        }
+            );
 
+
+        }
+        
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-            for(var i = 0; i < this.roads.Count; i++)
+
+            var roads = this.roads;
+            for(var i = 0; i < roads.Count; i++)
             {
-                var road = this.roads[i];
+                var road = roads[i];
 
                 var diff = road.to - road.from;
                 var size = diff + road.normal * road.width;

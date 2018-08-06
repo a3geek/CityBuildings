@@ -331,10 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b272acb477003ae458bae27a453f7df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  field: {x: 10000, y: 10000}
+  field: {x: 1000, y: 1000}
   sectionX: {x: 15, y: 60}
   sectionY: {x: 15, y: 60}
-  mainRoadWidth: 80
+  mainRoadWidth: 16
   subRoadWidth: 4
   mainRate: 0.1
 --- !u!114 &1753058802
