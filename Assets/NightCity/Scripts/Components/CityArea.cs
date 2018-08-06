@@ -158,6 +158,17 @@ namespace NightCity.Components
             );
 
 
+            for(var i = 0; i < this.horizontal.Count; i++)
+            {
+                var h = this.horizontal[i];
+
+                for(var j = 0; j < this.vertical.Count; j++)
+                {
+                    var v = this.vertical[j];
+
+
+                }
+            }
         }
         
         private void OnDrawGizmos()
