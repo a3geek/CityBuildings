@@ -348,11 +348,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df842b6c64300d84b967fba995ea6373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: {x: 30, y: 300}
-  numPerSection: {x: 6, y: 18}
-  sizeRate: {x: 0.8, y: 1}
-  windowSize: 8
-  baseHeight: 2.5
+  height: {x: 15, y: 40}
+  width: {x: 10, y: 20}
+  depth: {x: 10, y: 20}
+  rate: {x: 0.75, y: 0.95}
+  windowSize: 2
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
 --- !u!1 &1754051852
 GameObject:

@@ -4,10 +4,22 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 namespace NightCity.Utilities
 {
     public static class VectorExtends
     {
+        public static float Rand(this Vector2 vec2)
+        {
+            return Random.Range(vec2.x, vec2.y);
+        }
+
+        public static float Average(this Vector2 vec2)
+        {
+            return (vec2.x + vec2.y) * 0.5f;
+        }
+
         public static Vector3 Surplus(this Vector3 v3, float v)
         {
             return new Vector3(v3.x % v, v3.y % v, v3.z % v);

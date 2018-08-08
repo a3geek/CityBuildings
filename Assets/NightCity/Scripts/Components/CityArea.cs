@@ -185,5 +185,22 @@ namespace NightCity.Components
                 }
             }
         }
+        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+
+            var roads = this.roads;
+            for(var i = 0; i < roads.Count; i++)
+            {
+                var road = roads[i];
+
+                var diff = road.to - road.from;
+                var size = diff + road.normal * road.width;
+                var center = road.from + diff * 0.5f;
+
+                Gizmos.DrawCube(new Vector3(center.x, 0f, center.y), new Vector3(size.x, 0f, size.y));
+            }
+        }
     }
 }

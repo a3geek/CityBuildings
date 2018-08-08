@@ -26,17 +26,17 @@ namespace NightCity.Components
 
         public const string PropData = "_data";
         public const string PropWindowTex = "_windowTex";
-
+        
         [SerializeField]
-        private Vector2 height = new Vector2(10f, 20f);
+        private Vector2 height = new Vector2(15f, 40f);
         [SerializeField]
-        private Vector2Int numPerSection = new Vector2Int(2, 2);
+        private Vector2 width = new Vector2(35f, 20f);
         [SerializeField]
-        private Vector2 sizeRate = new Vector2(0.8f, 1f);
+        private Vector2 depth = new Vector2(35f, 20f);
         [SerializeField]
-        private int windowSize = 8;
+        private Vector2 rate = new Vector2(0.75f, 0.95f);
         [SerializeField]
-        private float baseHeight = 2.5f;
+        private int windowSize = 1;
 
         [Space]
         [SerializeField]
@@ -93,34 +93,50 @@ namespace NightCity.Components
             }
         }
 
+        private Build CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
+        {
+            var wid = rate.Rand() * width;
+            var dep = rate.Rand() * depth;
+            var hei = height.Rand();
+
+            var size = new Vector3(wid, hei, dep);
+            size = size - size.Surplus(this.windowSize);
+
+            return new Build()
+            {
+                center = center,
+                size = size,
+                baseSize = Vector3.zero,
+                uvStep = size / this.windowSize,
+                randSeed = (uint)(Random.value * uint.MaxValue)
+            };
+        }
+        
         private void CreateBuild(CityArea.Section section)
         {
-            var step = section.Size.XZ() / this.numPerSection;
-            Func<float> rater = () => Random.Range(this.sizeRate.x, this.sizeRate.y);
-
-            for(var i = 0; i < this.numPerSection.x; i++)
+            var size = section.Size;
+            var center = section.Center;
+            
+            if(size.x <= this.width.x && size.z <= this.depth.x)
             {
-                for(var j = 0; j < this.numPerSection.y; j++)
+                this.builds.Add(this.CreateBuild(center, size.x, size.z, this.height, this.rate));
+                return;
+            }
+
+            var count = new Vector2Int(Mathf.RoundToInt(size.x / this.width.y), Mathf.RoundToInt(size.z / this.depth.y));
+            var division = new Vector2(1f / count.x, 1f / count.y);
+            var bl = section.BottomLeft.XZ();
+            var div = size.XZ() * division;
+
+            Debug.Log(count);
+            for(var i = 0; i < count.x; i++)
+            {
+                for(var j = 0; j < count.y; j++)
                 {
-                    var baseSize = (step * new Vector2(rater(), rater())).ToVector3(this.baseHeight);
+                    var cen = bl + 0.5f * div + div * new Vector2(i, j);
+                    var field = new Vector2(size.x * division.x, size.z * division.y);
 
-                    var height = Random.Range(this.height.x, this.height.y);
-                    var size = (baseSize.XZ() - baseSize.XZ().Surplus(this.windowSize))
-                        .ToVector3(height - height % this.windowSize);
-
-                    var center = section.BottomLeft + (new Vector2(i, j) * step + 0.5f * baseSize.XZ() + new Vector2(
-                        Random.Range(0f, step.x - baseSize.x),
-                        Random.Range(0f, step.y - baseSize.z)
-                    )).ToVector3();
-
-                    this.builds.Add(new Build()
-                    {
-                        center = center,
-                        size = size,
-                        baseSize = baseSize,
-                        uvStep = size / this.windowSize,
-                        randSeed = (uint)(Random.value * uint.MaxValue)
-                    });
+                    this.builds.Add(this.CreateBuild(cen.ToVector3(center.y), field.x, field.y, this.height, this.rate));
                 }
             }
         }
