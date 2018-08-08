@@ -19,7 +19,6 @@ namespace NightCity.Components
         {
             public Vector3 center;
             public Vector3 size;
-            public Vector3 baseSize;
             public Vector3 uvStep;
             public uint randSeed;
         }
@@ -106,7 +105,6 @@ namespace NightCity.Components
             {
                 center = center,
                 size = size,
-                baseSize = Vector3.zero,
                 uvStep = size / this.windowSize,
                 randSeed = (uint)(Random.value * uint.MaxValue)
             };
@@ -127,8 +125,7 @@ namespace NightCity.Components
             var division = new Vector2(1f / count.x, 1f / count.y);
             var bl = section.BottomLeft.XZ();
             var div = size.XZ() * division;
-
-            Debug.Log(count);
+            
             for(var i = 0; i < count.x; i++)
             {
                 for(var j = 0; j < count.y; j++)

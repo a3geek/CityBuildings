@@ -349,8 +349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: {x: 15, y: 40}
-  width: {x: 10, y: 20}
-  depth: {x: 10, y: 20}
+  width: {x: 35, y: 30}
+  depth: {x: 35, y: 30}
   rate: {x: 0.75, y: 0.95}
   windowSize: 2
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
