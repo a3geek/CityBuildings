@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace NightCity.Utilities
 {
     public static class VectorExtends
     {

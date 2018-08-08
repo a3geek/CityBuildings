@@ -332,8 +332,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {x: 1000, y: 1000}
-  sectionX: {x: 15, y: 60}
-  sectionY: {x: 15, y: 60}
+  sectionX: {x: 30, y: 60}
+  sectionY: {x: 30, y: 60}
   mainRoadWidth: 16
   subRoadWidth: 4
   mainRate: 0.1

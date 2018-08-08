@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 
 namespace NightCity.Components
 {
+    using Utilities;
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour

@@ -131,15 +131,12 @@ namespace NightCity.Components
         {
             var main = this.mainRoadWidth;
 
-            this.vertical.AddRange(new List<Road>(){
-                new Road(new Vector2(field.x + main * 0.5f, field.z), new Vector2(field.x + main * 0.5f, field.w), main),
-                new Road(new Vector2(field.y - main * 0.5f, field.z), new Vector2(field.y - main * 0.5f, field.w), main)
-            });
-            this.horizontal.AddRange(new List<Road>()
-            {
-                new Road(new Vector2(field.x, field.z + main * 0.5f), new Vector2(field.y, field.z + main * 0.5f), main),
-                new Road(new Vector2(field.x, field.w - main * 0.5f), new Vector2(field.y, field.w - main * 0.5f), main)
-            });
+            this.vertical.Add(
+                new Road(new Vector2(field.x + main * 0.5f, field.z), new Vector2(field.x + main * 0.5f, field.w), main)
+            );
+            this.horizontal.Add(
+                new Road(new Vector2(field.x, field.z + main * 0.5f), new Vector2(field.y, field.z + main * 0.5f), main)
+            );
             
             this.vertical.AddRange(this.CreateLanes(
                 new Vector2(section.x, section.y), new Vector2(1f, 0f), field
@@ -148,6 +145,13 @@ namespace NightCity.Components
             this.horizontal.AddRange(this.CreateLanes(
                 new Vector2(section.z, section.w), new Vector2(0f, 1f), new Vector4(field.z, field.w, field.x, field.y)
             ));
+
+            this.vertical.Add(
+                new Road(new Vector2(field.y - main * 0.5f, field.z), new Vector2(field.y - main * 0.5f, field.w), main)
+            );
+            this.horizontal.Add(
+                new Road(new Vector2(field.x, field.w - main * 0.5f), new Vector2(field.y, field.w - main * 0.5f), main)
+            );
         }
 
         private void Init()
@@ -156,35 +160,29 @@ namespace NightCity.Components
                 new Vector4(this.sectionX.x, this.sectionX.y, this.sectionY.x, this.sectionY.y),
                 new Vector4(-this.field.x, this.field.x, -this.field.y, this.field.y)
             );
-
-
-            for(var i = 0; i < this.horizontal.Count; i++)
+            
+            for(var i = 0; i < this.horizontal.Count - 1; i++)
             {
-                var h = this.horizontal[i];
+                var h1 = this.horizontal[i];
+                var h2 = this.horizontal[i + 1];
 
-                for(var j = 0; j < this.vertical.Count; j++)
+                for(var j = 0; j < this.vertical.Count - 1; j++)
                 {
-                    var v = this.vertical[j];
+                    var v1 = this.vertical[j];
+                    var v2 = this.vertical[j + 1];
 
+                    var p0 = new Vector2(
+                        v1.from.x + v1.width * 0.5f, h1.from.y + h1.width * 0.5f
+                    );
+                    var p1 = new Vector2(
+                        v2.from.x - v2.width * 0.5f, h2.from.y - h2.width * 0.5f
+                    );
 
+                    var size = p1 - p0;
+                    var center = p0 + 0.5f * size;
+
+                    this.Sections.Add(new Section(center, size));
                 }
-            }
-        }
-        
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.green;
-
-            var roads = this.roads;
-            for(var i = 0; i < roads.Count; i++)
-            {
-                var road = roads[i];
-
-                var diff = road.to - road.from;
-                var size = diff + road.normal * road.width;
-                var center = road.from + diff * 0.5f;
-                
-                Gizmos.DrawCube(new Vector3(center.x, 0f, center.y), new Vector3(size.x, 0f, size.y));
             }
         }
     }
