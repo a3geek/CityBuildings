@@ -38,7 +38,8 @@
 			};
 
 			#include "./Libs/Random.cginc"
-			#include "./Libs/Appenders.cginc"
+			#include "./Geometries/Cube.cginc"
+			#include "./Geometries/Rounded.cginc"
 
 			#define DOUBLE_VERTEX_POSITION_COUNT VERTEX_POSITION_COUNT * 2
 
@@ -53,12 +54,12 @@
 				return o;
 			}
 
-			[maxvertexcount(APPEND_VERTEX_COUNT * 2)]
+			[maxvertexcount(128)]
 			void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
 			{
 				data d = _data[input[0].index];
 
-				AppendCube(d.center, d.size, d.uvStep, d.randSeed, outStream);
+				AppendRounded(d.center, d.size, d.uvStep, d.randSeed, outStream);
 			}
 
 			fixed4 frag(g2f i) : COLOR
