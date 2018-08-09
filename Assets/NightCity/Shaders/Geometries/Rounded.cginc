@@ -1,7 +1,7 @@
 ﻿#ifndef GEOMETRIES_ROUNDED_INCLUDED
 #define GEOMETRIES_ROUNDED_INCLUDED
 
-#define STEP 10.0;
+#define STEP 10.0
 #define STEP_COUNT 360 / STEP
 
 void AppendRounded(float3 center, float3 size, float3 uvStep, uint randSeed, inout TriangleStream<g2f> outStream)
@@ -19,7 +19,6 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, uint randSeed, ino
 	float r = 0.0;
 
 	int count = STEP_COUNT;
-	//for(int i = 0; i < count; i++)
 	for (int i = 0; i < count; i++)
 	{
 		r += step;
