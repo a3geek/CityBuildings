@@ -21,6 +21,7 @@ namespace NightCity.Components
             public Vector3 size;
             public Vector3 uvStep;
             public uint randSeed;
+            public uint buildType;
         }
 
         public const string PropData = "_data";
@@ -73,7 +74,7 @@ namespace NightCity.Components
             this.material.SetBuffer(PropData, this.buffer);
             this.material.SetTexture(PropWindowTex, this.winTex.Tex);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 1, this.buffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, 2, this.buffer.count);
         }
 
         private void OnDestroy()
@@ -106,7 +107,8 @@ namespace NightCity.Components
                 center = center,
                 size = size,
                 uvStep = size / this.windowSize,
-                randSeed = (uint)(Random.value * uint.MaxValue)
+                randSeed = (uint)(Random.value * uint.MaxValue),
+                buildType = Random.value < 0.5f ? 0u : 1u
             };
         }
         
