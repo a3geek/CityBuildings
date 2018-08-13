@@ -29,6 +29,15 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 	float step = ROUNDED_STEP;
 	float3 yOffset = float3(0.0, size.y, 0.0);
 
+	size.x = size.x > size.z ? size.z : size.x;
+	size.z = size.x > size.z ? size.z : size.x;
+
+	float wc = 1024.0 / 8.0;
+	float hc = 1024.0 / 8.0;
+	float dc = 1024.0 / 8.0;
+	float randWD = uvStep.x > uvStep.z ?
+		GetOffset(randSeed, uvStep.x, wc) :
+		GetOffset(randSeed, uvStep.z, dc);
 
 	bool skiped = false;
 	int count = floor(ROUNDED_STEP_COUNT);
@@ -37,7 +46,7 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 		float r2 = r + step;
 
 		float skip = 0.0;
-		if(skiped == false && rand01(randSeed) < 0.5)
+		if(skiped == false && rand01(randSeed) < 0.1)
 		{
 			skiped = true;
 			skip = ROUNDED_SKIP_ANGLE - step;

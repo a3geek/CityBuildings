@@ -23,7 +23,6 @@
 				float3 center;
 				float3 size;
 				float3 uvStep;
-				uint randSeed;
 				uint buildType;
 			};
 			
@@ -43,6 +42,7 @@
 			#include "./Geometries/Rounded.cginc"
 
 			uniform StructuredBuffer<data> _data;
+			uniform StructuredBuffer<uint> _randSeeds;
 			uniform sampler2D _windowTex;
 
 			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
@@ -59,6 +59,7 @@
 				v2g v = input[0];
 				uint id = v.id.x;
 				uint inst = v.id.y;
+				uint seed = _randSeeds[2 * inst + id];
 
 				data d = _data[inst];
 
@@ -69,12 +70,11 @@
 						return;
 					}
 
-					//AppendCube(d.center, d.size, d.uvStep, d.randSeed, outStream);
+					AppendCube(d.center, d.size, d.uvStep, seed, outStream);
 				}
 				else if (d.buildType == 1)
 				{
-					float angleOffset = ROUNDED_ANGLE_OFFSET_PER_LOOP * id;
-					AppendRounded(d.center, d.size, d.uvStep, angleOffset, d.randSeed, outStream);
+					AppendRounded(d.center, d.size, d.uvStep, id, seed, outStream);
 				}
 			}
 

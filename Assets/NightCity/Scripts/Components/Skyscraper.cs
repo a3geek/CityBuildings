@@ -20,11 +20,11 @@ namespace NightCity.Components
             public Vector3 center;
             public Vector3 size;
             public Vector3 uvStep;
-            public uint randSeed;
             public uint buildType;
         }
 
         public const string PropData = "_data";
+        public const string PropRandSeeds = "_randSeeds";
         public const string PropWindowTex = "_windowTex";
         
         [SerializeField]
@@ -43,8 +43,11 @@ namespace NightCity.Components
         private Material material = null;
 
         private WindowTexture winTex = null;
-        private ComputeBuffer buffer = null;
+        private ComputeBuffer dataBuffer = null;
+        private ComputeBuffer seedsBuffer = null;
+
         private List<Build> builds = new List<Build>();
+        private List<uint> seeds = new List<uint>();
 
 
         public void Init(WindowTexture windowTexture)
@@ -58,8 +61,11 @@ namespace NightCity.Components
                 return;
             }
 
-            this.buffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
-            this.buffer.SetData(this.builds.ToArray());
+            this.dataBuffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
+            this.dataBuffer.SetData(this.builds.ToArray());
+
+            this.seedsBuffer = new ComputeBuffer(this.seeds.Count, Marshal.SizeOf(typeof(uint)), ComputeBufferType.Default);
+            this.seedsBuffer.SetData(this.seeds.ToArray());
         }
 
         private void OnRenderObject()
@@ -71,15 +77,17 @@ namespace NightCity.Components
 
             this.material.SetPass(0);
 
-            this.material.SetBuffer(PropData, this.buffer);
+            this.material.SetBuffer(PropData, this.dataBuffer);
+            this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
             this.material.SetTexture(PropWindowTex, this.winTex.Tex);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 2, this.buffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, 2, this.dataBuffer.count);
         }
 
         private void OnDestroy()
         {
-            this.buffer?.Release();
+            this.dataBuffer?.Release();
+            this.seedsBuffer?.Release();
         }
 
         private void CreateBuilds()
@@ -102,13 +110,16 @@ namespace NightCity.Components
             var size = new Vector3(wid, hei, dep);
             size = size - size.Surplus(this.windowSize);
 
+            var buildType = Random.value < 0.5f ? 0u : 1u;
+            this.seeds.Add((uint)(Random.value * uint.MaxValue));
+            this.seeds.Add((uint)(Random.value * uint.MaxValue));
+
             return new Build()
             {
                 center = center,
                 size = size,
                 uvStep = size / this.windowSize,
-                randSeed = (uint)(Random.value * uint.MaxValue),
-                buildType = Random.value < 0.5f ? 0u : 1u
+                buildType = buildType
             };
         }
         
