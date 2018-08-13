@@ -57,9 +57,9 @@ void AppendCube(float3 center, float3 size, float3 uvStep, uint randSeed, inout 
 	float dc = 1024.0 / 8.0;
 
 	float randWD = uvStep.x > uvStep.z ?
-		GetOffset(randSeed, uvStep.x, wc) :
-		GetOffset(randSeed, uvStep.z, dc);
-	float randH = GetOffset(randSeed, uvStep.y, hc);
+		GetUvOffset(randSeed, uvStep.x, wc) :
+		GetUvOffset(randSeed, uvStep.z, dc);
+	float randH = GetUvOffset(randSeed, uvStep.y, hc);
 	float2 uvOffset = float2(randWD, randH);
 
 	float3 halfSize = 0.5 * size;
@@ -75,9 +75,9 @@ void AppendCube(float3 center, float3 size, float3 uvStep, uint randSeed, inout 
 			v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
 
 			v.uv = uvOffset + _CubeUvParam[idx] * float2(
-				i % 2 == 0 ? uvStep.z / dc : uvStep.x / wc,
+				IsMultipleOfTwo(i) == true ? uvStep.z / dc : uvStep.x / wc,
 				uvStep.y / hc
-				);
+			);
 
 			outStream.Append(v);
 		}
