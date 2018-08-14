@@ -35,31 +35,24 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 	float wc = 1024.0 / 8.0;
 	float hc = 1024.0 / 8.0;
 
-	float uvSkip = (2.0 * (uvStep.x + uvStep.z)) / ROUNDED_APPEND_LOOP_COUNT;
-	// countじゃなくて、2PIでわって、角度単位でUV制御したほうがよさそう.
-	float uvPerLoop = uvSkip / count;
+	float uvPerLoop = (2.0 * (uvStep.x + uvStep.z)) / UNITY_TWO_PI;
 
 	float randWD = GetUvOffset(randSeed, 2.0 * (uvStep.x + uvStep.z), wc);
 	float randH = GetUvOffset(randSeed, uvStep.y, hc);
-	float2 uvOffset = float2(randWD, randH) + float2((uvSkip * loop) / wc, 0.0);
-
+	float2 uvOffset = float2(randWD, randH);
 
 	for (int i = 0; i < count; i++)
 	{
-		int skipLoop = 0;
 		float r2 = r + step;
 
 		float skip = 0.0;
 		if(skiped == false && rand01(randSeed) < 0.1)
 		{
-			//skiped = true;
-			//skip = ROUNDED_SKIP_ANGLE - step;
-			//r2 += skip;
-			//skipLoop = ROUNDED_SKIP_LOOP_COUNT;
-			////i += ROUNDED_SKIP_LOOP_COUNT;
+			skiped = true;
+			skip = ROUNDED_SKIP_ANGLE;
+			i += ROUNDED_SKIP_LOOP_COUNT;
 		}
-
-		r2 = min(r2, max);
+		r2 = min(r2 + skip, max);
 
 		float3 p0 = center + float3(cos(r) * size.x * 0.5, size.y, sin(r) * size.z * 0.5);
 		float3 p1 = center + float3(cos(r2) * size.x * 0.5, size.y, sin(r2) * size.z * 0.5);
@@ -67,16 +60,16 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 		g2f v1, v2, v3, v4;
 
 		v1.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz, 1.0));
-		v1.uv = uvOffset + float2((i * uvPerLoop) / wc, uvStep.y / hc);
+		v1.uv = uvOffset + float2((r * uvPerLoop) / wc, uvStep.y / hc);
 
 		v2.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz, 1.0));
-		v2.uv = uvOffset + float2(((i + 1) * uvPerLoop) / wc, uvStep.y / hc);
+		v2.uv = uvOffset + float2((r2 * uvPerLoop) / wc, uvStep.y / hc);
 
 		v3.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz - yOffset, 1.0));
-		v3.uv = uvOffset + float2((i * uvPerLoop) / wc, 0.0);
+		v3.uv = uvOffset + float2((r * uvPerLoop) / wc, 0.0);
 
 		v4.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz - yOffset, 1.0));
-		v4.uv = uvOffset + float2(((i + 1) * uvPerLoop) / wc, 0.0);
+		v4.uv = uvOffset + float2((r2 * uvPerLoop) / wc, 0.0);
 
 		// high.
 		outStream.Append(highCen);
@@ -89,8 +82,7 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 		outStream.Append(lowCen);
 
 		outStream.RestartStrip();
-		r += step + skip;
-		i += skipLoop;
+		r += (step + skip);
 	}
 }
 
