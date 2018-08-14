@@ -1,6 +1,8 @@
 ﻿#ifndef GEOMETRIES_ROUNDED_INCLUDED
 #define GEOMETRIES_ROUNDED_INCLUDED
 
+#include "./Common.cginc"
+
 #define ROUNDED_STEP radians(10.0)
 #define ROUNDED_APPEND_LOOP_COUNT 2
 
@@ -16,7 +18,7 @@
 #define ROUNDED_SKIP_ANGLE radians(90.0)
 #define ROUNDED_SKIP_LOOP_COUNT ((ROUNDED_SKIP_ANGLE / ROUNDED_STEP) - 1)
 
-void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint randSeed, inout TriangleStream<g2f> outStream)
+void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint randSeed, inout TriangleStream<g2f> outStream)
 {
 	g2f lowCen, highCen;
 	lowCen.uv = highCen.uv = 0.0;
@@ -35,10 +37,10 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 	float wc = 1024.0 / 8.0;
 	float hc = 1024.0 / 8.0;
 
-	float uvPerLoop = (2.0 * (uvStep.x + uvStep.z)) / UNITY_TWO_PI;
+	float uvPerLoop = (2.0 * (uvRange.x + uvRange.z)) / UNITY_TWO_PI;
 
-	float randWD = GetUvOffset(randSeed, 2.0 * (uvStep.x + uvStep.z), wc);
-	float randH = GetUvOffset(randSeed, uvStep.y, hc);
+	float randWD = GetUvOffset(randSeed, 2.0 * (uvRange.x + uvRange.z), wc);
+	float randH = GetUvOffset(randSeed, uvRange.y, hc);
 	float2 uvOffset = float2(randWD, randH);
 
 	for (int i = 0; i < count; i++)
@@ -60,10 +62,10 @@ void AppendRounded(float3 center, float3 size, float3 uvStep, int loop, uint ran
 		g2f v1, v2, v3, v4;
 
 		v1.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz, 1.0));
-		v1.uv = uvOffset + float2((r * uvPerLoop) / wc, uvStep.y / hc);
+		v1.uv = uvOffset + float2((r * uvPerLoop) / wc, uvRange.y / hc);
 
 		v2.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz, 1.0));
-		v2.uv = uvOffset + float2((r2 * uvPerLoop) / wc, uvStep.y / hc);
+		v2.uv = uvOffset + float2((r2 * uvPerLoop) / wc, uvRange.y / hc);
 
 		v3.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz - yOffset, 1.0));
 		v3.uv = uvOffset + float2((r * uvPerLoop) / wc, 0.0);

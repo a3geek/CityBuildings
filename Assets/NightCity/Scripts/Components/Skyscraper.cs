@@ -19,7 +19,7 @@ namespace NightCity.Components
         {
             public Vector3 center;
             public Vector3 size;
-            public Vector3 uvStep;
+            public Vector3 uvRange;
             public uint buildType;
         }
 
@@ -118,7 +118,7 @@ namespace NightCity.Components
             {
                 center = center,
                 size = size,
-                uvStep = size / this.windowSize,
+                uvRange = size / this.windowSize,
                 buildType = buildType
             };
         }

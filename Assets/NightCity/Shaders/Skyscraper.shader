@@ -22,7 +22,7 @@
 			{
 				float3 center;
 				float3 size;
-				float3 uvStep;
+				float3 uvRange;
 				uint buildType;
 			};
 			
@@ -70,11 +70,11 @@
 						return;
 					}
 
-					AppendCube(d.center, d.size, d.uvStep, seed, outStream);
+					AppendCube(d.center, d.size, d.uvRange, seed, outStream);
 				}
 				else if (d.buildType == 1)
 				{
-					AppendRounded(d.center, d.size, d.uvStep, id, seed, outStream);
+					AppendRounded(d.center, d.size, d.uvRange, id, seed, outStream);
 				}
 			}
 
