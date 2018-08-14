@@ -25,6 +25,8 @@ namespace NightCity.Components
 
         public const string PropData = "_data";
         public const string PropRandSeeds = "_randSeeds";
+        public const string PropWindowNumberX = "_windowNumberX";
+        public const string PropWindowNumberY = "_windowNumberY";
         public const string PropWindowTex = "_windowTex";
         
         [SerializeField]
@@ -80,6 +82,10 @@ namespace NightCity.Components
             this.material.SetBuffer(PropData, this.dataBuffer);
             this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
             this.material.SetTexture(PropWindowTex, this.winTex.Tex);
+
+            var windowNumber = this.winTex.WindowNumber;
+            this.material.SetInt(PropWindowNumberX, windowNumber.x);
+            this.material.SetInt(PropWindowNumberY, windowNumber.y);
 
             Graphics.DrawProcedural(MeshTopology.Points, 2, this.dataBuffer.count);
         }

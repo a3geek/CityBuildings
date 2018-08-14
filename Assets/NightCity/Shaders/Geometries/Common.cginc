@@ -1,6 +1,9 @@
 ﻿#ifndef GEOMETRIES_COMMON_INCLUDED
 #define GEOMETRIES_COMMON_INCLUDED
 
+uniform int _windowNumberX;
+uniform int _windowNumberY;
+
 float GetUvOffset(uint randSeed, float base, float max)
 {
 	float width = max - base;

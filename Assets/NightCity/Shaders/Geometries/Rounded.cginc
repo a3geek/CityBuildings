@@ -29,19 +29,17 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 	float r = loop * ROUNDED_ANGLE_OFFSET_PER_LOOP;
 	float max = r + ROUNDED_ANGLE_OFFSET_PER_LOOP;
 	float step = ROUNDED_STEP;
-	float3 yOffset = float3(0.0, size.y, 0.0);
 
 	bool skiped = false;
 	int count = ROUNDED_STEP_COUNT;
 
-	float wc = 1024.0 / 8.0;
-	float hc = 1024.0 / 8.0;
+	float uvWidth = uvRange.x + uvRange.z;
+	float uvPerLoop = uvWidth / UNITY_TWO_PI;
+	float2 uvOffset = float2(GetUvOffset(seed.y, uvWidth, _windowNumberX), GetUvOffset(seed.y, uvRange.y, _windowNumberY));
 
-	float uvPerLoop = ((uvRange.x + uvRange.z)) / UNITY_TWO_PI;
-
-	float randWD = GetUvOffset(seed.y, (uvRange.x + uvRange.z), wc);
-	float randH = GetUvOffset(seed.y, uvRange.y, hc);
-	float2 uvOffset = float2(randWD, randH);
+	float3 yOffset = float3(0.0, size.y, 0.0);
+	float3 halfSize = 0.5 * size;
+	float uvY = uvRange.y / _windowNumberY;
 
 	for (int i = 0; i < count; i++)
 	{
@@ -56,22 +54,25 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		}
 		r2 = min(r2 + skip, max);
 
-		float3 p0 = center + float3(cos(r) * size.x * 0.5, size.y, sin(r) * size.z * 0.5);
-		float3 p1 = center + float3(cos(r2) * size.x * 0.5, size.y, sin(r2) * size.z * 0.5);
+		float3 p0 = center + float3(cos(r) * halfSize.x, size.y, sin(r) * halfSize.z);
+		float3 p1 = center + float3(cos(r2) * halfSize.x, size.y, sin(r2) * halfSize.z);
+
+		float uvX0 = (r * uvPerLoop) / _windowNumberX;
+		float uvX1 = (r2 * uvPerLoop) / _windowNumberX;
 
 		g2f v1, v2, v3, v4;
 
 		v1.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz, 1.0));
-		v1.uv = uvOffset + float2((r * uvPerLoop) / wc, uvRange.y / hc);
+		v1.uv = uvOffset + float2(uvX0, uvY);
 
 		v2.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz, 1.0));
-		v2.uv = uvOffset + float2((r2 * uvPerLoop) / wc, uvRange.y / hc);
+		v2.uv = uvOffset + float2(uvX1, uvY);
 
 		v3.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz - yOffset, 1.0));
-		v3.uv = uvOffset + float2((r * uvPerLoop) / wc, 0.0);
+		v3.uv = uvOffset + float2(uvX0, 0.0);
 
 		v4.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz - yOffset, 1.0));
-		v4.uv = uvOffset + float2((r2 * uvPerLoop) / wc, 0.0);
+		v4.uv = uvOffset + float2(uvX1, 0.0);
 
 		// high.
 		outStream.Append(highCen);
