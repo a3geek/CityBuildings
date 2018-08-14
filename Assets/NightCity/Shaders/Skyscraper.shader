@@ -59,8 +59,8 @@
 				v2g v = input[0];
 				uint id = v.id.x;
 				uint inst = v.id.y;
-				uint seed = _randSeeds[2 * inst + id];
 
+				uint seed = _randSeeds[2 * inst + id];
 				data d = _data[inst];
 
 				if (d.buildType == 0)
@@ -74,7 +74,8 @@
 				}
 				else if (d.buildType == 1)
 				{
-					AppendRounded(d.center, d.size, d.uvRange, id, seed, outStream);
+					uint2 seeds = uint2(seed, _randSeeds[2 * inst]);
+					AppendRounded(d.center, d.size, d.uvRange, id, seeds, outStream);
 				}
 			}
 

@@ -18,7 +18,7 @@
 #define ROUNDED_SKIP_ANGLE radians(90.0)
 #define ROUNDED_SKIP_LOOP_COUNT ((ROUNDED_SKIP_ANGLE / ROUNDED_STEP) - 1)
 
-void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint randSeed, inout TriangleStream<g2f> outStream)
+void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 seed, inout TriangleStream<g2f> outStream)
 {
 	g2f lowCen, highCen;
 	lowCen.uv = highCen.uv = 0.0;
@@ -37,10 +37,10 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint ra
 	float wc = 1024.0 / 8.0;
 	float hc = 1024.0 / 8.0;
 
-	float uvPerLoop = (2.0 * (uvRange.x + uvRange.z)) / UNITY_TWO_PI;
+	float uvPerLoop = ((uvRange.x + uvRange.z)) / UNITY_TWO_PI;
 
-	float randWD = GetUvOffset(randSeed, 2.0 * (uvRange.x + uvRange.z), wc);
-	float randH = GetUvOffset(randSeed, uvRange.y, hc);
+	float randWD = GetUvOffset(seed.y, (uvRange.x + uvRange.z), wc);
+	float randH = GetUvOffset(seed.y, uvRange.y, hc);
 	float2 uvOffset = float2(randWD, randH);
 
 	for (int i = 0; i < count; i++)
@@ -48,7 +48,7 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint ra
 		float r2 = r + step;
 
 		float skip = 0.0;
-		if(skiped == false && rand01(randSeed) < 0.1)
+		if(skiped == false && rand01(seed.x) < 0.1)
 		{
 			skiped = true;
 			skip = ROUNDED_SKIP_ANGLE;
