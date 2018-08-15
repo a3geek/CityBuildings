@@ -87,7 +87,7 @@ namespace NightCity.Components
             this.material.SetInt(PropWindowNumberX, windowNumber.x);
             this.material.SetInt(PropWindowNumberY, windowNumber.y);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 2, this.dataBuffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, 3, this.dataBuffer.count);
         }
 
         private void OnDestroy()

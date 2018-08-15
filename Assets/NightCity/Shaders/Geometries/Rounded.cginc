@@ -4,12 +4,12 @@
 #include "./Common.cginc"
 
 #define ROUNDED_STEP radians(10.0)
-#define ROUNDED_APPEND_LOOP_COUNT 2
+#define ROUNDED_APPEND_LOOP_COUNT 3
 
 #define ROUNDED_ANGLE_PER_LOOP (UNITY_TWO_PI / ROUNDED_APPEND_LOOP_COUNT)
 #define ROUNDED_STEP_COUNT floor(ROUNDED_ANGLE_PER_LOOP / ROUNDED_STEP)
 
-#define ROUNDED_VERTEX_COUNT_PER_LOOP 6
+#define ROUNDED_VERTEX_COUNT_PER_LOOP 10
 #define ROUNDED_APPEND_VERTEX_COUNT (ROUNDED_STEP_COUNT * ROUNDED_VERTEX_COUNT_PER_LOOP)
 
 #define ROUNDED_APPEND_COUNT_PER_GEOMETRY (ROUNDED_APPEND_VERTEX_COUNT / ROUNDED_APPEND_LOOP_COUNT)
@@ -63,23 +63,31 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		g2f v1, v2, v3, v4;
 
 		v1.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz, 1.0));
-		v1.uv = uvOffset + float2(uvX0, uvY);
-
 		v2.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz, 1.0));
-		v2.uv = uvOffset + float2(uvX1, uvY);
 
 		v3.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz - yOffset, 1.0));
-		v3.uv = uvOffset + float2(uvX0, 0.0);
 
 		v4.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz - yOffset, 1.0));
-		v4.uv = uvOffset + float2(uvX1, 0.0);
 
 		// high.
+		v1.uv = v2.uv = 0.0;
 		outStream.Append(highCen);
 		outStream.Append(v2);
 		outStream.Append(v1);
 
+		// side.
+		v1.uv = uvOffset + float2(uvX0, uvY);
+		v2.uv = uvOffset + float2(uvX1, uvY);
+		v3.uv = uvOffset + float2(uvX0, 0.0);
+		v4.uv = uvOffset + float2(uvX1, 0.0);
+
+		outStream.Append(v2);
+		outStream.Append(v1);
+		outStream.Append(v4);
+		outStream.Append(v3);
+
 		// low.
+		v3.uv = v4.uv = 0.0;
 		outStream.Append(v4);
 		outStream.Append(v3);
 		outStream.Append(lowCen);
