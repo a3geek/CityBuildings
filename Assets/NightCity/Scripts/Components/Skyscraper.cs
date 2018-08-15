@@ -39,6 +39,10 @@ namespace NightCity.Components
         private Vector2 rate = new Vector2(0.75f, 0.95f);
         [SerializeField]
         private int windowSize = 1;
+        [SerializeField]
+        private float specialRate = 0.05f;
+        [SerializeField]
+        private Vector2 specialHeight = new Vector2(50f, 75f);
 
         [Space]
         [SerializeField]
@@ -62,7 +66,7 @@ namespace NightCity.Components
             {
                 return;
             }
-
+            
             this.dataBuffer = new ComputeBuffer(this.builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
             this.dataBuffer.SetData(this.builds.ToArray());
 
@@ -111,7 +115,7 @@ namespace NightCity.Components
         {
             var wid = rate.Rand() * width;
             var dep = rate.Rand() * depth;
-            var hei = height.Rand();
+            var hei = Random.value < this.specialRate ? this.specialHeight.Rand() : height.Rand();
 
             var size = new Vector3(wid, hei, dep);
             size = size - size.Surplus(this.windowSize);

@@ -15,8 +15,8 @@
 #define ROUNDED_APPEND_COUNT_PER_GEOMETRY (ROUNDED_APPEND_VERTEX_COUNT / ROUNDED_APPEND_LOOP_COUNT)
 #define ROUNDED_ANGLE_OFFSET_PER_LOOP (UNITY_TWO_PI / ROUNDED_APPEND_LOOP_COUNT)
 
-#define ROUNDED_SKIP_ANGLE radians(90.0)
-#define ROUNDED_SKIP_LOOP_COUNT ((ROUNDED_SKIP_ANGLE / ROUNDED_STEP) - 1)
+#define ROUNDED_SKIP_ANGLE(i) (i == 0 ? radians(45.0) : radians(90.0))
+#define ROUNDED_SKIP_LOOP_COUNT(angle) ((angle / ROUNDED_STEP) - 1)
 
 void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 seed, inout TriangleStream<g2f> outStream)
 {
@@ -49,8 +49,8 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		if(skiped == false && rand01(seed.x) < 0.1)
 		{
 			skiped = true;
-			skip = ROUNDED_SKIP_ANGLE;
-			i += ROUNDED_SKIP_LOOP_COUNT;
+			skip = ROUNDED_SKIP_ANGLE(round(rand01(seed.x)));
+			i += ROUNDED_SKIP_LOOP_COUNT(skip);
 		}
 		r2 = min(r2 + skip, max);
 
@@ -66,7 +66,6 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		v2.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz, 1.0));
 
 		v3.pos = mul(UNITY_MATRIX_VP, float4(p0.xyz - yOffset, 1.0));
-
 		v4.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz - yOffset, 1.0));
 
 		// high.

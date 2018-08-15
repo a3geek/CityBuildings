@@ -40,10 +40,6 @@ namespace NightCity.Components
         [SerializeField]
         private float noiseFrequency = 1f;
 
-        [Header("Debug")]
-        [SerializeField]
-        private Renderer render = null;
-
 
         public void Init()
         {
@@ -61,8 +57,6 @@ namespace NightCity.Components
             this.cs.SetTexture(0, PropWindowTex, this.Tex);
 
             this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
-
-            this.render.material.mainTexture = this.Tex;
         }
     }
 }
