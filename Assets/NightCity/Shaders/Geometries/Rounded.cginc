@@ -33,7 +33,7 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 	bool skiped = false;
 	int count = ROUNDED_STEP_COUNT;
 
-	float uvWidth = uvRange.x + uvRange.z;
+	float uvWidth = (uvRange.x + uvRange.z) * 1.5;
 	float uvPerLoop = uvWidth / UNITY_TWO_PI;
 	float2 uvOffset = float2(GetUvOffset(seed.y, uvWidth, _windowNumberX), GetUvOffset(seed.y, uvRange.y, _windowNumberY));
 

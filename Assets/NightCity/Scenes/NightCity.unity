@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 621738620}
   - component: {fileID: 621738619}
   - component: {fileID: 621738618}
+  - component: {fileID: 621738622}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -195,6 +196,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
+--- !u!114 &621738622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 621738617}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b02de5510014f4889942bd89a54311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validity: 1
+  material: {fileID: 2100000, guid: 96f780aa9758e6c4183afec98400b4d5, type: 2}
+  iteration: 4
+  threshold: 0.1
+  softThreshold: 0.1
+  intensity: 4
+  downRate: 1
+  upRate: 0.5
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,11 +366,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df842b6c64300d84b967fba995ea6373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: {x: 10, y: 25}
-  width: {x: 35, y: 30}
-  depth: {x: 35, y: 30}
-  rate: {x: 0.75, y: 0.95}
-  windowSize: 2
-  specialRate: 0.025
-  specialHeight: {x: 75, y: 100}
+  buildings:
+    height: {x: 10, y: 25}
+    width: {x: 35, y: 30}
+    depth: {x: 35, y: 30}
+    rate: {x: 0.75, y: 0.95}
+    windowSize: 1
+    specialRate: 0.025
+    specialHeight: {x: 75, y: 100}
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
