@@ -4,8 +4,6 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
-using Random = UnityEngine.Random;
-
 namespace NightCity.Components
 {
     using Utilities;

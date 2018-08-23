@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 621738619}
   - component: {fileID: 621738618}
   - component: {fileID: 621738622}
+  - component: {fileID: 621738623}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -219,6 +220,19 @@ MonoBehaviour:
   intensity: 4
   downRate: 1
   upRate: 0.5
+--- !u!114 &621738623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 621738617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b4f457122e9b4586422773949914a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validity: 1
+  material: {fileID: 2100000, guid: 01edeaea6a7a630419ccaf388da24215, type: 2}
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +391,22 @@ MonoBehaviour:
     depth: {x: 35, y: 30}
     rate: {x: 0.75, y: 0.95}
     windowSize: 1
-    colors: []
+    colors:
+    - {r: 0.993, g: 0.89724004, b: 0.86700004, a: 0.5}
+    - {r: 0.9965, g: 0.90739, b: 0.8635, a: 0.5}
+    - {r: 0.979, g: 0.92804, b: 0.88100004, a: 0.5}
+    - {r: 0.993, g: 0.91992, b: 0.86700004, a: 0.5}
+    - {r: 0.985, g: 0.87700003, b: 0.71500003, a: 0.5}
+    - {r: 0.993, g: 0.96528, b: 0.86700004, a: 0.5}
+    - {r: 0.993, g: 0.98039997, b: 0.86700004, a: 0.5}
+    - {r: 0.994, g: 1, b: 0.70000005, a: 0.5}
+    - {r: 0.86700004, g: 0.95519996, b: 0.993, a: 0.5}
+    - {r: 0.86700004, g: 0.95519996, b: 0.993, a: 0.5}
+    - {r: 0.86700004, g: 0.9174, b: 0.993, a: 0.5}
+    - {r: 0.86700004, g: 0.87960005, b: 0.993, a: 0.5}
+    - {r: 0.986, g: 0.9868, b: 0.994, a: 0.5}
+    - {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
+    - {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
