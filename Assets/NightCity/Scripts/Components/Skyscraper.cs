@@ -10,72 +10,82 @@ namespace NightCity.Components
 {
     using Utilities;
     using Creators;
-    using Build = Creators.BuildingsCreator.Build;
+    using GeomData = Creators.Builder.GeomData;
+    using FragData = Creators.Builder.FragData;
     
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour
     {
-        public const string PropData = "_data";
+        public const string PropData = "_geomData";
         public const string PropRandSeeds = "_randSeeds";
+        public const string PropFragData = "_fragData";
         public const string PropWindowNumberX = "_windowNumberX";
         public const string PropWindowNumberY = "_windowNumberY";
         public const string PropWindowTex = "_windowTex";
 
         [SerializeField]
-        private BuildingsCreator buildings = new BuildingsCreator();
+        private Builder builder = new Builder();
         [SerializeField]
         private Material material = null;
 
         private WindowTexture winTex = null;
-        private ComputeBuffer dataBuffer = null;
+        private ComputeBuffer geomsBuffer = null;
         private ComputeBuffer seedsBuffer = null;
-        
+        private ComputeBuffer fragsBuffer = null;
+
 
         public void Init(WindowTexture windowTexture)
         {
             this.winTex = windowTexture;
 
-            List<Build> builds;
-            List<uint> seeds;
-
-            this.buildings.CreateBuilds(out builds, out seeds);
-            if(builds.Count <= 0)
+            this.builder.CreateBuilds();
+            if(this.builder.Geoms.Count <= 0)
             {
                 return;
             }
-            
-            this.dataBuffer = new ComputeBuffer(builds.Count, Marshal.SizeOf(typeof(Build)), ComputeBufferType.Default);
-            this.dataBuffer.SetData(builds.ToArray());
 
-            this.seedsBuffer = new ComputeBuffer(seeds.Count, Marshal.SizeOf(typeof(uint)), ComputeBufferType.Default);
-            this.seedsBuffer.SetData(seeds.ToArray());
+            this.geomsBuffer = this.CreateBuffer<GeomData>(this.builder.Geoms.Count);
+            this.geomsBuffer.SetData(this.builder.Geoms.ToArray());
+
+            this.seedsBuffer = this.CreateBuffer<uint>(this.builder.Seeds.Count);
+            this.seedsBuffer.SetData(this.builder.Seeds.ToArray());
+
+            this.fragsBuffer = this.CreateBuffer<FragData>(this.builder.Frags.Count);
+            this.fragsBuffer.SetData(this.builder.Frags.ToArray());
         }
 
         private void OnRenderObject()
         {
-            if(this.dataBuffer.count <= 0)
+            if(this.geomsBuffer == null)
             {
                 return;
             }
 
             this.material.SetPass(0);
 
-            this.material.SetBuffer(PropData, this.dataBuffer);
+            this.material.SetBuffer(PropData, this.geomsBuffer);
             this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
+            this.material.SetBuffer(PropFragData, this.fragsBuffer);
             this.material.SetTexture(PropWindowTex, this.winTex.Tex);
 
             var windowNumber = this.winTex.WindowNumber;
             this.material.SetInt(PropWindowNumberX, windowNumber.x);
             this.material.SetInt(PropWindowNumberY, windowNumber.y);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 3, this.dataBuffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, 3, this.geomsBuffer.count);
         }
 
         private void OnDestroy()
         {
-            this.dataBuffer?.Release();
+            this.geomsBuffer?.Release();
             this.seedsBuffer?.Release();
+            this.fragsBuffer?.Release();
+        }
+
+        private ComputeBuffer CreateBuffer<T>(int count)
+        {
+            return new ComputeBuffer(count, Marshal.SizeOf(typeof(T)), ComputeBufferType.Default);
         }
     }
 }

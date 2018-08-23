@@ -116,9 +116,9 @@ NavMeshSettings:
 --- !u!1 &621738617
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 621738621}
   - component: {fileID: 621738620}
@@ -135,27 +135,31 @@ GameObject:
 --- !u!81 &621738618
 AudioListener:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
   m_Enabled: 1
 --- !u!124 &621738619
 Behaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
   m_Enabled: 1
 --- !u!20 &621738620
 Camera:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 1
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -185,7 +189,7 @@ Camera:
 --- !u!4 &621738621
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
   m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
@@ -199,10 +203,10 @@ Transform:
 --- !u!114 &621738622
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b02de5510014f4889942bd89a54311, type: 3}
   m_Name: 
@@ -218,9 +222,9 @@ MonoBehaviour:
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 1619333017}
   - component: {fileID: 1619333016}
@@ -234,7 +238,7 @@ GameObject:
 --- !u!108 &1619333016
 Light:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1619333015}
   m_Enabled: 1
@@ -261,6 +265,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
@@ -270,7 +275,7 @@ Light:
 --- !u!4 &1619333017
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1619333015}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -283,9 +288,9 @@ Transform:
 --- !u!1 &1753058797
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 1753058798}
   - component: {fileID: 1753058800}
@@ -302,7 +307,7 @@ GameObject:
 --- !u!4 &1753058798
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1753058797}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -315,7 +320,7 @@ Transform:
 --- !u!114 &1753058799
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1753058797}
   m_Enabled: 1
@@ -330,7 +335,7 @@ MonoBehaviour:
 --- !u!114 &1753058800
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1753058797}
   m_Enabled: 1
@@ -341,7 +346,7 @@ MonoBehaviour:
 --- !u!114 &1753058801
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1753058797}
   m_Enabled: 1
@@ -358,7 +363,7 @@ MonoBehaviour:
 --- !u!114 &1753058802
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1753058797}
   m_Enabled: 1
@@ -366,12 +371,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df842b6c64300d84b967fba995ea6373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildings:
+  builder:
     height: {x: 10, y: 25}
     width: {x: 35, y: 30}
     depth: {x: 35, y: 30}
     rate: {x: 0.75, y: 0.95}
     windowSize: 1
+    colors:
+    - {r: 1, g: 1, b: 1, a: 0}
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}

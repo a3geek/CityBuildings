@@ -18,10 +18,10 @@
 #define ROUNDED_SKIP_ANGLE(i) (i == 0 ? radians(45.0) : radians(90.0))
 #define ROUNDED_SKIP_LOOP_COUNT(angle) ((angle / ROUNDED_STEP) - 1)
 
-void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 seed, inout TriangleStream<g2f> outStream)
+void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 seed, int index, inout TriangleStream<g2f> outStream)
 {
 	g2f lowCen, highCen;
-	lowCen.uv = highCen.uv = 0.0;
+	lowCen.uv = highCen.uv = float3(0.0, 0.0, -1.0);
 
 	lowCen.pos = mul(UNITY_MATRIX_VP, float4(center.xyz, 1.0));
 	highCen.pos = mul(UNITY_MATRIX_VP, float4(center.x, center.y + size.y, center.z, 1.0));
@@ -69,16 +69,16 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		v4.pos = mul(UNITY_MATRIX_VP, float4(p1.xyz - yOffset, 1.0));
 
 		// high.
-		v1.uv = v2.uv = 0.0;
+		v1.uv = v2.uv = float3(0.0, 0.0, -1.0);
 		outStream.Append(highCen);
 		outStream.Append(v2);
 		outStream.Append(v1);
 
 		// side.
-		v1.uv = uvOffset + float2(uvX0, uvY);
-		v2.uv = uvOffset + float2(uvX1, uvY);
-		v3.uv = uvOffset + float2(uvX0, 0.0);
-		v4.uv = uvOffset + float2(uvX1, 0.0);
+		v1.uv = float3(uvOffset + float2(uvX0, uvY), index);
+		v2.uv = float3(uvOffset + float2(uvX1, uvY), index);
+		v3.uv = float3(uvOffset + float2(uvX0, 0.0), index);
+		v4.uv = float3(uvOffset + float2(uvX1, 0.0), index);
 
 		outStream.Append(v2);
 		outStream.Append(v1);
@@ -86,7 +86,7 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		outStream.Append(v3);
 
 		// low.
-		v3.uv = v4.uv = 0.0;
+		v3.uv = v4.uv = float3(0.0, 0.0, -1.0);
 		outStream.Append(v4);
 		outStream.Append(v3);
 		outStream.Append(lowCen);

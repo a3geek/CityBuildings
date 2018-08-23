@@ -48,7 +48,7 @@ static const int _CubeVertexOrder[CUBE_SURFACE_COUNT][CUBE_VERTEX_COUNT_PER_SURF
 	{ 3, 6, 2, 7 }  // bottom
 };
 
-void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, inout TriangleStream<g2f> outStream)
+void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int index, inout TriangleStream<g2f> outStream)
 {
 	g2f v;
 
@@ -74,10 +74,10 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, inout
 			pos.y += halfSize.y;
 			v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
 
-			v.uv = uvOffset + _CubeUvParam[idx] * float2(
+			v.uv = float3(uvOffset + _CubeUvParam[idx] * float2(
 				IsMultipleOfTwo(i) == true ? uvRange.z / dc : uvRange.x / wc,
 				uvRange.y / hc
-			);
+			), index);
 
 			outStream.Append(v);
 		}

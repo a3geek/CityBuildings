@@ -11,16 +11,26 @@ namespace NightCity.Creators
     using Components;
 
     [Serializable]
-    public class BuildingsCreator
+    public class Builder
     {
         [Serializable]
-        public struct Build
+        public struct GeomData
         {
             public Vector3 center;
             public Vector3 size;
             public Vector3 uvRange;
             public uint buildType;
         }
+
+        [Serializable]
+        public struct FragData
+        {
+            public Color colors;
+        }
+
+        public List<GeomData> Geoms { get; } = new List<GeomData>();
+        public List<FragData> Frags { get; } = new List<FragData>();
+        public List<uint> Seeds { get; } = new List<uint>();
         
         [SerializeField]
         private Vector2 height = new Vector2(15f, 40f);
@@ -33,33 +43,34 @@ namespace NightCity.Creators
         [SerializeField]
         private int windowSize = 1;
         [SerializeField]
+        private List<Color> colors = new List<Color>();
+        [SerializeField]
         private float specialRate = 0.05f;
         [SerializeField]
         private Vector2 specialHeight = new Vector2(50f, 75f);
 
 
-        public void CreateBuilds(out List<Build> builds, out List<uint> seeds)
+        public void CreateBuilds()
         {
             var sections = CityArea.Instance.Sections;
-            builds = new List<Build>();
-            seeds = new List<uint>();
 
             for(var i = 0; i < sections.Count; i++)
             {
                 var section = sections[i];
-                this.CreateBuild(section, ref builds, ref seeds);
+                this.CreateBuild(section);
             }
         }
 
-        private void CreateBuild(CityArea.Section section, ref List<Build> builds, ref List<uint> seeds)
+        private void CreateBuild(CityArea.Section section)
         {
             var size = section.Size;
             var center = section.Center;
 
             if(size.x <= this.width.x && size.z <= this.depth.x)
             {
-                this.AddSeeds(ref seeds, 2);
-                builds.Add(this.CreateBuild(center, size.x, size.z, this.height, this.rate));
+                this.AddFrags(1);
+                this.AddSeeds(2);
+                this.Geoms.Add(this.CreateBuild(center, size.x, size.z, this.height, this.rate));
                 return;
             }
 
@@ -75,13 +86,14 @@ namespace NightCity.Creators
                     var cen = bl + 0.5f * div + div * new Vector2(i, j);
                     var field = new Vector2(size.x * division.x, size.z * division.y);
 
-                    this.AddSeeds(ref seeds, 2);
-                    builds.Add(this.CreateBuild(cen.ToVector3(center.y), field.x, field.y, this.height, this.rate));
+                    this.AddFrags(1);
+                    this.AddSeeds(2);
+                    this.Geoms.Add(this.CreateBuild(cen.ToVector3(center.y), field.x, field.y, this.height, this.rate));
                 }
             }
         }
 
-        private Build CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
+        private GeomData CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
         {
             var wid = rate.Rand() * width;
             var dep = rate.Rand() * depth;
@@ -90,7 +102,7 @@ namespace NightCity.Creators
             var size = new Vector3(wid, hei, dep);
             size = size - size.Surplus(this.windowSize);
 
-            return new Build()
+            return new GeomData()
             {
                 center = center,
                 size = size,
@@ -99,11 +111,19 @@ namespace NightCity.Creators
             };
         }
 
-        private void AddSeeds(ref List<uint> seeds, int count)
+        private void AddFrags(int count)
         {
             for(var i = 0; i < count; i++)
             {
-                seeds.Add((uint)(Random.value * uint.MaxValue));
+                this.Frags.Add(new FragData() { colors = this.colors[Random.Range(0, this.colors.Count)] });
+            }
+        }
+
+        private void AddSeeds(int count)
+        {
+            for(var i = 0; i < count; i++)
+            {
+                this.Seeds.Add((uint)(Random.value * uint.MaxValue));
             }
         }
     }
