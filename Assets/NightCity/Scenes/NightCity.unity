@@ -377,8 +377,7 @@ MonoBehaviour:
     depth: {x: 35, y: 30}
     rate: {x: 0.75, y: 0.95}
     windowSize: 1
-    colors:
-    - {r: 1, g: 1, b: 1, a: 0}
+    colors: []
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
