@@ -7,29 +7,15 @@ using Random = UnityEngine.Random;
 
 namespace NightCity.Creators
 {
+    using Structs;
     using Utilities;
     using Components;
 
     [Serializable]
     public class Builder
     {
-        [Serializable]
-        public struct GeomData
-        {
-            public Vector3 center;
-            public Vector3 size;
-            public Vector3 uvRange;
-            public uint buildType;
-        }
-
-        [Serializable]
-        public struct FragData
-        {
-            public Color colors;
-        }
-
-        public List<GeomData> Geoms { get; } = new List<GeomData>();
-        public List<FragData> Frags { get; } = new List<FragData>();
+        public List<BuildingGeomData> Geoms { get; } = new List<BuildingGeomData>();
+        public List<BuildingFragData> Frags { get; } = new List<BuildingFragData>();
         public List<uint> Seeds { get; } = new List<uint>();
         
         [SerializeField]
@@ -50,10 +36,8 @@ namespace NightCity.Creators
         private Vector2 specialHeight = new Vector2(50f, 75f);
 
 
-        public void CreateBuilds()
+        public void CreateBuilds(List<Section> sections)
         {
-            var sections = CityArea.Instance.Sections;
-
             for(var i = 0; i < sections.Count; i++)
             {
                 var section = sections[i];
@@ -61,7 +45,7 @@ namespace NightCity.Creators
             }
         }
 
-        private void CreateBuild(CityArea.Section section)
+        private void CreateBuild(Section section)
         {
             var size = section.Size;
             var center = section.Center;
@@ -93,7 +77,7 @@ namespace NightCity.Creators
             }
         }
 
-        private GeomData CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
+        private BuildingGeomData CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
         {
             var wid = rate.Rand() * width;
             var dep = rate.Rand() * depth;
@@ -102,7 +86,7 @@ namespace NightCity.Creators
             var size = new Vector3(wid, hei, dep);
             size = size - size.Surplus(this.windowSize);
 
-            return new GeomData()
+            return new BuildingGeomData()
             {
                 center = center,
                 size = size,
@@ -115,7 +99,7 @@ namespace NightCity.Creators
         {
             for(var i = 0; i < count; i++)
             {
-                this.Frags.Add(new FragData() { colors = this.colors[Random.Range(0, this.colors.Count)] });
+                this.Frags.Add(new BuildingFragData() { colors = this.colors[Random.Range(0, this.colors.Count)] });
             }
         }
 

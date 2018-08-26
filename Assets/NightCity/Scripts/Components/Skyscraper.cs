@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace NightCity.Components
 {
-    using Utilities;
+    using Structs;
     using Creators;
-    using GeomData = Creators.Builder.GeomData;
-    using FragData = Creators.Builder.FragData;
     
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Sky Scraper")]
@@ -25,6 +23,8 @@ namespace NightCity.Components
         [SerializeField]
         private Builder builder = new Builder();
         [SerializeField]
+        private CityArea cityarea = new CityArea();
+        [SerializeField]
         private Material material = null;
 
         private WindowTexture winTex = null;
@@ -37,20 +37,42 @@ namespace NightCity.Components
         {
             this.winTex = windowTexture;
 
-            this.builder.CreateBuilds();
+            this.colors = new Dictionary<Road, Color>();
+            this.cityarea.CreateAreas();
+            this.builder.CreateBuilds(this.cityarea.Sections);
+
             if(this.builder.Geoms.Count <= 0)
             {
                 return;
             }
 
-            this.geomsBuffer = this.CreateBuffer<GeomData>(this.builder.Geoms.Count);
+            this.geomsBuffer = this.CreateBuffer<BuildingGeomData>(this.builder.Geoms.Count);
             this.geomsBuffer.SetData(this.builder.Geoms.ToArray());
 
             this.seedsBuffer = this.CreateBuffer<uint>(this.builder.Seeds.Count);
             this.seedsBuffer.SetData(this.builder.Seeds.ToArray());
 
-            this.fragsBuffer = this.CreateBuffer<FragData>(this.builder.Frags.Count);
+            this.fragsBuffer = this.CreateBuffer<BuildingFragData>(this.builder.Frags.Count);
             this.fragsBuffer.SetData(this.builder.Frags.ToArray());
+        }
+
+        private Dictionary<Road, Color> colors = new Dictionary<Road, Color>();
+
+        private void OnDrawGizmos()
+        {
+            var roads = this.cityarea.Roads;
+            for(var i = 0; i < roads.Count; i++)
+            {
+                var road = roads[i];
+
+                if(this.colors.ContainsKey(road) == false)
+                {
+                    this.colors[road] = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
+                }
+
+                Gizmos.color = this.colors[road];
+                road.Line.DrawGizmos();
+            }
         }
 
         private void OnRenderObject()

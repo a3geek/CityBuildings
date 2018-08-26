@@ -39,5 +39,37 @@ namespace NightCity.Utilities
         {
             return new Vector3(v2.x, y, v2.y);
         }
+
+        public static Vector2 Normal(this Vector2 v2)
+        {
+            return new Vector2(v2.y, v2.x).normalized;
+        }
+
+        public static void EachAction(this Vector2 v2, Action<float> action)
+        {
+            action(v2.x);
+            action(v2.y);
+        }
+
+        public static void EachAction(this Vector2 v2, Action<int, float> action)
+        {
+            action(0, v2[0]);
+            action(1, v2[1]);
+        }
+
+        public static Vector2 EachFunc(this Vector2 v2, Func<float, float> func)
+        {
+            return new Vector2(func(v2.x), func(v2.y));
+        }
+
+        public static Vector2 EachFunc(this Vector2 v2, Func<int, float, float> func)
+        {
+            return new Vector2(func(0, v2[0]), func(1, v2[1]));
+        }
+
+        public static Vector2 EachFunc(this Vector2 v2, Vector2 other, Func<float, float, float> func)
+        {
+            return new Vector2(func(v2.x, other.x), func(v2.y, other.y));
+        }
     }
 }

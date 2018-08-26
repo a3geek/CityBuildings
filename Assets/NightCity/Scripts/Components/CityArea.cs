@@ -1,206 +1,192 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 using UnityEngine;
-
 using Random = UnityEngine.Random;
 
 namespace NightCity.Components
 {
+    using Components;
+    using LineStructures;
+    using Structs;
     using Utilities;
 
-    [DisallowMultipleComponent]
-    [DefaultExecutionOrder(ExecutionOrder)]
-    [AddComponentMenu("Night City/Components/City Area")]
-    public class CityArea : SingletonMonoBehaviour<CityArea>
+    [Serializable]
+    public class CityArea
     {
-        [Serializable]
-        public struct Section
-        {
-            public static float DefaultCenterY = 0f;
-            public static float DefaultSizeY = 0f;
-
-            public Vector3 BottomLeft
-            {
-                get { return this.Center - 0.5f * this.Size; }
-            }
-
-            public Vector3 Center { get; }
-            public Vector3 Size { get; }
-
-
-            public Section(Vector2 center, Vector2 size)
-            {
-                this.Center = new Vector3(center.x, DefaultCenterY, center.y);
-                this.Size = new Vector3(size.x, DefaultSizeY, size.y);
-            }
-        }
-        public class Road
-        {
-            public Vector2 from;
-            public Vector2 to;
-            public Vector2 normal;
-            public float width;
-
-
-            public Road(Vector2 from, Vector2 to, float width)
-            {
-                this.from = from;
-                this.to = to;
-                this.width = width;
-
-                var diff = to - from;
-                this.normal = (new Vector2(diff.y, diff.x)).normalized;
-            }
-            
-        }
-
-        public const int ExecutionOrder = -32000;
-
         public List<Section> Sections { get; } = new List<Section>();
-        public List<Road> roads
-        {
-            get { return this.vertical.Concat(this.horizontal).ToList(); }
-        }
+        //public List<Road> roads
+        //{
+        //    get { return this.vertical.Concat(this.horizontal).ToList(); }
+        //}
 
-        public List<Road> vertical { get; } = new List<Road>();
-        public List<Road> horizontal { get; } = new List<Road>();
+        public List<Road> VerticalRoad { get; } = new List<Road>();
+        public List<Road> HorizontalRoad { get; } = new List<Road>();
+        public List<Road> Roads { get; } = new List<Road>();
 
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
         [SerializeField]
-        private Vector2 sectionX = new Vector2(15f, 60f);
+        private Vector2 sectionX = new Vector2(30f, 60f);
         [SerializeField]
-        private Vector2 sectionY = new Vector2(15f, 60f);
-        
+        private Vector2 sectionY = new Vector2(30f, 60f);
+
         [Header("Road"), Space]
         [SerializeField]
-        private float mainRoadWidth = 8f;
+        private float mainRoadWidth = 16f;
         [SerializeField]
         private float subRoadWidth = 4f;
         [SerializeField]
         private float mainRate = 0.1f;
-        
+        [SerializeField]
+        private float interval = 1f;
 
-        protected override void Awake()
+
+        public void CreateAreas()
         {
-            base.Awake();
-            this.Init();
-        }
+            // First : main road.
+            var max = new Vector2(this.sectionX.y, this.sectionY.y);
+            var counter = 0;
+            var pos = Vector2.zero;
+            
+            var horizontal = new List<float>();
+            var vertical = new List<float>();
 
-        private List<Road> CreateLanes(Vector2 section, Vector2 dir, Vector4 field)
-        {
-            var lanes = new List<Road>();
-            var main = this.mainRoadWidth;
+            Action posStep = () =>
+            {
+                pos = pos.EachFunc(max, (v1, v2) => v1 + (v1 < 0f ? 0f : v2));
+            };
 
-            var reverse = -1f * (dir - Vector2.one);
-
-            var bypass = true;
-            var last = field.y - main * 0.5f;
-            var step = field.x + main;
+            var j = 0;
+            var k = 0;
             do
             {
-                var sector = Random.Range(section.x, section.y);
-                step += sector;
+                (pos - this.field)
+                    .EachFunc((i, v) => v < this.field[i] - max[i] ? v : this.field[i])
+                    .EachAction((i, v) =>
+                    {
+                        if(pos[i] < 0f)
+                        {
+                            return;
+                        }
 
-                if(step > last || last - step <= this.mainRoadWidth + section.x)
-                {
-                    step = last;
-                    break;
-                }
+                        var isLast = v == this.field[i];
+                        if(v != -this.field[i] && isLast == false && Random.value >= this.mainRate)
+                        {
+                            return;
+                        }
 
-                bypass = bypass ? false : Random.value < this.mainRate;
-                var width = bypass ? this.mainRoadWidth : this.subRoadWidth;
+                        //var i2 = (i == 0 ? 1 : 0);
+                        ////Vector2 from = Vector2.zero, to = Vector2.zero;
+                        //var to = Vector2.zero;
 
-                lanes.Add(new Road(
-                    (step + width * 0.5f) * dir + reverse * field.z,
-                    (step + width * 0.5f) * dir + reverse * field.w,
-                    width
-                ));
+                        ////from[i] = to[i] = v;
+                        ////from[i2] = -this.field[i];
+                        ////to[i2] = this.field[i];
+                        //to[i] = v;
+                        //to[i2] = this.field[i];
 
-                step += width;
+                        ////this.AddRoad(new Road(from, to, this.mainRoadWidth, this.interval),
+                        ////    i == 0 ? horizontal : vertical,
+                        ////    i == 0 ? vertical : horizontal
+                        ////);
+
+                        if(i == 0)
+                        {
+                            horizontal.Add(v);
+                        }
+                        else
+                        {
+                            vertical.Add(v);
+                        }
+
+                        posStep();
+                        k++;
+
+                        if(isLast == true)
+                        {
+                            counter++;
+                            pos[i] = -1f;
+                        }
+                    });
+
+                posStep();
             }
-            while(true);
+            while(counter < 2);
 
-            return lanes;
+            this.MainRoad(horizontal, vertical);
+            //this.Roads.AddRange(horizontal);
+            //this.Roads.AddRange(vertical);
         }
 
-        private void CreateLanes(Vector4 section, Vector4 field)
+        private List<Rect> MainRoad(List<float> horizontal, List<float> vertical)
         {
-            var main = this.mainRoadWidth;
+            var min = -1f * this.field;
+            var max = this.field;
 
-            this.vertical.Add(
-                new Road(new Vector2(field.x + main * 0.5f, field.z), new Vector2(field.x + main * 0.5f, field.w), main)
-            );
-            this.horizontal.Add(
-                new Road(new Vector2(field.x, field.z + main * 0.5f), new Vector2(field.y, field.z + main * 0.5f), main)
-            );
-            
-            this.vertical.AddRange(this.CreateLanes(
-                new Vector2(section.x, section.y), new Vector2(1f, 0f), field
-            ));
+            var ph = min.x;
+            var rects = new List<Rect>();
 
-            this.horizontal.AddRange(this.CreateLanes(
-                new Vector2(section.z, section.w), new Vector2(0f, 1f), new Vector4(field.z, field.w, field.x, field.y)
-            ));
-
-            this.vertical.Add(
-                new Road(new Vector2(field.y - main * 0.5f, field.z), new Vector2(field.y - main * 0.5f, field.w), main)
-            );
-            this.horizontal.Add(
-                new Road(new Vector2(field.x, field.w - main * 0.5f), new Vector2(field.y, field.w - main * 0.5f), main)
-            );
-        }
-
-        private void Init()
-        {
-            this.CreateLanes(
-                new Vector4(this.sectionX.x, this.sectionX.y, this.sectionY.x, this.sectionY.y),
-                new Vector4(-this.field.x, this.field.x, -this.field.y, this.field.y)
-            );
-            
-            for(var i = 0; i < this.horizontal.Count - 1; i++)
+            for(var i = 0; i < horizontal.Count; i++)
             {
-                var h1 = this.horizontal[i];
-                var h2 = this.horizontal[i + 1];
+                var h = horizontal[i];
+                var pv = min.y;
 
-                for(var j = 0; j < this.vertical.Count - 1; j++)
+                vertical.ForEach(v =>
                 {
-                    var v1 = this.vertical[j];
-                    var v2 = this.vertical[j + 1];
+                    rects.Add(new Rect(ph, pv, h - ph, v - pv));
 
-                    var p0 = new Vector2(
-                        v1.from.x + v1.width * 0.5f, h1.from.y + h1.width * 0.5f
-                    );
-                    var p1 = new Vector2(
-                        v2.from.x - v2.width * 0.5f, h2.from.y - h2.width * 0.5f
-                    );
+                    this.Roads.Add(new Road(new Vector2(ph, pv), new Vector2(h, pv), this.mainRoadWidth, this.interval));
+                    this.Roads.Add(new Road(new Vector2(ph, pv), new Vector2(ph, v), this.mainRoadWidth, this.interval));
 
-                    var size = p1 - p0;
-                    var center = p0 + 0.5f * size;
+                    if(i == horizontal.Count - 1)
+                    {
+                        var from = new Vector2(max.x, pv);
+                        var to = new Vector2(max.x, v);
+                        this.Roads.Add(new Road(from, to, this.mainRoadWidth, this.interval));
+                    }
 
-                    this.Sections.Add(new Section(center, size));
-                }
+                    pv = v;
+                });
+
+                this.Roads.Add(new Road(new Vector2(ph, max.y), new Vector2(h, max.y), this.mainRoadWidth, this.interval));
+                ph = h;
             }
+
+            return rects;
         }
+
+
+        //private void AddRoad(Road road, List<Road> group, List<Road> others)
+        //{
+        //    var roads = new List<Road>();
+
+        //    for(var i = 0; i < others.Count; i++)
+        //    {
+        //        var o = others[i];
+        //        var line = road.Line;
+
+        //        if(Lines.IsCrossing(line, o.Line) == false)
+        //        {
+        //            continue;
+        //        }
         
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.green;
+        //        var cross = Lines.GetIntersection(road.Line, o.Line);
+        //        if(line.p0 == cross || line.p1 == cross)
+        //        {
+        //            continue;
+        //        }
 
-            var roads = this.roads;
-            for(var i = 0; i < roads.Count; i++)
-            {
-                var road = roads[i];
+        //        var p1 = line.p1;
+        //        roads.Add(new Road(line.p0, cross, road.Width, road.Interval));
+        //        roads.Add(new Road(cross, p1, road.Width, road.Interval));
 
-                var diff = road.to - road.from;
-                var size = diff + road.normal * road.width;
-                var center = road.from + diff * 0.5f;
+        //        road = roads[roads.Count - 1];
+        //    }
 
-                Gizmos.DrawCube(new Vector3(center.x, 0f, center.y), new Vector3(size.x, 0f, size.y));
-            }
-        }
+        //    group.AddRange(roads.Count <= 0 ? new List<Road>() { road } : roads);
+        //}
     }
 }

@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 621738619}
   - component: {fileID: 621738618}
   - component: {fileID: 621738622}
-  - component: {fileID: 621738623}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -220,19 +219,6 @@ MonoBehaviour:
   intensity: 4
   downRate: 1
   upRate: 0.5
---- !u!114 &621738623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 621738617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744b4f457122e9b4586422773949914a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  validity: 1
-  material: {fileID: 2100000, guid: 01edeaea6a7a630419ccaf388da24215, type: 2}
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +295,6 @@ GameObject:
   - component: {fileID: 1753058798}
   - component: {fileID: 1753058800}
   - component: {fileID: 1753058799}
-  - component: {fileID: 1753058801}
   - component: {fileID: 1753058802}
   m_Layer: 0
   m_Name: Main Controller
@@ -357,23 +342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97f8eb69762c1434a82222d1902c7bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1753058801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1753058797}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b272acb477003ae458bae27a453f7df4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  field: {x: 1000, y: 1000}
-  sectionX: {x: 30, y: 60}
-  sectionY: {x: 30, y: 60}
-  mainRoadWidth: 16
-  subRoadWidth: 4
-  mainRate: 0.1
 --- !u!114 &1753058802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,4 +377,12 @@ MonoBehaviour:
     - {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
+  cityarea:
+    field: {x: 1000, y: 1000}
+    sectionX: {x: 30, y: 60}
+    sectionY: {x: 30, y: 60}
+    mainRoadWidth: 16
+    subRoadWidth: 4
+    mainRate: 0.1
+    interval: 1
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
