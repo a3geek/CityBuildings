@@ -58,9 +58,7 @@ namespace NightCity.Components
             {
                 pos = pos.EachFunc(max, (v1, v2) => v1 + (v1 < 0f ? 0f : v2));
             };
-
-            var j = 0;
-            var k = 0;
+            
             do
             {
                 (pos - this.field)
@@ -77,33 +75,9 @@ namespace NightCity.Components
                         {
                             return;
                         }
-
-                        //var i2 = (i == 0 ? 1 : 0);
-                        ////Vector2 from = Vector2.zero, to = Vector2.zero;
-                        //var to = Vector2.zero;
-
-                        ////from[i] = to[i] = v;
-                        ////from[i2] = -this.field[i];
-                        ////to[i2] = this.field[i];
-                        //to[i] = v;
-                        //to[i2] = this.field[i];
-
-                        ////this.AddRoad(new Road(from, to, this.mainRoadWidth, this.interval),
-                        ////    i == 0 ? horizontal : vertical,
-                        ////    i == 0 ? vertical : horizontal
-                        ////);
-
-                        if(i == 0)
-                        {
-                            horizontal.Add(v);
-                        }
-                        else
-                        {
-                            vertical.Add(v);
-                        }
-
+                        
+                        this.GetList(i, horizontal, vertical);
                         posStep();
-                        k++;
 
                         if(isLast == true)
                         {
@@ -117,8 +91,6 @@ namespace NightCity.Components
             while(counter < 2);
 
             this.MainRoad(horizontal, vertical);
-            //this.Roads.AddRange(horizontal);
-            //this.Roads.AddRange(vertical);
         }
 
         private List<Rect> MainRoad(List<float> horizontal, List<float> vertical)
@@ -158,35 +130,9 @@ namespace NightCity.Components
             return rects;
         }
 
-
-        //private void AddRoad(Road road, List<Road> group, List<Road> others)
-        //{
-        //    var roads = new List<Road>();
-
-        //    for(var i = 0; i < others.Count; i++)
-        //    {
-        //        var o = others[i];
-        //        var line = road.Line;
-
-        //        if(Lines.IsCrossing(line, o.Line) == false)
-        //        {
-        //            continue;
-        //        }
-        
-        //        var cross = Lines.GetIntersection(road.Line, o.Line);
-        //        if(line.p0 == cross || line.p1 == cross)
-        //        {
-        //            continue;
-        //        }
-
-        //        var p1 = line.p1;
-        //        roads.Add(new Road(line.p0, cross, road.Width, road.Interval));
-        //        roads.Add(new Road(cross, p1, road.Width, road.Interval));
-
-        //        road = roads[roads.Count - 1];
-        //    }
-
-        //    group.AddRange(roads.Count <= 0 ? new List<Road>() { road } : roads);
-        //}
+        public List<float> GetList(int id, List<float> l0, List<float> l1)
+        {
+            return id == 0 ? l0 : l1;
+        }
     }
 }
