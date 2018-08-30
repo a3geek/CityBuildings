@@ -18,34 +18,7 @@ namespace NightCity.Creators
         private float roadWidth = 16f;
         [SerializeField]
         private float rate = 0.1f;
-
-
-        private Dictionary<Road, Color> colors = new Dictionary<Road, Color>();
-        public void DrawGizmos()
-        {
-            var roads = this.Roads;
-            var color = Gizmos.color;
-
-            for(var i = 0; i < roads.Count; i++)
-            {
-                var road = roads[i];
-
-                if(this.colors.ContainsKey(road) == false)
-                {
-                    this.colors[road] = new Color(Random.value, Random.value, Random.value, 1f);
-                }
-
-                Gizmos.color = this.colors[road];
-
-                var center = (road.From + road.To) * 0.5f;
-                var diff = road.To - road.From;
-
-                var size = diff.ToVector3() + (diff.x != 0f ? Vector3.forward * road.Width : Vector3.right * road.Width);
-                Gizmos.DrawCube(center.ToVector3(), size);
-            }
-
-            Gizmos.color = color;
-        }
+        
 
         public void Create(Vector2 field, Vector4 section, float interval)
         {
@@ -85,40 +58,42 @@ namespace NightCity.Creators
 
                 this.StepPos(ref pos, max);
             }
-
+            
             this.Create(field, horizontal, vertical, interval);
         }
 
         private void Create(Vector2 field, List<float> horizontal, List<float> vertical, float interval)
         {
-            var min = -1f * field;
             var max = field;
+            var w = this.roadWidth;
+            var preHori = horizontal[0];
 
-            var preHori = min.x;
-
-            for(var i = 0; i < horizontal.Count; i++)
+            for(var i = 1; i < horizontal.Count; i++)
             {
                 var h = horizontal[i];
-                var preVert = min.y;
+                var preVert = vertical[0];
 
-                vertical.ForEach(v =>
+                for(var j = 1; j < vertical.Count; j++)
                 {
-                    this.Rects.Add(new Rect(preHori, preVert, h - preHori, v - preVert));
+                    var v = vertical[j];
+                    var refPoint = new Vector2(preHori, preVert);
+                    
+                    this.Rects.Add(new Rect(preHori + 0.5f * w, preVert + 0.5f * w, h - preHori - w, v - preVert - w));
 
-                    this.Roads.Add(new Road(new Vector2(preHori, preVert), new Vector2(h, preVert), this.roadWidth, interval));
-                    this.Roads.Add(new Road(new Vector2(preHori, preVert), new Vector2(preHori, v), this.roadWidth, interval));
+                    this.Roads.Add(new Road(refPoint, new Vector2(h, preVert), w, interval));
+                    this.Roads.Add(new Road(refPoint, new Vector2(preHori, v), w, interval));
 
                     if(i == horizontal.Count - 1)
                     {
                         var from = new Vector2(max.x, preVert);
                         var to = new Vector2(max.x, v);
-                        this.Roads.Add(new Road(from, to, this.roadWidth, interval));
+                        this.Roads.Add(new Road(from, to, w, interval));
                     }
 
                     preVert = v;
-                });
-
-                this.Roads.Add(new Road(new Vector2(preHori, max.y), new Vector2(h, max.y), this.roadWidth, interval));
+                }
+                
+                this.Roads.Add(new Road(new Vector2(preHori, max.y), new Vector2(h, max.y), w, interval));
                 preHori = h;
             }
         }

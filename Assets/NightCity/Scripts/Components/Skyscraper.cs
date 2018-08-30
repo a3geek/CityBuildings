@@ -55,11 +55,6 @@ namespace NightCity.Components
             this.fragsBuffer.SetData(this.builder.Frags.ToArray());
         }
         
-        private void OnDrawGizmos()
-        {
-            this.cityarea.DrawGizmos();
-        }
-
         private void OnRenderObject()
         {
             if(this.geomsBuffer == null)
