@@ -36,8 +36,7 @@ namespace NightCity.Components
         public void Init(WindowTexture windowTexture)
         {
             this.winTex = windowTexture;
-
-            this.colors = new Dictionary<Road, Color>();
+            
             this.cityarea.CreateAreas();
             this.builder.CreateBuilds(this.cityarea.Sections);
 
@@ -55,24 +54,10 @@ namespace NightCity.Components
             this.fragsBuffer = this.CreateBuffer<BuildingFragData>(this.builder.Frags.Count);
             this.fragsBuffer.SetData(this.builder.Frags.ToArray());
         }
-
-        private Dictionary<Road, Color> colors = new Dictionary<Road, Color>();
-
+        
         private void OnDrawGizmos()
         {
-            var roads = this.cityarea.Roads;
-            for(var i = 0; i < roads.Count; i++)
-            {
-                var road = roads[i];
-
-                if(this.colors.ContainsKey(road) == false)
-                {
-                    this.colors[road] = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
-                }
-
-                Gizmos.color = this.colors[road];
-                road.Line.DrawGizmos();
-            }
+            this.cityarea.DrawGizmos();
         }
 
         private void OnRenderObject()

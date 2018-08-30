@@ -381,8 +381,9 @@ MonoBehaviour:
     field: {x: 1000, y: 1000}
     sectionX: {x: 30, y: 60}
     sectionY: {x: 30, y: 60}
-    mainRoadWidth: 16
+    mainRoad:
+      roadWidth: 16
+      rate: 0.15
     subRoadWidth: 4
-    mainRate: 0.1
     interval: 1
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
