@@ -40,5 +40,10 @@ namespace NightCity.Creators
             var section = new Vector4(this.sectionX.x, this.sectionX.y, this.sectionY.x, this.sectionY.y);
             this.mainRoad.Create(this.field, section, this.interval);
         }
+
+        public void DrawGizmos()
+        {
+            this.mainRoad.DrawGizmos();
+        }
     }
 }
