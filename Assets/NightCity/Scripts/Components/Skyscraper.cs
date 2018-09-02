@@ -37,8 +37,8 @@ namespace NightCity.Components
         {
             this.winTex = windowTexture;
             
-            this.cityarea.CreateAreas();
-            this.builder.CreateBuilds(this.cityarea.Sections);
+            this.cityarea.Create();
+            //this.builder.CreateBuilds(this.cityarea.Sections);
 
             if(this.builder.Geoms.Count <= 0)
             {

@@ -40,8 +40,8 @@ namespace NightCity.Structs
         [SerializeField]
         private Vector3 size;
 
-
-        public Section(Vector2 center, Vector2 size)
+        
+        public void Set(Vector2 center, Vector2 size)
         {
             this.center = new Vector3(center.x, DefaultCenterY, center.y);
             this.size = new Vector3(size.x, DefaultSizeY, size.y);
@@ -77,6 +77,7 @@ namespace NightCity.Structs
         public Vector2 Normal => this.normal;
         public float Width => this.width;
         public float Interval => this.interval;
+        public bool IsVertical { get; }
 
         [SerializeField]
         private Vector2 from;
@@ -92,12 +93,13 @@ namespace NightCity.Structs
         private LineSegment line;
 
 
-        public Road(Vector2 from, Vector2 to, float width, float interval)
+        public Road(Vector2 from, Vector2 to, float width, float interval, bool isVertical)
         {
             this.from = from;
             this.to = to;
             this.width = width;
             this.interval = interval;
+            this.IsVertical = isVertical;
 
             this.line = new LineSegment(from, to);
             this.normal = this.line.normal;

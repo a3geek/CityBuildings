@@ -379,11 +379,13 @@ MonoBehaviour:
     specialHeight: {x: 75, y: 100}
   cityarea:
     field: {x: 1000, y: 1000}
-    sectionX: {x: 30, y: 60}
-    sectionY: {x: 30, y: 60}
-    mainRoad:
-      roadWidth: 16
-      rate: 0.15
-    subRoadWidth: 4
+    sectionX: {x: 60, y: 90}
+    sectionY: {x: 60, y: 90}
+    main:
+      width: 16
+      rate: 0.2
+    sub:
+      width: 4
     interval: 1
+    secdelay: 1
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
