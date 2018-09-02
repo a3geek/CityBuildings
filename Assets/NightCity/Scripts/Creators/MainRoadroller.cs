@@ -59,9 +59,7 @@ namespace NightCity.Creators
                 this.index = (this.index + 1) % (this.vert * this.hor);
                 this.timer = 0f;
             }
-
-            Debug.Log(this.vert + " _ " + this.hor + " __ " + this.Sections.LongLength);
-
+            
             var shift = this.index / this.vert;
             var section = this.Sections[shift, this.index - this.vert * shift];
 
@@ -145,38 +143,33 @@ namespace NightCity.Creators
                     hor = new Road(refPoint, new Vector2(h, preVert), w, interval);
                     var vert = new Road(refPoint, new Vector2(preHori, v), w, interval);
 
-                    //this.Rects.Add(new Rect(preHori + 0.5f * w, preVert + 0.5f * w, h - preHori - w, v - preVert - w));
                     var sec = this.Sections[i - 1, j - 1] ?? new Section();
                     this.Sections[i - 1, j - 1] = sec;
 
                     sec.Bottom = hor;
                     sec.Left = vert;
-
-                    Debug.Log(this.Sections[Mathf.Max(0, i - 2), j - 1] + " __ " + Mathf.Max(0, i - 2) + " _ " + (j - 1));
+                    
                     this.Sections[Mathf.Max(0, i - 2), j - 1].Right = vert;
                     this.Sections[i - 1, Mathf.Max(0, j - 2)].Top = hor;
-
-                    //sec.AddRoad(hor).AddRoad(vert).AddRoad()
-
-
-                    this.Roads.Add(hor);
-                    this.Roads.Add(vert);
+                    
+                    //this.Roads.Add(hor);
+                    //this.Roads.Add(vert);
 
                     if(i == horizontal.Count - 1)
                     {
                         vert = new Road(new Vector2(max.x, preVert), new Vector2(max.x, v), w, interval);
 
-                        //this.Sections[i - 1, j - 1].Right = vert;
-                        this.Roads.Add(vert);
+                        this.Sections[i - 1, j - 1].Right = vert;
+                        //this.Roads.Add(vert);
                     }
 
                     preVert = v;
                 }
 
                 hor = new Road(new Vector2(preHori, max.y), new Vector2(h, max.y), w, interval);
-
-                //this.Sections[i - 1, vertical.Count - 1].Top = hor;
-                this.Roads.Add(hor);
+                
+                this.Sections[i - 1, vertical.Count - 2].Top = hor;
+                //this.Roads.Add(hor);
                 preHori = h;
             }
         }
