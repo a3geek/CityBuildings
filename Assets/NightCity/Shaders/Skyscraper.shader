@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Skyscraper"
+﻿Shader "Hidden/Skyscraper"
 {
 	Properties
 	{

@@ -36,12 +36,14 @@ namespace NightCity.Creators
         private Vector2 specialHeight = new Vector2(50f, 75f);
 
 
-        public void CreateBuilds(List<Section> sections)
+        public void CreateBuilds(Section[,] sections)
         {
-            for(var i = 0; i < sections.Count; i++)
+            for(var i = 0; i < sections.GetLength(0); i++)
             {
-                var section = sections[i];
-                this.CreateBuild(section);
+                for(var j = 0; j < sections.GetLength(1); j++)
+                {
+                    this.CreateBuild(sections[i, j]);
+                }
             }
         }
 

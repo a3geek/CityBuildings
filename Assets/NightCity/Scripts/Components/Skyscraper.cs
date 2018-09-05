@@ -20,6 +20,9 @@ namespace NightCity.Components
         public const string PropWindowNumberY = "_windowNumberY";
         public const string PropWindowTex = "_windowTex";
 
+        public Builder Builder => this.builder;
+        public CityArea CityArea => this.cityarea;
+
         [SerializeField]
         private Builder builder = new Builder();
         [SerializeField]
@@ -38,7 +41,7 @@ namespace NightCity.Components
             this.winTex = windowTexture;
             
             this.cityarea.Create();
-            //this.builder.CreateBuilds(this.cityarea.Sections);
+            this.builder.CreateBuilds(this.cityarea.Sections);
 
             if(this.builder.Geoms.Count <= 0)
             {

@@ -382,10 +382,9 @@ MonoBehaviour:
     sectionX: {x: 60, y: 90}
     sectionY: {x: 60, y: 90}
     main:
-      width: 16
+      width: 20
       rate: 0.2
     sub:
-      width: 4
+      width: 8
     interval: 1
-    secdelay: 1
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
