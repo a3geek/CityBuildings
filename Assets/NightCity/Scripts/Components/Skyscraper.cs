@@ -13,13 +13,13 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour
     {
-        public const string PropData = "_geomData";
+        public const string PropGeomData = "_geomData";
         public const string PropRandSeeds = "_randSeeds";
         public const string PropFragData = "_fragData";
         public const string PropWindowNumberX = "_windowNumberX";
         public const string PropWindowNumberY = "_windowNumberY";
         public const string PropWindowTex = "_windowTex";
-
+        
         public Builder Builder => this.builder;
         public CityArea CityArea => this.cityarea;
 
@@ -67,7 +67,7 @@ namespace NightCity.Components
 
             this.material.SetPass(0);
 
-            this.material.SetBuffer(PropData, this.geomsBuffer);
+            this.material.SetBuffer(PropGeomData, this.geomsBuffer);
             this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
             this.material.SetBuffer(PropFragData, this.fragsBuffer);
             this.material.SetTexture(PropWindowTex, this.winTex.Tex);

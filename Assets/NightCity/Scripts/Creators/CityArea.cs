@@ -28,6 +28,7 @@ namespace NightCity.Creators
 
         public Section[,] Sections { get; private set; } = new Section[0, 0];
         public List<Road> Roads { get; } = new List<Road>();
+        public float MaxRoadDistance { get; private set; } = 0f;
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
@@ -101,8 +102,8 @@ namespace NightCity.Creators
                     var py = pointsY[j];
                     var refPoint = new Vector2(preX.Point, preY.Point);
 
-                    var hor = new Road(refPoint, new Vector2(px.Point, preY.Point), preY.Width, this.interval, false);
-                    var vert = new Road(refPoint, new Vector2(preX.Point, py.Point), preX.Width, this.interval, true);
+                    var hor = new Road(refPoint, new Vector2(px.Point, preY.Point), preY.Width, this.interval);
+                    var vert = new Road(refPoint, new Vector2(preX.Point, py.Point), preX.Width, this.interval);
 
                     var edge = new Vector2(px.Point - px.HalfWidth, py.Point - py.HalfWidth);
                     var preEdge = new Vector2(preX.Point + preX.HalfWidth, preY.Point + preY.HalfWidth);
@@ -113,22 +114,34 @@ namespace NightCity.Creators
                             edge.y - preEdge.y
                         )
                     );
+                    
+                    this.AddRoad(hor);
+                    this.AddRoad(vert);
 
-                    this.Roads.Add(hor);
-                    this.Roads.Add(vert);
-
+                    var longer = hor.SqrMagnitude > vert.SqrMagnitude ? hor : vert;
+                    this.MaxRoadDistance = this.MaxRoadDistance > longer.SqrMagnitude ? this.MaxRoadDistance : longer.SqrMagnitude;
+                    
                     if(i == pointsX.Count - 1)
                     {
-                        vert = new Road(new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), px.Width, this.interval, true);
-                        this.Roads.Add(vert);
+                        this.AddRoad(
+                            new Road(new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), px.Width, this.interval)
+                        );
                     }
 
                     preY = py;
                 }
 
-                this.Roads.Add(new Road(new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preY.Width, this.interval, false));
+                this.AddRoad(new Road(new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preY.Width, this.interval));
                 preX = px;
             }
+        }
+
+        private void AddRoad(Road road)
+        {
+            var mag = road.SqrMagnitude;
+            this.MaxRoadDistance = this.MaxRoadDistance > mag ? this.MaxRoadDistance : mag;
+
+            this.Roads.Add(road);
         }
     }
 }

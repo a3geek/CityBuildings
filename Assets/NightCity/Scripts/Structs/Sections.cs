@@ -73,36 +73,33 @@ namespace NightCity.Structs
                 this.normal = this.line.normal;
             }
         }
-        public LineSegment Line => this.line;
-        public Vector2 Normal => this.normal;
         public float Width => this.width;
-        public float Interval => this.interval;
-        public bool IsVertical { get; }
+        public float SqrMagnitude => (this.to - this.from).sqrMagnitude;
 
         [SerializeField]
         private Vector2 from;
         [SerializeField]
         private Vector2 to;
         [SerializeField]
-        private Vector2 normal;
-        [SerializeField]
         private float width;
         [SerializeField]
+        private float step;
+        [SerializeField]
+        private uint count;
+
         private float interval;
 
-        private LineSegment line;
 
-
-        public Road(Vector2 from, Vector2 to, float width, float interval, bool isVertical)
+        public Road(Vector2 from, Vector2 to, float width, float interval/*, bool isVertical*/)
         {
             this.from = from;
             this.to = to;
             this.width = width;
             this.interval = interval;
-            this.IsVertical = isVertical;
+            
 
-            this.line = new LineSegment(from, to);
-            this.normal = this.line.normal;
         }
     }
 }
+//float step = dis / d.interval;
+//int count = trunc(step);

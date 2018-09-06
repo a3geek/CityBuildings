@@ -22,9 +22,9 @@
             {
                 float2 from;
                 float2 to;
-                float2 normal;
                 float width;
-                float interval;
+                float step;
+                uint count;
             };
 
             struct v2g
@@ -35,9 +35,13 @@
             struct g2f
             {
                 float4 pos : SV_POSITION;
-                float3 uv : TEXCOORD0;
+                float2 uv : TEXCOORD0;
             };
 
+            #include "./Geometries/Quad.cginc"
+
+            uniform uint _maxPointPerGeom;
+            uniform float _height;
             uniform StructuredBuffer<data> _geomData;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
@@ -47,7 +51,7 @@
 
                 return o;
             }
-
+            
             [maxvertexcount(128)]
             void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
             {
@@ -55,19 +59,18 @@
                 uint id = v.id.x;
                 uint inst = v.id.y;
 
-                data d = _geomData[id];
-
-                float dis = distance(d.to, d.from);
-                float dir = normalize(d.to - d.from);
+                data d = _geomData[inst];
+    
                 float hw = 0.5 * d.width;
+                float2 dir = normalize(d.to - d.from);
 
-                float step = dis / d.interval;
-                int count = trunc(step);
-
-                for (int i = 0; i < count; i++)
+                for (uint i = id * _maxPointPerGeom; i < d.count && i < (id + 1) * _maxPointPerGeom; i++)
                 {
-                    float2 v = d.from + (step * i) * dir;
-                    
+                    float2 v = d.from + (d.step * i) * dir;
+                    float2 n = float2(-dir.y, dir.x);
+
+                    AppendQuad(v + n * (hw - 1.0), 1.0, _height, outStream);
+                    AppendQuad(v - n * (hw - 1.0), 1.0, _height, outStream);
                 }
             }
 
