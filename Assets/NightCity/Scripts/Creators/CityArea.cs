@@ -28,7 +28,7 @@ namespace NightCity.Creators
 
         public Section[,] Sections { get; private set; } = new Section[0, 0];
         public List<Road> Roads { get; } = new List<Road>();
-        public float MaxRoadDistance { get; private set; } = 0f;
+        public Road MaxDistance { get; private set; }
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
@@ -117,9 +117,6 @@ namespace NightCity.Creators
                     
                     this.AddRoad(hor);
                     this.AddRoad(vert);
-
-                    var longer = hor.SqrMagnitude > vert.SqrMagnitude ? hor : vert;
-                    this.MaxRoadDistance = this.MaxRoadDistance > longer.SqrMagnitude ? this.MaxRoadDistance : longer.SqrMagnitude;
                     
                     if(i == pointsX.Count - 1)
                     {
@@ -138,9 +135,6 @@ namespace NightCity.Creators
 
         private void AddRoad(Road road)
         {
-            var mag = road.SqrMagnitude;
-            this.MaxRoadDistance = this.MaxRoadDistance > mag ? this.MaxRoadDistance : mag;
-
             this.Roads.Add(road);
         }
     }

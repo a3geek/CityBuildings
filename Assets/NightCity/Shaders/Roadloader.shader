@@ -23,8 +23,7 @@
                 float2 from;
                 float2 to;
                 float width;
-                float step;
-                uint count;
+                float interval;
             };
 
             struct v2g
@@ -64,13 +63,18 @@
                 float hw = 0.5 * d.width;
                 float2 dir = normalize(d.to - d.from);
 
-                for (uint i = id * _maxPointPerGeom; i < d.count && i < (id + 1) * _maxPointPerGeom; i++)
+                float dis = distance(d.to, d.from);
+                uint count = ceil(dis / d.interval);
+
+float size = 1.0;
+
+                for (uint i = id * _maxPointPerGeom; i < count && i < (id + 1) * _maxPointPerGeom; i++)
                 {
-                    float2 v = d.from + (d.step * i) * dir;
+                    float2 v = d.from + min(d.interval * i, dis) * dir;
                     float2 n = float2(-dir.y, dir.x);
 
-                    AppendQuad(v + n * (hw - 1.0), 1.0, _height, outStream);
-                    AppendQuad(v - n * (hw - 1.0), 1.0, _height, outStream);
+                    AppendQuad(v + n * (hw - size), size, _height, outStream);
+                    AppendQuad(v - n * (hw - size), size, _height, outStream);
                 }
             }
 

@@ -51,30 +51,10 @@ namespace NightCity.Structs
     [Serializable]
     public struct Road
     {
-        public Vector2 From
-        {
-            get { return this.from; }
-            set
-            {
-                this.from = value;
-
-                this.line.p0 = value;
-                this.normal = this.line.normal;
-            }
-        }
-        public Vector2 To
-        {
-            get { return this.to; }
-            set
-            {
-                this.to = value;
-
-                this.line.p1 = value;
-                this.normal = this.line.normal;
-            }
-        }
+        public Vector2 From => this.from;
+        public Vector2 To => this.to;
         public float Width => this.width;
-        public float SqrMagnitude => (this.to - this.from).sqrMagnitude;
+        public float Interval => this.interval;
 
         [SerializeField]
         private Vector2 from;
@@ -83,23 +63,15 @@ namespace NightCity.Structs
         [SerializeField]
         private float width;
         [SerializeField]
-        private float step;
-        [SerializeField]
-        private uint count;
-
         private float interval;
+        
 
-
-        public Road(Vector2 from, Vector2 to, float width, float interval/*, bool isVertical*/)
+        public Road(Vector2 from, Vector2 to, float width, float interval)
         {
             this.from = from;
             this.to = to;
             this.width = width;
             this.interval = interval;
-            
-
         }
     }
 }
-//float step = dis / d.interval;
-//int count = trunc(step);

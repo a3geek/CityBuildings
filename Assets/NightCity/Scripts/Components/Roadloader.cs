@@ -17,6 +17,7 @@ namespace NightCity.Components
         public const uint PerVertex = 8u;
         public const uint MaxPointPerGeom = MaxVertexCount / PerVertex;
         public const string PropHeight = "_height";
+        public const string PropMaxPointPerGeom = "_maxPointPerGeom";
         public const string PropGeomData = "_geomData";
 
         [SerializeField]
@@ -46,8 +47,9 @@ namespace NightCity.Components
 
             this.material.SetBuffer(PropGeomData, this.geomBuffer);
             this.material.SetFloat(PropHeight, this.height);
+            this.material.SetFloat(PropMaxPointPerGeom, MaxPointPerGeom);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 1, this.geomBuffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, 10, this.geomBuffer.count);
         }
 
         private void OnDestroy()
