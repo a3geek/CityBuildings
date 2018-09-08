@@ -5,7 +5,8 @@
     }
     SubShader
     {
-        Tags { "RenderType" = "Opaque" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
 
         Pass
@@ -41,6 +42,8 @@
 
             uniform uint _maxPointPerGeom;
             uniform float _height;
+            uniform float _Size;
+            uniform float4 _Color;
             uniform StructuredBuffer<data> _geomData;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
@@ -66,22 +69,22 @@
                 float dis = distance(d.to, d.from);
                 uint count = ceil(dis / d.interval);
 
-float size = 1.0;
-
                 for (uint i = id * _maxPointPerGeom; i < count && i < (id + 1) * _maxPointPerGeom; i++)
                 {
                     float2 v = d.from + min(d.interval * i, dis) * dir;
                     float2 n = float2(-dir.y, dir.x);
 
-                    AppendQuad(v + n * (hw - size), size, _height, outStream);
-                    AppendQuad(v - n * (hw - size), size, _height, outStream);
+                    AppendQuad(v + n * (hw - 0.5 * _Size), _Size, _height, outStream);
+                    AppendQuad(v - n * (hw - 0.5 * _Size), _Size, _height, outStream);
                 }
             }
 
-            fixed4 frag(g2f i) : COLOR
+            float4 frag(g2f i) : COLOR
             {
-                return 1;
-                //return tex2D(_windowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _fragData[(int)i.uv.z].color);
+                float dis = distance(i.uv, float2(0.5, 0.5));
+                float vdis = saturate(1 - dis);
+
+                return float4((_Color * vdis).rgb, saturate(0.5 - dis));
             }
 
             ENDCG
