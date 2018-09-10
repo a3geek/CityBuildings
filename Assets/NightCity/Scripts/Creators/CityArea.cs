@@ -101,10 +101,7 @@ namespace NightCity.Creators
                 {
                     var py = pointsY[j];
                     var refPoint = new Vector2(preX.Point, preY.Point);
-
-                    var hor = new Road(refPoint, new Vector2(px.Point, preY.Point), preY.Width, this.interval);
-                    var vert = new Road(refPoint, new Vector2(preX.Point, py.Point), preX.Width, this.interval);
-
+                    
                     var edge = new Vector2(px.Point - px.HalfWidth, py.Point - py.HalfWidth);
                     var preEdge = new Vector2(preX.Point + preX.HalfWidth, preY.Point + preY.HalfWidth);
                     this.Sections[i - 1, j - 1].Set(
@@ -114,28 +111,33 @@ namespace NightCity.Creators
                             edge.y - preEdge.y
                         )
                     );
-                    
-                    this.AddRoad(hor);
-                    this.AddRoad(vert);
+
+                    this.AddRoad(refPoint, new Vector2(px.Point, preY.Point), preX.Width, px.Width, preY.Width);
+                    this.AddRoad(refPoint, new Vector2(preX.Point, py.Point), preY.Width, py.Width, preX.Width);
                     
                     if(i == pointsX.Count - 1)
                     {
                         this.AddRoad(
-                            new Road(new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), px.Width, this.interval)
+                            new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), preY.Width, py.Width, px.Width
                         );
                     }
 
                     preY = py;
                 }
 
-                this.AddRoad(new Road(new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preY.Width, this.interval));
+                this.AddRoad(
+                    new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preX.Width, px.Width, preY.Width
+                );
                 preX = px;
             }
         }
 
-        private void AddRoad(Road road)
+        private Road AddRoad(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width)
         {
+            var road = new Road(from, to, fromOffset, toOffset, width, this.interval);
             this.Roads.Add(road);
+
+            return road;
         }
     }
 }

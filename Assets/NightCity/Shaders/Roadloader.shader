@@ -23,6 +23,8 @@
             {
                 float2 from;
                 float2 to;
+                float fromOffset;
+                float toOffset;
                 float width;
                 float interval;
             };
@@ -41,6 +43,7 @@
             #include "./Geometries/Quad.cginc"
 
             uniform uint _maxPointPerGeom;
+            uniform float _basicWidth;
             uniform float _height;
             uniform float _Size;
             uniform float4 _Color;
@@ -66,16 +69,25 @@
                 float hw = 0.5 * d.width;
                 float2 dir = normalize(d.to - d.from);
 
-                float dis = distance(d.to, d.from);
+                float2 from = d.from + dir * d.fromOffset;
+                float2 to = d.to - dir * d.toOffset;
+
+                float dis = distance(from, to);
                 uint count = ceil(dis / d.interval);
+
+                float size = _Size * (d.width / _basicWidth);
+
+                float2 center = 0.5 * (from + to);
+                float2 center2 = (from + 0.5 * dir * d.interval * (count - 1));
+                float2 diff = center - center2;
 
                 for (uint i = id * _maxPointPerGeom; i < count && i < (id + 1) * _maxPointPerGeom; i++)
                 {
-                    float2 v = d.from + min(d.interval * i, dis) * dir;
+                    float2 v = from + min(d.interval * i, dis) * dir + diff;
                     float2 n = float2(-dir.y, dir.x);
 
-                    AppendQuad(v + n * (hw - 0.5 * _Size), _Size, _height, outStream);
-                    AppendQuad(v - n * (hw - 0.5 * _Size), _Size, _height, outStream);
+                    AppendQuad(v + n * (hw - 0.5 * size), size, _height, outStream);
+                    AppendQuad(v - n * (hw - 0.5 * size), size, _height, outStream);
                 }
             }
 

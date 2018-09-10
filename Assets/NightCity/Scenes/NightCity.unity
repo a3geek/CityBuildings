@@ -355,8 +355,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.8627451, b: 0.7019608, a: 1}
-  size: 2
-  height: 0
+  size: 5
+  _basicWidth: 24
+  height: 1
   material: {fileID: 2100000, guid: dcef1d25fc79ccb4693c43a40d4a18ca, type: 2}
 --- !u!114 &1753058802
 MonoBehaviour:
@@ -398,9 +399,9 @@ MonoBehaviour:
     sectionX: {x: 60, y: 90}
     sectionY: {x: 60, y: 90}
     main:
-      width: 20
+      width: 24
       rate: 0.2
     sub:
-      width: 8
-    interval: 5
+      width: 12
+    interval: 20
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}

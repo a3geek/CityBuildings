@@ -19,6 +19,7 @@ namespace NightCity.Components
 
         public const string PropColor = "_Color";
         public const string PropSize = "_Size";
+        public const string PropBasicWidth = "_basicWidth";
         public const string PropHeight = "_height";
         public const string PropMaxPointPerGeom = "_maxPointPerGeom";
         public const string PropGeomData = "_geomData";
@@ -27,6 +28,8 @@ namespace NightCity.Components
         private Color color = new Color(0.99f, 0.75f, 0.70f, 1f);
         [SerializeField]
         private float size = 1f;
+        [SerializeField]
+        private float _basicWidth = 24f;
         [SerializeField]
         private float height = 0f;
         [SerializeField]
@@ -54,6 +57,7 @@ namespace NightCity.Components
 
             this.material.SetColor(PropColor, this.color);
             this.material.SetFloat(PropSize, this.size);
+            this.material.SetFloat(PropBasicWidth, this._basicWidth);
             this.material.SetFloat(PropHeight, this.height);
             this.material.SetBuffer(PropGeomData, this.geomBuffer);
             this.material.SetFloat(PropMaxPointPerGeom, MaxPointPerGeom);
