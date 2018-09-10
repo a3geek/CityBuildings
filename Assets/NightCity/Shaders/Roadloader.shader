@@ -94,7 +94,7 @@
             float4 frag(g2f i) : COLOR
             {
                 float dis = distance(i.uv, float2(0.5, 0.5));
-                float vdis = saturate(1 - dis);
+                float vdis = saturate(1.0 - dis);
 
                 return float4((_Color * vdis).rgb, saturate(0.5 - dis));
             }

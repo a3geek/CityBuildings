@@ -13,6 +13,7 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour
     {
+        public const string PropIsSceneCamera = "ON_RENDER_SCENE_VIEW";
         public const string PropGeomData = "_geomData";
         public const string PropRandSeeds = "_randSeeds";
         public const string PropFragData = "_fragData";
@@ -64,6 +65,20 @@ namespace NightCity.Components
             {
                 return;
             }
+
+#if UNITY_EDITOR
+            var cam = UnityEditor.SceneView.currentDrawingSceneView?.camera;
+            if(cam != null && Camera.current == cam)
+            {
+                this.material.EnableKeyword(PropIsSceneCamera);
+            }
+            else
+            {
+                this.material.DisableKeyword(PropIsSceneCamera);
+            }
+#else
+            this.material.DisableKeyword(PropIsSceneCamera);
+#endif
 
             this.material.SetPass(0);
 

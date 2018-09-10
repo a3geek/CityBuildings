@@ -396,7 +396,7 @@ MonoBehaviour:
     specialHeight: {x: 75, y: 100}
   cityarea:
     field: {x: 1000, y: 1000}
-    sectionX: {x: 60, y: 90}
+    sectionX: {x: 120, y: 180}
     sectionY: {x: 60, y: 90}
     main:
       width: 24

@@ -6,7 +6,14 @@
 	SubShader
 	{
 		Tags { "RenderType" = "Opaque" }
-		LOD 100
+
+        CGINCLUDE
+        #ifdef ON_RENDER_SCENE_VIEW
+            #define IS_SCENE_VIEW 0
+        #else
+            #define IS_SCENE_VIEW 1
+        #endif
+        ENDCG
 
 		Pass
 		{
@@ -16,6 +23,7 @@
 			#pragma vertex vert
 			#pragma geometry geom
 			#pragma fragment frag
+            #pragma multi_compile _ ON_RENDER_SCENE_VIEW
 			#pragma target 5.0
 
 			struct data
@@ -38,7 +46,7 @@
 			struct g2f
 			{
 				float4 pos : SV_POSITION;
-				float3 uv : TEXCOORD0;
+				float4 uv : TEXCOORD0;
 			};
 
 			#include "./Libs/Random.cginc"
@@ -84,9 +92,11 @@
 				}
 			}
 
-			fixed4 frag(g2f i) : COLOR
+            float4 frag(g2f i) : COLOR
 			{
-				return tex2D(_windowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _fragData[(int)i.uv.z].color);
+                float4 col = tex2D(_windowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _fragData[(int)i.uv.z].color);
+
+				return lerp(col, float4(0.0, 0.0, 0.0, 1.0), saturate(-1.0 * i.uv.w / 750.0) * IS_SCENE_VIEW);
 			}
 
 			ENDCG
