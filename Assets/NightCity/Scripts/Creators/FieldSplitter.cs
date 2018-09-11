@@ -12,8 +12,8 @@ namespace NightCity.Creators
     [Serializable]
     public class FieldSplitter
     {
-        public List<SplitPoint> PointX { get; } = new List<SplitPoint>();
-        public List<SplitPoint> PointY { get; } = new List<SplitPoint>();
+        public List<SplitPoint> PointsX { get; } = new List<SplitPoint>();
+        public List<SplitPoint> PointsY { get; } = new List<SplitPoint>();
 
         [SerializeField]
         private Vector2 sectionX = new Vector2(120f, 180f);
@@ -27,11 +27,8 @@ namespace NightCity.Creators
         private SubRoadParams sub = new SubRoadParams();
 
 
-        public void Create(Vector2 field, out List<SplitPoint> pointsX, out List<SplitPoint> pointsY)
+        public void Create(Vector2 field)
         {
-            var px = new List<SplitPoint>();
-            var py = new List<SplitPoint>();
-
             var max = new Vector2(this.sectionX.y, this.sectionY.y);
             var pos = Vector2.zero;
             var step = Vector2.zero;
@@ -50,7 +47,9 @@ namespace NightCity.Creators
 
                         var isLast = (p >= field[i]);
                         isMain = (isMain || isFrame || isLast);
-                        (i == 0 ? px : py).Add(new SplitPoint(p, isMain == true ? this.main.Width : this.sub.Width));
+
+                        var sp = new SplitPoint(p, isMain == true ? this.main.Width : this.sub.Width);
+                        (i == 0 ? this.PointsX : this.PointsY).Add(sp);
 
                         step[i] = (isMain == true ? max[i] : 0f);
                         if(isLast == true)
@@ -63,9 +62,6 @@ namespace NightCity.Creators
                 step += new Vector2(this.sectionX.Rand(), this.sectionY.Rand());
                 pos = pos.EachFunc(step, (v1, Vector2) => v1 + (v1 < 0f ? 0f : Vector2));
             }
-
-            pointsX = px;
-            pointsY = py;
         }
     }
 }

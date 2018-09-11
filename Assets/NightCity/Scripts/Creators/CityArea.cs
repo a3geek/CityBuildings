@@ -23,10 +23,8 @@ namespace NightCity.Creators
 
         public void Create()
         {
-            List<SplitPoint> pointsX, pointsY;
-
-            this.splitter.Create(this.field, out pointsX, out pointsY);
-            this.Create(pointsX, pointsY);
+            this.splitter.Create(this.field);
+            this.Create(this.splitter.PointsX, this.splitter.PointsY);
         }
 
         private void Create(List<SplitPoint> pointsX, List<SplitPoint> pointsY)
