@@ -15,9 +15,9 @@ namespace NightCity.Structs
         public float Rate => this.rate;
 
         [SerializeField]
-        private float width = 16f;
+        private float width = 24f;
         [SerializeField]
-        private float rate = 0.1f;
+        private float rate = 0.2f;
     }
 
     [Serializable]
@@ -26,6 +26,6 @@ namespace NightCity.Structs
         public float Width => this.width;
 
         [SerializeField]
-        private float width = 4f;
+        private float width = 12f;
     }
 }

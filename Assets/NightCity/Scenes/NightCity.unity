@@ -396,12 +396,13 @@ MonoBehaviour:
     specialHeight: {x: 75, y: 100}
   cityarea:
     field: {x: 1000, y: 1000}
-    sectionX: {x: 120, y: 180}
-    sectionY: {x: 60, y: 90}
-    main:
-      width: 24
-      rate: 0.2
-    sub:
-      width: 12
+    splitter:
+      sectionX: {x: 80, y: 180}
+      sectionY: {x: 40, y: 60}
+      main:
+        width: 24
+        rate: 0.2
+      sub:
+        width: 12
     interval: 20
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}

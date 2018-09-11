@@ -5,84 +5,27 @@ using UnityEngine;
 namespace NightCity.Creators
 {
     using Structs;
-    using Utilities;
-
-    using Random = UnityEngine.Random;
-
+    
     [Serializable]
     public class CityArea
     {
-        private class SplitPoint
-        {
-            public float HalfWidth => 0.5f * this.Width;
-            public float Point { get; }
-            public float Width { get; }
-
-
-            public SplitPoint(float point, float width)
-            {
-                this.Point = point;
-                this.Width = width;
-            }
-        }
-
         public Section[,] Sections { get; private set; } = new Section[0, 0];
         public List<Road> Roads { get; } = new List<Road>();
         public Road MaxDistance { get; private set; }
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
-        [SerializeField]
-        private Vector2 sectionX = new Vector2(30f, 60f);
-        [SerializeField]
-        private Vector2 sectionY = new Vector2(30f, 60f);
-
-        [Header("About Road"), Space]
-        [SerializeField]
-        private MainRoadParams main = new MainRoadParams();
-        [SerializeField]
-        private SubRoadParams sub = new SubRoadParams();
-        [SerializeField]
-        private float interval = 1f;
+        [SerializeField, Space]
+        private FieldSplitter splitter = new FieldSplitter();
+        [SerializeField, Space]
+        private float interval = 20f;
 
 
         public void Create()
         {
-            var max = new Vector2(this.sectionX.y, this.sectionY.y);
-            var pos = Vector2.zero;
-            var step = Vector2.zero;
-            var counter = 0;
+            List<SplitPoint> pointsX, pointsY;
 
-            var pointsX = new List<SplitPoint>();
-            var pointsY = new List<SplitPoint>();
-
-            while(counter < 2)
-            {
-                (pos - this.field)
-                    .EachAction((i, p) => pos[i] >= 0f, (i, p) =>
-                    {
-                        var isFrame = (p <= -this.field[i] == true || p >= this.field[i] == true);
-                        var isMain = Random.value < this.main.Rate && isFrame == false;
-
-                        p += 0.5f * (isMain == true ? max[i] : 0f);
-                        p = p < this.field[i] - max[i] ? p : this.field[i];
-
-                        var isLast = (p >= this.field[i]);
-                        isMain = (isMain || isFrame || isLast);
-                        (i == 0 ? pointsX : pointsY).Add(new SplitPoint(p, isMain == true ? this.main.Width : this.sub.Width));
-
-                        step[i] = (isMain == true ? max[i] : 0f);
-                        if(isLast == true)
-                        {
-                            counter++;
-                            pos[i] = -1f;
-                        }
-                    });
-
-                step += new Vector2(this.sectionX.Rand(), this.sectionY.Rand());
-                pos = pos.EachFunc(step, (v1, v2) => v1 + (v1 < 0f ? 0f : v2));
-            }
-
+            this.splitter.Create(this.field, out pointsX, out pointsY);
             this.Create(pointsX, pointsY);
         }
 
