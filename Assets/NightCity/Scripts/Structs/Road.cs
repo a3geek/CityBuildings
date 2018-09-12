@@ -6,6 +6,9 @@ namespace NightCity.Structs
     [Serializable]
     public struct Road
     {
+        public Vector2Int SectionIndex1 { get; set; }
+        public Vector2Int SectionIndex2 { get; set; }
+
         public Vector2 From => this.from;
         public Vector2 To => this.to;
         public float FromOffset => this.fromOffset;
@@ -35,6 +38,8 @@ namespace NightCity.Structs
             this.toOffset = toOffset;
             this.width = width;
             this.interval = interval;
+
+            this.SectionIndex1 = this.SectionIndex2 = Vector2Int.zero;
         }
     }
 }
