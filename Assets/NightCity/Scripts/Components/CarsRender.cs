@@ -21,6 +21,8 @@ namespace NightCity.Components
 
         [SerializeField]
         private int num = 50;
+        [SerializeField]
+        private float speed = 1f;
 
         private List<Car> cars = new List<Car>();
         private Skyscraper skyscraper;
@@ -39,6 +41,21 @@ namespace NightCity.Components
                 });
             }
         }
+
+        //private void Update()
+        //{
+        //    var v = this.speed * Time.deltaTime;
+
+        //    for(var i = 0; i < this.cars.Count; i++)
+        //    {
+        //        this.cars[i].Value += v;
+
+        //        if(this.cars[i].Value >= 1f)
+        //        {
+
+        //        }
+        //    }
+        //}
 
         private void OnDrawGizmos()
         {
