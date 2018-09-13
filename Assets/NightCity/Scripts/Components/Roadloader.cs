@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using UnityEngine;
 
 namespace NightCity.Components
@@ -40,9 +41,9 @@ namespace NightCity.Components
 
         public void Init(Skyscraper skyscraper)
         {
-            var roads = skyscraper.CityArea.Roads;
+            var roads = skyscraper.CityArea.Roads.Values.Select(r => (SimpleRoad)r);
 
-            this.geomBuffer = new ComputeBuffer(roads.Count, Marshal.SizeOf(typeof(Road)), ComputeBufferType.Default);
+            this.geomBuffer = new ComputeBuffer(roads.Count(), Marshal.SizeOf(typeof(SimpleRoad)), ComputeBufferType.Default);
             this.geomBuffer.SetData(roads.ToArray());
         }
 

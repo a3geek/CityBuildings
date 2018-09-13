@@ -2,23 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using UnityEngine;
 
 namespace NightCity.Components
 {
     using Creators;
+    using Utilities;
     using Structs;
 
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Cars Render")]
     public class CarsRender : MonoBehaviour
     {
-        public class Car
-        {
-            public int CarIndex = 0;
-            public float Value = 0f;
-        }
-
         [SerializeField]
         private int num = 50;
         [SerializeField]
@@ -30,32 +26,48 @@ namespace NightCity.Components
         public void Init(Skyscraper skyscraper)
         {
             this.skyscraper = skyscraper;
+
             var roads = skyscraper.CityArea.Roads;
+            var ids = roads.Keys.ToList();
 
             for(var i = 0; i < this.num; i++)
             {
                 this.cars.Add(new Car()
                 {
-                    CarIndex = UnityEngine.Random.Range(0, roads.Count),
-                    Value = UnityEngine.Random.value
+                    RoadID = ids[UnityEngine.Random.Range(0, ids.Count)],
+                    Progress = UnityEngine.Random.value,
+                    Dir = UnityEngine.Random.value < 0.5f ? 1 : -1
                 });
             }
         }
 
-        //private void Update()
-        //{
-        //    var v = this.speed * Time.deltaTime;
+        private void Update()
+        {
+            for(var i = 0; i < this.cars.Count; i++)
+            {
+                var car = this.cars[i];
+                var road = this.skyscraper.CityArea.Roads[car.RoadID];
+                
+                if(car.GetProgress(road) >= 1f)
+                {
+                    var roadsID = RoadPointer.GetRoadsID(car.Dir == 1 ? road.ToPointID : road.FromPointID)
+                        .Where(id => id != road.Id).ToList();
+                    
+                    var nextID = roadsID.Rand();
+                    var next = this.skyscraper.CityArea.Roads[nextID];
 
-        //    for(var i = 0; i < this.cars.Count; i++)
-        //    {
-        //        this.cars[i].Value += v;
+                    car.RoadID = nextID;
+                    car.Progress = 0f;
+                    car.Dir = ((car.Dir == 1 ? road.To : road.From) == next.From ? 1 : -1);
+                }
+                else
+                {
+                    car.Progress += this.speed;
+                }
 
-        //        if(this.cars[i].Value >= 1f)
-        //        {
-
-        //        }
-        //    }
-        //}
+                this.cars[i] = car;
+            }
+        }
 
         private void OnDrawGizmos()
         {
@@ -63,18 +75,17 @@ namespace NightCity.Components
             {
                 return;
             }
-
+            
             var roads = this.skyscraper.CityArea.Roads;
 
             for(var i = 0; i < this.cars.Count; i++)
             {
                 var car = this.cars[i];
-                var road = roads[car.CarIndex];
+                var road = roads[car.RoadID];
 
-                var distance = (road.To - road.From).magnitude;
-                var dir = (road.To - road.From).normalized;
+                var pos = car.GetPos(road);
 
-                var pos = road.From + dir * distance * car.Value;
+                Gizmos.color = car.Dir == 1 ? Color.white : Color.red;
                 Gizmos.DrawSphere(new Vector3(pos.x, 0f, pos.y), 10f);
             }
         }

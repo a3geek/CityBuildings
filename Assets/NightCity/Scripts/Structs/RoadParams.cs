@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace NightCity.Structs
 {
-    using Structs;
-    using Utilities;
-    using Random = UnityEngine.Random;
-
     [Serializable]
     public class MainRoadParams
     {
