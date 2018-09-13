@@ -29,7 +29,7 @@ namespace NightCity.Components
         [SerializeField]
         private float size = 1f;
         [SerializeField]
-        private float _basicWidth = 24f;
+        private float basicWidth = 24f;
         [SerializeField]
         private float height = 0f;
         [SerializeField]
@@ -57,7 +57,7 @@ namespace NightCity.Components
 
             this.material.SetColor(PropColor, this.color);
             this.material.SetFloat(PropSize, this.size);
-            this.material.SetFloat(PropBasicWidth, this._basicWidth);
+            this.material.SetFloat(PropBasicWidth, this.basicWidth);
             this.material.SetFloat(PropHeight, this.height);
             this.material.SetBuffer(PropGeomData, this.geomBuffer);
             this.material.SetFloat(PropMaxPointPerGeom, MaxPointPerGeom);

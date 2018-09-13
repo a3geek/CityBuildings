@@ -12,22 +12,8 @@ namespace NightCity.Structs
         public Vector3 HalfSize => 0.5f * this.Size;
         public Vector3 BottomLeft => this.Center - this.HalfSize;
         public Vector3 TopRight => this.Center + this.HalfSize;
-        public Vector3 TopLeft
-        {
-            get
-            {
-                var half = this.HalfSize;
-                return this.Center + new Vector3(-half.x, 0f, half.z);
-            }
-        }
-        public Vector3 BottomRight
-        {
-            get
-            {
-                var half = this.HalfSize;
-                return this.Center + new Vector3(half.x, 0f, -half.z);
-            }
-        }
+        public Vector3 TopLeft => this.Center + new Vector3(-this.HalfSize.x, 0f, this.HalfSize.z);
+        public Vector3 BottomRight => this.Center + new Vector3(this.HalfSize.x, 0f, -this.HalfSize.z);
 
         public Vector3 Center => this.center;
         public Vector3 Size => this.size;
