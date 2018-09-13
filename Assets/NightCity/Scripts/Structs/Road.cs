@@ -8,6 +8,35 @@ namespace NightCity.Structs
     public struct SimpleRoad
     {
 #pragma warning disable 0414
+        public Vector2 From;
+        public Vector2 To;
+        public float FromOffset;
+        public float ToOffset;
+        public float Width;
+        public float Interval;
+        public float Magnitude;
+        public Vector2 Direction;
+#pragma warning restore 0414
+    }
+
+    [Serializable]
+    public struct Road
+    {
+        private static int ID = 0;
+
+        public Vector2 From => this.from;
+        public Vector2 To => this.to;
+        public float FromOffset => this.fromOffset;
+        public float ToOffset => this.toOffset;
+        public float Width => this.width;
+        public float Interval => this.interval;
+
+        public int Id => this.id;
+        public int FromPointID => this.fromPointID;
+        public int ToPointID => this.toPointID;
+        public float Magnitude => this.magnitude;
+        public Vector2 Direction => this.direction;
+
         [SerializeField]
         private Vector2 from;
         [SerializeField]
@@ -20,30 +49,6 @@ namespace NightCity.Structs
         private float width;
         [SerializeField]
         private float interval;
-#pragma warning restore 0414
-
-
-        public SimpleRoad(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width, float interval)
-        {
-            this.from = from;
-            this.to = to;
-            this.fromOffset = fromOffset;
-            this.toOffset = toOffset;
-            this.width = width;
-            this.interval = interval;
-        }
-    }
-
-    [Serializable]
-    public struct Road
-    {
-        private static int ID = 0;
-
-        public int Id => this.id;
-        public int FromPointID => this.fromPointID;
-        public int ToPointID => this.toPointID;
-        public float Magnitude => this.magnitude;
-        public Vector2 Direction => this.direction;
 
         [NonSerialized]
         private int id;
@@ -55,26 +60,6 @@ namespace NightCity.Structs
         private float magnitude;
         [NonSerialized]
         private Vector2 direction;
-        
-        public Vector2 From => this.from;
-        public Vector2 To => this.to;
-        public float FromOffset => this.fromOffset;
-        public float ToOffset => this.toOffset;
-        public float Width => this.width;
-        public float Interval => this.interval;
-
-        [SerializeField]
-        private Vector2 from;
-        [SerializeField]
-        private Vector2 to;
-        [SerializeField]
-        private float fromOffset;
-        [SerializeField]
-        private float toOffset;
-        [SerializeField]
-        private float width;
-        [SerializeField]
-        private float interval;
 
 
         public Road(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width, float interval)
@@ -88,8 +73,8 @@ namespace NightCity.Structs
             this.interval = interval;
 
             var dir = (to - from);
-            this.magnitude = dir.magnitude;
             this.direction = dir.normalized;
+            this.magnitude = Vector2.Distance(from + this.direction * fromOffset, to - this.direction * toOffset);
 
             this.fromPointID = RoadPointer.AddPoint(from, ID);
             this.toPointID = RoadPointer.AddPoint(to, ID);
@@ -99,7 +84,17 @@ namespace NightCity.Structs
 
         public static implicit operator SimpleRoad(Road road)
         {
-            return new SimpleRoad(road.from, road.to, road.fromOffset, road.toOffset, road.width, road.interval);
+            return new SimpleRoad()
+            {
+                From = road.from,
+                To = road.to,
+                FromOffset = road.fromOffset,
+                ToOffset = road.toOffset,
+                Width = road.width,
+                Interval = road.interval,
+                Magnitude = road.magnitude,
+                Direction = road.direction
+            };
         }
     }
 }

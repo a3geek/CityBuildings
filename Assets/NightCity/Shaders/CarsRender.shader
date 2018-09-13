@@ -1,4 +1,4 @@
-﻿Shader "Hidden/Roadloader"
+﻿Shader "Hidden/CarsRender"
 {
     Properties
     {
@@ -27,8 +27,6 @@
                 float toOffset;
                 float width;
                 float interval;
-                float magnitude;
-                float2 direction;
             };
 
             struct v2g
@@ -58,7 +56,7 @@
 
                 return o;
             }
-            
+
             [maxvertexcount(128)]
             void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
             {
@@ -67,14 +65,14 @@
                 uint inst = v.id.y;
 
                 data d = _geomData[inst];
-    
+
                 float hw = 0.5 * d.width;
-                float2 dir = d.direction;
+                float2 dir = normalize(d.to - d.from);
 
                 float2 from = d.from + dir * d.fromOffset;
                 float2 to = d.to - dir * d.toOffset;
 
-                float dis = d.magnitude;
+                float dis = distance(from, to);
                 uint count = ceil(dis / d.interval);
 
                 float size = _Size * (d.width / _basicWidth);
