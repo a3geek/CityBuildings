@@ -13,6 +13,7 @@ namespace NightCity.Creators
         public Section[,] Sections { get; private set; } = new Section[0, 0];
         public Dictionary<int, Road> Roads { get; } = new Dictionary<int, Road>();
         public float MaxDistance { get; private set; } = 0f;
+        public float Interval => this.interval;
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);

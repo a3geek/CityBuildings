@@ -74,7 +74,7 @@ namespace NightCity.Structs
 
             var dir = (to - from);
             this.direction = dir.normalized;
-            this.magnitude = Vector2.Distance(from + this.direction * fromOffset, to - this.direction * toOffset);
+            this.magnitude = dir.magnitude;
 
             this.fromPointID = RoadPointer.AddPoint(from, ID);
             this.toPointID = RoadPointer.AddPoint(to, ID);
@@ -84,6 +84,8 @@ namespace NightCity.Structs
 
         public static implicit operator SimpleRoad(Road road)
         {
+            var mag = Vector2.Distance(road.from + road.direction * road.fromOffset, road.to - road.direction * road.toOffset);
+
             return new SimpleRoad()
             {
                 From = road.from,
@@ -92,7 +94,7 @@ namespace NightCity.Structs
                 ToOffset = road.toOffset,
                 Width = road.width,
                 Interval = road.interval,
-                Magnitude = road.magnitude,
+                Magnitude = mag,
                 Direction = road.direction
             };
         }

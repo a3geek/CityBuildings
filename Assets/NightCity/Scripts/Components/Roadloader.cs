@@ -37,6 +37,7 @@ namespace NightCity.Components
         private Material material = null;
 
         private ComputeBuffer geomBuffer = null;
+        private int vertsCount = 1;
 
 
         public void Init(Skyscraper skyscraper)
@@ -45,6 +46,9 @@ namespace NightCity.Components
 
             this.geomBuffer = new ComputeBuffer(roads.Count(), Marshal.SizeOf(typeof(SimpleRoad)), ComputeBufferType.Default);
             this.geomBuffer.SetData(roads.ToArray());
+
+            var step = skyscraper.CityArea.MaxDistance / skyscraper.CityArea.Interval;
+            this.vertsCount = Mathf.CeilToInt(step / MaxPointPerGeom);
         }
 
         private void OnRenderObject()
@@ -63,7 +67,7 @@ namespace NightCity.Components
             this.material.SetBuffer(PropGeomData, this.geomBuffer);
             this.material.SetFloat(PropMaxPointPerGeom, MaxPointPerGeom);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 10, this.geomBuffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, this.vertsCount, this.geomBuffer.count);
         }
 
         private void OnDestroy()
