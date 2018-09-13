@@ -42,10 +42,11 @@ namespace NightCity.Creators
                 {
                     var py = pointsY[j];
                     var refPoint = new Vector2(preX.Point, preY.Point);
+                    var index = new Vector2Int(i - 1, j - 1);
                     
                     var edge = new Vector2(px.Point - px.HalfWidth, py.Point - py.HalfWidth);
                     var preEdge = new Vector2(preX.Point + preX.HalfWidth, preY.Point + preY.HalfWidth);
-                    this.Sections[i - 1, j - 1].Set(
+                    this.Sections[index.x, index.y].Set(
                         0.5f * (edge + preEdge),
                         new Vector2(
                             edge.x - preEdge.x,
@@ -53,13 +54,18 @@ namespace NightCity.Creators
                         )
                     );
 
-                    this.AddRoad(refPoint, new Vector2(px.Point, preY.Point), preX.Width, px.Width, preY.Width);
-                    this.AddRoad(refPoint, new Vector2(preX.Point, py.Point), preY.Width, py.Width, preX.Width);
+                    this.AddRoad(refPoint, new Vector2(px.Point, preY.Point), preX.Width, px.Width, preY.Width,index, new Vector2Int(
+                        index.x, Mathf.Max(0, index.y - 1)
+                    ));
+                    this.AddRoad(refPoint, new Vector2(preX.Point, py.Point), preY.Width, py.Width, preX.Width, index, new Vector2Int(
+                        Mathf.Max(0, index.x - 1), index.y
+                    ));
                     
                     if(i == pointsX.Count - 1)
                     {
                         this.AddRoad(
-                            new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), preY.Width, py.Width, px.Width
+                            new Vector2(max.x, preY.Point), new Vector2(max.x, py.Point), preY.Width, py.Width, px.Width,
+                            index, index
                         );
                     }
 
@@ -67,17 +73,20 @@ namespace NightCity.Creators
                 }
 
                 this.AddRoad(
-                    new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preX.Width, px.Width, preY.Width
+                    new Vector2(preX.Point, max.y), new Vector2(px.Point, max.y), preX.Width, px.Width, preY.Width,
+                    new Vector2Int(i, pointsY.Count - 2), new Vector2Int(i, pointsY.Count - 2)
                 );
                 preX = px;
             }
         }
 
-        private Road AddRoad(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width)
+        private Road AddRoad(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width, Vector2Int index1, Vector2Int index2)
         {
             var road = new Road(from, to, fromOffset, toOffset, width, this.interval);
-            this.Roads.Add(road);
+            road.SectionIndex1 = index1;
+            road.SectionIndex2 = index2;
 
+            this.Roads.Add(road);
             return road;
         }
     }

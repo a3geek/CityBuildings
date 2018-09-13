@@ -10,12 +10,14 @@ namespace NightCity
     [RequireComponent(typeof(WindowTexture))]
     [RequireComponent(typeof(Skyscraper))]
     [RequireComponent(typeof(Roadloader))]
+    [RequireComponent(typeof(CarsRender))]
     [AddComponentMenu("Night City/Main Controller")]
     public class MainController : MonoBehaviour
     {
         private WindowTexture windowTexture = null;
         private Skyscraper skyScraper = null;
         private Roadloader roadloader = null;
+        private CarsRender carsRender = null;
 
 
         private void Awake()
@@ -28,6 +30,9 @@ namespace NightCity
 
             this.roadloader = GetComponent<Roadloader>();
             this.roadloader.Init(this.skyScraper);
+
+            this.carsRender = GetComponent<CarsRender>();
+            this.carsRender.Init(this.skyScraper);
         }
     }
 }

@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 1753058799}
   - component: {fileID: 1753058802}
   - component: {fileID: 1753058801}
+  - component: {fileID: 1753058803}
   m_Layer: 0
   m_Name: Main Controller
   m_TagString: Untagged
@@ -406,3 +407,15 @@ MonoBehaviour:
         width: 12
     interval: 20
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
+--- !u!114 &1753058803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1753058797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5792d72baf8403a4596ea93f47b925b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 50
