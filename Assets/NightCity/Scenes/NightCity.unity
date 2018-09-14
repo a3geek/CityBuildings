@@ -357,7 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.8627451, b: 0.7019608, a: 1}
   size: 5
-  basicWidth: 24
+  basicWidth: 30
   height: 1
   material: {fileID: 2100000, guid: dcef1d25fc79ccb4693c43a40d4a18ca, type: 2}
 --- !u!114 &1753058802
@@ -401,10 +401,10 @@ MonoBehaviour:
       sectionX: {x: 80, y: 180}
       sectionY: {x: 40, y: 60}
       main:
-        width: 24
+        width: 30
         rate: 0.2
       sub:
-        width: 12
+        width: 18
     interval: 20
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
 --- !u!114 &1753058803
@@ -418,10 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5792d72baf8403a4596ea93f47b925b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 250
+  num: 500
   speed: 0.25
   offset: 2.5
-  size: 7.5
+  size: 5
   height: 0
   forward: {r: 1, g: 1, b: 1, a: 1}
   back: {r: 1, g: 0, b: 0, a: 1}
