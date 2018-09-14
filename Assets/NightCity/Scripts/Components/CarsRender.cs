@@ -11,15 +11,17 @@ namespace NightCity.Components
     using Utilities;
     using Structs;
 
+    using Random = UnityEngine.Random;
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Night City/Components/Cars Render")]
     public class CarsRender : MonoBehaviour
     {
-        public struct Data
-        {
-            public Vector2 pos;
-            public Vector2 dir;
-        }
+        //public struct Data
+        //{
+        //    public Vector2 pos;
+        //    public Vector2 dir;
+        //}
 
         public const string PropHeight = "_Height";
         public const string PropSize = "_Size";
@@ -46,7 +48,7 @@ namespace NightCity.Components
 
         private ComputeBuffer geomBuffer = null;
 
-        private List<Car> cars = new List<Car>();
+        private Car[] cars = new Car[0];
         private Skyscraper skyscraper;
 
 
@@ -57,60 +59,26 @@ namespace NightCity.Components
             var roads = skyscraper.CityArea.Roads;
             var ids = roads.Keys.ToList();
 
+            this.cars = new Car[this.num];
             for(var i = 0; i < this.num; i++)
             {
-                this.cars.Add(new Car()
-                {
-                    RoadID = ids[UnityEngine.Random.Range(0, ids.Count)],
-                    Progress = UnityEngine.Random.value,
-                    Dir = UnityEngine.Random.value < 0.5f ? 1 : -1
-                });
+                this.cars[i] = new Car(ids[Random.Range(0, ids.Count)]);
             }
 
-            this.geomBuffer = new ComputeBuffer(this.cars.Count, Marshal.SizeOf(typeof(Data)), ComputeBufferType.Default);
+            this.geomBuffer = new ComputeBuffer(this.cars.Length, Marshal.SizeOf(typeof(Car)), ComputeBufferType.Default);
         }
 
         private void Update()
         {
-            for(var i = 0; i < this.cars.Count; i++)
+            for(var i = 0; i < this.cars.Length; i++)
             {
                 var car = this.cars[i];
-                var road = this.skyscraper.CityArea.Roads[car.RoadID];
-                
-                if(car.GetProgress(road) >= 1f)
-                {
-                    var roadsID = RoadPointer.GetRoadsID(car.Dir == 1 ? road.ToPointID : road.FromPointID)
-                        .Where(id => id != road.Id).ToList();
-                    
-                    var nextID = roadsID.Rand();
-                    var next = this.skyscraper.CityArea.Roads[nextID];
-
-                    car.RoadID = nextID;
-                    car.Progress = 0f;
-                    car.Dir = ((car.Dir == 1 ? road.To : road.From) == next.From ? 1 : -1);
-                }
-                else
-                {
-                    car.Progress += this.speed;
-                }
+                car.Update(this.skyscraper.CityArea, this.speed, this.offset);
 
                 this.cars[i] = car;
             }
-
-            var data = this.cars.ConvertAll(car =>
-            {
-                var road = this.skyscraper.CityArea.Roads[car.RoadID];
-                var dir = car.Dir == 1 ? road.Direction : -1f * road.Direction;
-                var normal = (new Vector2(dir.y, -dir.x)).normalized * this.offset;
-
-                return new Data()
-                {
-                    pos = car.GetPos(road) + normal,
-                    dir = dir
-                };
-            });
-
-            this.geomBuffer.SetData(data.ToArray());
+            
+            this.geomBuffer.SetData(this.cars.ToArray());
         }
 
         private void OnRenderObject()

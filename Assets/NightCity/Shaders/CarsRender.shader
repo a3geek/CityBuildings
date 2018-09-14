@@ -23,6 +23,9 @@
             {
                 float2 pos;
                 float2 dir;
+                int roadID;
+                float progress;
+                int isForward;
             };
 
             struct v2g

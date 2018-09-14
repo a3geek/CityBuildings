@@ -29,7 +29,7 @@ namespace NightCity.Utilities
 
         public static Vector2 Normal(this Vector2 v2)
         {
-            return new Vector2(v2.y, v2.x).normalized;
+            return new Vector2(v2.y, -v2.x).normalized;
         }
 
         public static void EachAction(this Vector2 v2, Action<float> action)
