@@ -132,15 +132,14 @@ namespace NightCity.Structs
             for(var i = 0; i < ids.Count; i++)
             {
                 var id = ids[i];
-                var d = Vector2.Dot(road.Direction, city.Roads[id].Direction);
-
                 if(id == road.Id)
                 {
                     ids.Remove(road.Id);
                     i--;
                     continue;
                 }
-                
+
+                var d = Vector2.Dot(road.Direction, city.Roads[id].Direction);
                 if(Mathf.Abs(d - 1f) <= Vector2.kEpsilon && Random.value <= straightRate)
                 {
                     return id;
