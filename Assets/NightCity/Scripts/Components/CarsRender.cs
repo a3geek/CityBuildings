@@ -17,12 +17,6 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Cars Render")]
     public class CarsRender : MonoBehaviour
     {
-        //public struct Data
-        //{
-        //    public Vector2 pos;
-        //    public Vector2 dir;
-        //}
-
         public const string PropHeight = "_Height";
         public const string PropSize = "_Size";
         public const string PropForwardColor = "_ForwardColor";
