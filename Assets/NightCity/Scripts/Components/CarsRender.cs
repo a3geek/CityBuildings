@@ -31,6 +31,8 @@ namespace NightCity.Components
 
         [SerializeField]
         private int num = 50;
+        [SerializeField, Range(0f, 1f)]
+        private float straightRate = 0.75f;
         [SerializeField]
         private float speed = 1f;
         [SerializeField]
@@ -49,6 +51,7 @@ namespace NightCity.Components
         private ComputeBuffer geomBuffer = null;
 
         private Car[] cars = new Car[0];
+        private SimpleCar[] simpleCars = new SimpleCar[0];
         private Skyscraper skyscraper;
 
 
@@ -60,12 +63,15 @@ namespace NightCity.Components
             var ids = roads.Keys.ToList();
 
             this.cars = new Car[this.num];
+            this.simpleCars = new SimpleCar[this.num];
+
             for(var i = 0; i < this.num; i++)
             {
-                this.cars[i] = new Car(ids[Random.Range(0, ids.Count)]);
+                var id = ids[Random.Range(0, ids.Count)];
+                this.cars[i] = new Car(roads[id]);
             }
 
-            this.geomBuffer = new ComputeBuffer(this.cars.Length, Marshal.SizeOf(typeof(Car)), ComputeBufferType.Default);
+            this.geomBuffer = new ComputeBuffer(this.cars.Length, Marshal.SizeOf(typeof(SimpleCar)), ComputeBufferType.Default);
         }
 
         private void Update()
@@ -73,12 +79,13 @@ namespace NightCity.Components
             for(var i = 0; i < this.cars.Length; i++)
             {
                 var car = this.cars[i];
-                car.Update(this.skyscraper.CityArea, this.speed, this.offset);
+                car.Update(this.skyscraper.CityArea, this.speed, this.offset, this.straightRate);
 
                 this.cars[i] = car;
+                this.simpleCars[i] = car;
             }
             
-            this.geomBuffer.SetData(this.cars.ToArray());
+            this.geomBuffer.SetData(this.simpleCars.ToArray());
         }
 
         private void OnRenderObject()

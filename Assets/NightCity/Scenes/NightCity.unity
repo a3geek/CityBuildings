@@ -399,7 +399,7 @@ MonoBehaviour:
     field: {x: 1000, y: 1000}
     splitter:
       sectionX: {x: 80, y: 180}
-      sectionY: {x: 40, y: 60}
+      sectionY: {x: 50, y: 70}
       main:
         width: 30
         rate: 0.2
@@ -419,7 +419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   num: 1000
-  speed: 0.25
+  straightRate: 0.75
+  speed: 0.1
   offset: 2.5
   size: 5
   height: 0

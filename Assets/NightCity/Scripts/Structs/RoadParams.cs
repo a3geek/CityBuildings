@@ -12,7 +12,7 @@ namespace NightCity.Structs
 
         [SerializeField]
         private float width = 24f;
-        [SerializeField]
+        [SerializeField, Range(0f, 1f)]
         private float rate = 0.2f;
     }
 

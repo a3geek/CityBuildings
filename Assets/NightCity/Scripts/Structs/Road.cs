@@ -24,6 +24,10 @@ namespace NightCity.Structs
     {
         private static int ID = 0;
 
+        public Vector2 OffsetFrom => this.from + this.direction * this.fromOffset;
+        public Vector2 OffsetTo => this.to - this.direction * this.toOffset;
+        public float OffsetMagnitude => this.magnitude - this.fromOffset - this.toOffset;
+        
         public Vector2 From => this.from;
         public Vector2 To => this.to;
         public float FromOffset => this.fromOffset;
