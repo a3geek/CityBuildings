@@ -14,12 +14,12 @@ namespace NightCity.Components
     public class Skyscraper : MonoBehaviour
     {
         public const string PropIsSceneCamera = "ON_RENDER_SCENE_VIEW";
-        public const string PropGeomData = "_geomData";
-        public const string PropRandSeeds = "_randSeeds";
-        public const string PropFragData = "_fragData";
-        public const string PropWindowNumberX = "_windowNumberX";
-        public const string PropWindowNumberY = "_windowNumberY";
-        public const string PropWindowTex = "_windowTex";
+        public const string PropGeomData = "_GeomData";
+        public const string PropRandSeeds = "_RandSeeds";
+        public const string PropFragData = "_FragData";
+        public const string PropWindowNumberX = "_WindowNumberX";
+        public const string PropWindowNumberY = "_WindowNumberY";
+        public const string PropWindowTex = "_WindowTex";
         
         public Builder Builder => this.builder;
         public CityArea CityArea => this.cityarea;

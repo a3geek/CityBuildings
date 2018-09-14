@@ -35,11 +35,11 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 
 	float uvWidth = (uvRange.x + uvRange.z) * 1.5;
 	float uvPerLoop = uvWidth / UNITY_TWO_PI;
-	float2 uvOffset = float2(GetUvOffset(seed.y, uvWidth, _windowNumberX), GetUvOffset(seed.y, uvRange.y, _windowNumberY));
+	float2 uvOffset = float2(GetUvOffset(seed.y, uvWidth, _WindowNumberX), GetUvOffset(seed.y, uvRange.y, _WindowNumberY));
 
 	float3 yOffset = float3(0.0, size.y, 0.0);
 	float3 halfSize = 0.5 * size;
-	float uvY = uvRange.y / _windowNumberY;
+	float uvY = uvRange.y / _WindowNumberY;
 
 	for (int i = 0; i < count; i++)
 	{
@@ -57,8 +57,8 @@ void AppendRounded(float3 center, float3 size, float3 uvRange, int loop, uint2 s
 		float3 p0 = center + float3(cos(r) * halfSize.x, size.y, sin(r) * halfSize.z);
 		float3 p1 = center + float3(cos(r2) * halfSize.x, size.y, sin(r2) * halfSize.z);
 
-		float uvX0 = (r * uvPerLoop) / _windowNumberX;
-		float uvX1 = (r2 * uvPerLoop) / _windowNumberX;
+		float uvX0 = (r * uvPerLoop) / _WindowNumberX;
+		float uvX1 = (r2 * uvPerLoop) / _WindowNumberX;
 
 		g2f v1, v2, v3, v4;
 

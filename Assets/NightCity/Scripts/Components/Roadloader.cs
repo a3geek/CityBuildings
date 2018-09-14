@@ -20,10 +20,10 @@ namespace NightCity.Components
 
         public const string PropColor = "_Color";
         public const string PropSize = "_Size";
-        public const string PropBasicWidth = "_basicWidth";
-        public const string PropHeight = "_height";
-        public const string PropMaxPointPerGeom = "_maxPointPerGeom";
-        public const string PropGeomData = "_geomData";
+        public const string PropBasicWidth = "_BasicWidth";
+        public const string PropHeight = "_Height";
+        public const string PropMaxPointPerGeom = "_MaxPointPerGeom";
+        public const string PropGeomData = "_GeomData";
 
         [SerializeField]
         private Color color = new Color(0.99f, 0.75f, 0.70f, 1f);

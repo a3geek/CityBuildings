@@ -418,5 +418,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5792d72baf8403a4596ea93f47b925b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 1
-  speed: 1
+  num: 250
+  speed: 0.25
+  offset: 2.5
+  size: 7.5
+  height: 0
+  forward: {r: 1, g: 1, b: 1, a: 1}
+  back: {r: 1, g: 0, b: 0, a: 1}
+  material: {fileID: 2100000, guid: 230bcf696074960488c12a1c31b0b13f, type: 2}

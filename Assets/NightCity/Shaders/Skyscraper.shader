@@ -53,10 +53,10 @@
 			#include "./Geometries/Cube.cginc"
 			#include "./Geometries/Rounded.cginc"
 
-			uniform StructuredBuffer<data> _geomData;
-			uniform StructuredBuffer<uint> _randSeeds;
-            uniform StructuredBuffer<frag_data> _fragData;
-			uniform sampler2D _windowTex;
+			uniform StructuredBuffer<data> _GeomData;
+			uniform StructuredBuffer<uint> _RandSeeds;
+            uniform StructuredBuffer<frag_data> _FragData;
+			uniform sampler2D _WindowTex;
 
 			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
 			{
@@ -73,8 +73,8 @@
 				uint id = v.id.x;
 				uint inst = v.id.y;
 
-				uint seed = _randSeeds[2 * inst + id];
-				data d = _geomData[inst];
+				uint seed = _RandSeeds[2 * inst + id];
+				data d = _GeomData[inst];
 
 				if (d.buildType == 0)
 				{
@@ -87,14 +87,14 @@
 				}
 				else if (d.buildType == 1)
 				{
-					uint2 seeds = uint2(seed, _randSeeds[2 * inst]);
+					uint2 seeds = uint2(seed, _RandSeeds[2 * inst]);
 					AppendRounded(d.center, d.size, d.uvRange, id, seeds, inst, outStream);
 				}
 			}
 
             float4 frag(g2f i) : COLOR
 			{
-                float4 col = tex2D(_windowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _fragData[(int)i.uv.z].color);
+                float4 col = tex2D(_WindowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _FragData[(int)i.uv.z].color);
 
 				return lerp(col, float4(0.0, 0.0, 0.0, 1.0), saturate(-1.0 * i.uv.w / 750.0) * IS_SCENE_VIEW);
 			}

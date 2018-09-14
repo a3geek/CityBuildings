@@ -21,12 +21,8 @@
 
             struct data
             {
-                float2 from;
-                float2 to;
-                float fromOffset;
-                float toOffset;
-                float width;
-                float interval;
+                float2 pos;
+                float2 dir;
             };
 
             struct v2g
@@ -37,17 +33,19 @@
             struct g2f
             {
                 float4 pos : SV_POSITION;
-                float2 uv : TEXCOORD0;
+                float3 uv : TEXCOORD0;
             };
 
             #include "./Geometries/Quad.cginc"
+            
+            uniform float _Height, _Size;
+            uniform float4 _ForwardColor, _BackColor;
+            uniform StructuredBuffer<data> _GeomData;
 
-            uniform uint _maxPointPerGeom;
-            uniform float _basicWidth;
-            uniform float _height;
-            uniform float _Size;
-            uniform float4 _Color;
-            uniform StructuredBuffer<data> _geomData;
+            float3 getCameraForward()
+            {
+                return -UNITY_MATRIX_V[2].xyz;
+            }
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
             {
@@ -55,7 +53,7 @@
                 o.id = uint2(id, inst);
 
                 return o;
-            }
+            }   
 
             [maxvertexcount(128)]
             void geom(point v2g input[1], inout TriangleStream<g2f> outStream)
@@ -64,39 +62,19 @@
                 uint id = v.id.x;
                 uint inst = v.id.y;
 
-                data d = _geomData[inst];
+                data d = _GeomData[inst];
 
-                float hw = 0.5 * d.width;
-                float2 dir = normalize(d.to - d.from);
-
-                float2 from = d.from + dir * d.fromOffset;
-                float2 to = d.to - dir * d.toOffset;
-
-                float dis = distance(from, to);
-                uint count = ceil(dis / d.interval);
-
-                float size = _Size * (d.width / _basicWidth);
-
-                float2 center = 0.5 * (from + to);
-                float2 center2 = (from + 0.5 * dir * d.interval * (count - 1));
-                float2 diff = center - center2;
-
-                for (uint i = id * _maxPointPerGeom; i < count && i < (id + 1) * _maxPointPerGeom; i++)
-                {
-                    float2 v = from + min(d.interval * i, dis) * dir + diff;
-                    float2 n = float2(-dir.y, dir.x);
-
-                    AppendQuad(v + n * (hw - 0.5 * size), size, _height, outStream);
-                    AppendQuad(v - n * (hw - 0.5 * size), size, _height, outStream);
-                }
+                float view = dot(getCameraForward(), float3(d.dir.x, 0.0, d.dir.y));
+                AppendQuad(d.pos, _Size, _Height, view > 0 ? 1.0 : -1.0, outStream);
             }
 
             float4 frag(g2f i) : COLOR
             {
-                float dis = distance(i.uv, float2(0.5, 0.5));
+                float dis = distance(i.uv.xy, float2(0.5, 0.5));
                 float vdis = saturate(1.0 - dis);
-
-                return float4((_Color * vdis).rgb, saturate(0.5 - dis));
+                
+                float4 c = i.uv.z >= 0.0 ? _BackColor : _ForwardColor;
+                return float4((c * vdis).rgb, saturate(0.5 - dis));
             }
 
             ENDCG
