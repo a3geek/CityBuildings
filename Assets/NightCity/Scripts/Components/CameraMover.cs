@@ -1,0 +1,86 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Linq;
+using UnityEngine;
+
+namespace NightCity.Components
+{
+    using Creators;
+    using Utilities;
+    using Structs;
+    using Random = UnityEngine.Random;
+    
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(Camera))]
+    [AddComponentMenu("Night City/Components/Camera Mover")]
+    public class CameraMover : MonoBehaviour
+    {
+        private Road road
+        {
+            get { return this.skyscraper.CityArea.Roads[this.roadID]; }
+        }
+        private Vector2 from
+        {
+            get { return this.isForward == true ? this.road.From : this.road.To; }
+        }
+        private Vector2 to
+        {
+            get { return this.isForward == true ? this.road.To : this.road.From; }
+        }
+        private Vector2 dir
+        {
+            get { return this.isForward == true ? this.road.Direction : -1f * this.road.Direction; }
+        }
+
+        [SerializeField]
+        private float speed = 1f;
+        [SerializeField, Range(0f, 1f)]
+        private float straightRate = 0.75f;
+
+        private int roadID = 0;
+        private float progress = 0f;
+        private bool isForward = true;
+        private Skyscraper skyscraper = null;
+
+
+        public void Init(Skyscraper skyscraper)
+        {
+            this.skyscraper = skyscraper;
+
+            var ids = skyscraper.CityArea.Roads.Keys;
+            this.roadID = ids.ElementAt(Random.Range(0, ids.Count));
+            this.progress = Random.Range(0f, this.road.Magnitude);
+        }
+
+        private void Update()
+        {
+            if(this.GetProgress() >= 1f)
+            {
+                var to = this.to;
+
+                this.roadID = RoadPointer.GetNextRoadID(
+                    this.road,
+                    this.isForward == true ? this.road.ToPointID : this.road.FromPointID,
+                    this.skyscraper.CityArea, this.straightRate
+                );
+
+                this.isForward = this.road.IsForward(to);
+                this.progress = 0f;
+            }
+            else
+            {
+                this.progress = Mathf.Min(this.road.Magnitude, this.progress + this.speed);
+            }
+
+            var pos = this.from + this.dir * this.progress;
+            transform.position = pos.ToVector3(transform.position.y);
+        }
+
+        private float GetProgress()
+        {
+            return this.progress / this.road.Magnitude;
+        }
+    }
+}

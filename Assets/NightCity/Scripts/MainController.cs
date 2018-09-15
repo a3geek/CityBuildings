@@ -14,6 +14,9 @@ namespace NightCity
     [AddComponentMenu("Night City/Main Controller")]
     public class MainController : MonoBehaviour
     {
+        [SerializeField]
+        private CameraMover mover = null;
+        
         private WindowTexture windowTexture = null;
         private Skyscraper skyScraper = null;
         private Roadloader roadloader = null;
@@ -33,9 +36,9 @@ namespace NightCity
 
             this.carsRender = GetComponent<CarsRender>();
             this.carsRender.Init(this.skyScraper);
+
+            this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
+            this.mover.Init(this.skyScraper);
         }
     }
 }
-
-// 道幅は4mで2車線
-// ビルの高さはMinimumで30m（10階建て） (w*hは15*15くらいから）

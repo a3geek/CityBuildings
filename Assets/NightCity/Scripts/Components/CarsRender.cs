@@ -46,7 +46,7 @@ namespace NightCity.Components
 
         private Car[] cars = new Car[0];
         private SimpleCar[] simpleCars = new SimpleCar[0];
-        private Skyscraper skyscraper;
+        private Skyscraper skyscraper = null;
 
 
         public void Init(Skyscraper skyscraper)
@@ -54,14 +54,14 @@ namespace NightCity.Components
             this.skyscraper = skyscraper;
 
             var roads = skyscraper.CityArea.Roads;
-            var ids = roads.Keys.ToList();
+            var ids = roads.Keys;
 
             this.cars = new Car[this.num];
             this.simpleCars = new SimpleCar[this.num];
 
             for(var i = 0; i < this.num; i++)
             {
-                var id = ids[Random.Range(0, ids.Count)];
+                var id = ids.ElementAt(Random.Range(0, ids.Count));
                 this.cars[i] = new Car(roads[id]);
             }
 

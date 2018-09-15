@@ -41,8 +41,9 @@ namespace NightCity.Structs
         private float magnitude;
         [SerializeField]
         private int nextID;
-
+        [SerializeField]
         private Vector2 from;
+        [SerializeField]
         private Vector2 to;
 
 
@@ -104,10 +105,11 @@ namespace NightCity.Structs
             }
             else
             {
-                this.nextID = this.GetNextRoadID(road, city, straightRate);
+                this.nextID = RoadPointer.GetNextRoadID(
+                    road, this.isForward == true ? road.ToPointID : road.FromPointID, city, straightRate);
 
                 var next = city.Roads[this.nextID];
-                this.isForward = this.IsForward(this.to, next);
+                this.isForward = next.IsForward(this.to);
 
                 var dir = next.Direction * (isForward == true ? 1f : -1f);
 
@@ -124,39 +126,7 @@ namespace NightCity.Structs
 
             this.progress = 0f;
         }
-
-        private int GetNextRoadID(Road road, CityArea city, float straightRate)
-        {
-            var ids = new List<int>(RoadPointer.GetRoadsID(this.isForward == true ? road.ToPointID : road.FromPointID));
-
-            for(var i = 0; i < ids.Count; i++)
-            {
-                var id = ids[i];
-                if(id == road.Id)
-                {
-                    ids.Remove(road.Id);
-                    i--;
-                    continue;
-                }
-
-                var d = Vector2.Dot(road.Direction, city.Roads[id].Direction);
-                if(Mathf.Abs(d - 1f) <= Vector2.kEpsilon && Random.value <= straightRate)
-                {
-                    return id;
-                }
-            }
-
-            return ids[Random.Range(0, ids.Count)];
-        }
-
-        private bool IsForward(Vector2 pos, Road road)
-        {
-            var from = (pos - road.From).sqrMagnitude;
-            var to = (pos - road.To).sqrMagnitude;
-
-            return from < to;
-        }
-
+        
         public static implicit operator SimpleCar(Car car)
         {
             return new SimpleCar()

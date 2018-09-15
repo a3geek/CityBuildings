@@ -86,6 +86,14 @@ namespace NightCity.Structs
             ID++;
         }
 
+        public bool IsForward(Vector2 pos)
+        {
+            var from = (pos - this.from).sqrMagnitude;
+            var to = (pos - this.to).sqrMagnitude;
+
+            return from < to;
+        }
+
         public static implicit operator SimpleRoad(Road road)
         {
             var mag = Vector2.Distance(road.from + road.direction * road.fromOffset, road.to - road.direction * road.toOffset);
