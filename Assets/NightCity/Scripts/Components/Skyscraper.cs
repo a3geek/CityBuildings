@@ -13,6 +13,8 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Sky Scraper")]
     public class Skyscraper : MonoBehaviour
     {
+        public const int VertexCount = 3;
+
         public const string PropIsSceneCamera = "ON_RENDER_SCENE_VIEW";
         public const string PropGeomData = "_GeomData";
         public const string PropRandSeeds = "_RandSeeds";
@@ -91,7 +93,7 @@ namespace NightCity.Components
             this.material.SetInt(PropWindowNumberX, windowNumber.x);
             this.material.SetInt(PropWindowNumberY, windowNumber.y);
 
-            Graphics.DrawProcedural(MeshTopology.Points, 3, this.geomsBuffer.count);
+            Graphics.DrawProcedural(MeshTopology.Points, VertexCount, this.geomsBuffer.count);
         }
 
         private void OnDestroy()

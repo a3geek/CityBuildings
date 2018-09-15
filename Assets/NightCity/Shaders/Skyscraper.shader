@@ -32,6 +32,7 @@
 				float3 size;
 				float3 uvRange;
 				uint buildType;
+                int index;
 			};
             struct frag_data
             {
@@ -73,8 +74,8 @@
 				uint id = v.id.x;
 				uint inst = v.id.y;
 
-				uint seed = _RandSeeds[2 * inst + id];
-				data d = _GeomData[inst];
+                data d = _GeomData[inst];
+				uint seed = _RandSeeds[3 * d.index + id];
 
 				if (d.buildType == 0)
 				{
@@ -83,18 +84,18 @@
 						return;
 					}
 
-					AppendCube(d.center, d.size, d.uvRange, seed, inst, outStream);
+					AppendCube(d.center, d.size, d.uvRange, seed, d.index, outStream);
 				}
 				else if (d.buildType == 1)
 				{
 					uint2 seeds = uint2(seed, _RandSeeds[2 * inst]);
-					AppendRounded(d.center, d.size, d.uvRange, id, seeds, inst, outStream);
+					AppendRounded(d.center, d.size, d.uvRange, id, seeds, d.index, outStream);
 				}
 			}
 
             float4 frag(g2f i) : COLOR
 			{
-                float4 col = tex2D(_WindowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _FragData[(int)i.uv.z].color);
+                float4 col = tex2D(_WindowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _FragData[round(i.uv.z)].color);
 				return lerp(col, float4(0.0, 0.0, 0.0, 1.0), saturate(-1.0 * i.uv.w / 750.0) * IS_SCENE_VIEW);
 			}
 

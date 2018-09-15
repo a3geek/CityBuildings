@@ -74,10 +74,11 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int i
 			pos.y += halfSize.y;
 			v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
 
-			v.uv = float4(uvOffset + _CubeUvParam[idx] * float2(
-				IsMultipleOfTwo(i) == true ? uvRange.z / dc : uvRange.x / wc,
-				uvRange.y / hc
-			), index, UnityObjectToViewPos(float4(pos, 1.0)).z);
+            float2 uv = uvOffset + _CubeUvParam[idx] * float2(
+                IsMultipleOfTwo(i) == true ? uvRange.z / dc : uvRange.x / wc,
+                uvRange.y / hc
+            );
+			v.uv = float4(uv.x, uv.y, index, UnityObjectToViewPos(float4(pos, 1.0)).z);
 
 			outStream.Append(v);
 		}

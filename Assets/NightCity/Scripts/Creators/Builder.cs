@@ -35,6 +35,8 @@ namespace NightCity.Creators
         [SerializeField]
         private Vector2 specialHeight = new Vector2(50f, 75f);
 
+        private int index = 0;
+
 
         public void CreateBuilds(Section[,] sections)
         {
@@ -55,7 +57,7 @@ namespace NightCity.Creators
             if(size.x <= this.width.x && size.z <= this.depth.x)
             {
                 this.AddFrags(1);
-                this.AddSeeds(2);
+                this.AddSeeds(Skyscraper.VertexCount);
                 this.Geoms.Add(this.CreateBuild(center, size.x, size.z, this.height, this.rate));
                 return;
             }
@@ -73,7 +75,7 @@ namespace NightCity.Creators
                     var field = new Vector2(size.x * division.x, size.z * division.y);
 
                     this.AddFrags(1);
-                    this.AddSeeds(2);
+                    this.AddSeeds(Skyscraper.VertexCount);
                     this.Geoms.Add(this.CreateBuild(cen.ToVector3(center.y), field.x, field.y, this.height, this.rate));
                 }
             }
@@ -93,7 +95,8 @@ namespace NightCity.Creators
                 center = center,
                 size = size,
                 uvRange = size / this.windowSize,
-                buildType = Random.value < 0.5f ? 0u : 1u
+                buildType = Random.value < 0.5f ? 0u : 1u,
+                index = this.index++
             };
         }
 

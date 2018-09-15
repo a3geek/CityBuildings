@@ -10,6 +10,7 @@ namespace NightCity.Structs
         public Vector3 size;
         public Vector3 uvRange;
         public uint buildType;
+        public int index;
     }
 
     [Serializable]
