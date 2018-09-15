@@ -52,8 +52,7 @@ namespace NightCity.Components
             var center = this.skyscraper.CityArea.FieldCenter;
 
             var dis = pos.XZ() - center;
-            var rate = Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y));
-            Debug.Log(rate);
+            var rate = Mathf.Clamp01(Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y)));
 
             var rot = Quaternion.LookRotation(center.ToVector3(pos.y) - pos);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, rate);
@@ -75,8 +74,8 @@ namespace NightCity.Components
             {
                 this.progress = Mathf.Min(this.road.Magnitude, this.progress + this.speed);
             }
-            
-            transform.position = (this.from + this.dir * this.progress).ToVector3(pos.y);
+
+            transform.position = Vector2.Lerp(this.from, this.to, this.GetProgress()).ToVector3(pos.y);
         }
 
         private float GetProgress()
