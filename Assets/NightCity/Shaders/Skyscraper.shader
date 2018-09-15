@@ -95,7 +95,6 @@
             float4 frag(g2f i) : COLOR
 			{
                 float4 col = tex2D(_WindowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _FragData[(int)i.uv.z].color);
-
 				return lerp(col, float4(0.0, 0.0, 0.0, 1.0), saturate(-1.0 * i.uv.w / 750.0) * IS_SCENE_VIEW);
 			}
 

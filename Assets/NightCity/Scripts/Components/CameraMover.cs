@@ -17,31 +17,22 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Camera Mover")]
     public class CameraMover : MonoBehaviour
     {
-        private Road road
-        {
-            get { return this.skyscraper.CityArea.Roads[this.roadID]; }
-        }
-        private Vector2 from
-        {
-            get { return this.isForward == true ? this.road.From : this.road.To; }
-        }
-        private Vector2 to
-        {
-            get { return this.isForward == true ? this.road.To : this.road.From; }
-        }
-        private Vector2 dir
-        {
-            get { return this.isForward == true ? this.road.Direction : -1f * this.road.Direction; }
-        }
+        private Road road => this.skyscraper.CityArea.Roads[this.roadID];
+        private Vector2 from => this.isForward == true ? this.road.From : this.road.To;
+        private Vector2 to => this.isForward == true ? this.road.To : this.road.From;
+        private Vector2 dir => this.isForward == true ? this.road.Direction : -1f * this.road.Direction;
 
         [SerializeField]
         private float speed = 1f;
         [SerializeField, Range(0f, 1f)]
         private float straightRate = 0.75f;
+        [SerializeField]
+        private float autotime = 5f;
 
         private int roadID = 0;
         private float progress = 0f;
         private bool isForward = true;
+        private float timer = 0f;
         private Skyscraper skyscraper = null;
 
 
@@ -56,6 +47,17 @@ namespace NightCity.Components
 
         private void Update()
         {
+            var pos = transform.position;
+            var field = this.skyscraper.CityArea.Field;
+            var center = this.skyscraper.CityArea.FieldCenter;
+
+            var dis = pos.XZ() - center;
+            var rate = Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y));
+            Debug.Log(rate);
+
+            var rot = Quaternion.LookRotation(center.ToVector3(pos.y) - pos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, rate);
+            
             if(this.GetProgress() >= 1f)
             {
                 var to = this.to;
@@ -73,9 +75,8 @@ namespace NightCity.Components
             {
                 this.progress = Mathf.Min(this.road.Magnitude, this.progress + this.speed);
             }
-
-            var pos = this.from + this.dir * this.progress;
-            transform.position = pos.ToVector3(transform.position.y);
+            
+            transform.position = (this.from + this.dir * this.progress).ToVector3(pos.y);
         }
 
         private float GetProgress()

@@ -48,7 +48,12 @@ namespace NightCity.Components
 
             this.Tex = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGB32)
             {
-                enableRandomWrite = true
+                enableRandomWrite = true,
+                useMipMap = false,
+                filterMode = FilterMode.Point,
+                anisoLevel = 0,
+                wrapMode = TextureWrapMode.Repeat,
+                autoGenerateMips = false
             };
             this.Tex.Create();
 

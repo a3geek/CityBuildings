@@ -16,7 +16,7 @@ namespace NightCity.Utilities
         {
             return (vec2.x + vec2.y) * 0.5f;
         }
-
+        
         public static Vector2 Surplus(this Vector2 v2, float v)
         {
             return new Vector2(v2.x % v, v2.y % v);

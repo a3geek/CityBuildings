@@ -14,6 +14,8 @@ namespace NightCity.Creators
         public Dictionary<int, Road> Roads { get; } = new Dictionary<int, Road>();
         public float MaxDistance { get; private set; } = 0f;
         public float Interval => this.interval;
+        public Vector2 Field => this.field;
+        public Vector2 FieldCenter => Vector2.zero;
 
         [SerializeField]
         private Vector2 field = new Vector2(1000f, 1000f);
