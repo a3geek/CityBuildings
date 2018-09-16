@@ -62,7 +62,7 @@ namespace NightCity.Components
             for(var i = 0; i < this.num; i++)
             {
                 var id = ids.ElementAt(Random.Range(0, ids.Count));
-                this.cars[i] = new Car(roads[id]);
+                this.cars[i] = new Car(roads[id], this.offset);
             }
 
             this.geomBuffer = new ComputeBuffer(this.cars.Length, Marshal.SizeOf(typeof(SimpleCar)), ComputeBufferType.Default);
@@ -73,7 +73,7 @@ namespace NightCity.Components
             for(var i = 0; i < this.cars.Length; i++)
             {
                 var car = this.cars[i];
-                car.Update(this.skyscraper.CityArea, this.speed, this.offset, this.straightRate);
+                car.Update(this.skyscraper.CityArea, this.speed, this.straightRate);
 
                 this.cars[i] = car;
                 this.simpleCars[i] = car;

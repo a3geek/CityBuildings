@@ -86,8 +86,11 @@
                     float2 v = from + min(d.interval * i, dis) * dir + diff;
                     float2 n = float2(-dir.y, dir.x);
 
-                    AppendQuad(v + n * (hw - 0.5 * size), size, _Height, 0.0, outStream);
-                    AppendQuad(v - n * (hw - 0.5 * size), size, _Height, 0.0, outStream);
+                    float2 p1 = v + n * (hw - 0.5 * size);
+                    float2 p2 = v - n * (hw - 0.5 * size);
+
+                    AppendQuad(float3(p1.x, _Height, p1.y), size, float3(0.0, 1.0, 0.0), float3(0.0, 0.0, 1.0), 0.0, outStream);
+                    AppendQuad(float3(p2.x, _Height, p2.y), size, float3(0.0, 1.0, 0.0), float3(0.0, 0.0, 1.0), 0.0, outStream);
                 }
             }
 

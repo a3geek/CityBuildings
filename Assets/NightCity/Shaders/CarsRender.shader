@@ -7,7 +7,7 @@
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
-        LOD 100
+        Cull Off
 
         Pass
         {
@@ -65,7 +65,10 @@
                 data d = _GeomData[inst];
 
                 float view = dot(getCameraForward(), float3(d.dir.x, 0.0, d.dir.y));
-                AppendQuad(d.pos, _Size, _Height, view > 0 ? 1.0 : -1.0, outStream);
+                float3 forward = float3(d.dir.x, 0.0, d.dir.y);
+                float3 up = float3(0.0, 1.0, 0.0);
+
+                AppendQuad(float3(d.pos.x, _Height, d.pos.y), _Size, forward, up, view > 0 ? 1.0 : -1.0, outStream);
             }
 
             float4 frag(g2f i) : COLOR
