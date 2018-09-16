@@ -234,6 +234,9 @@ MonoBehaviour:
   speed: 0.25
   straightRate: 0.75
   autotime: 5
+  range: {x: 40, y: 80}
+  delay: 1
+  rotSpeed: 0.1
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
