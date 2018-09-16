@@ -64,7 +64,7 @@ namespace NightCity.Components
             {
                 return false;
             }
-
+            
             var euler = transform.rotation.eulerAngles;
             euler.y += (this.speed * Time.deltaTime * ((right == true ? 1f : 0f) + (left == true ? -1f : 0f)));
             transform.rotation = Quaternion.Euler(euler);
