@@ -26,7 +26,9 @@ namespace NightCity.Creators
         [SerializeField]
         private Vector2 depth = new Vector2(35f, 20f);
         [SerializeField]
-        private Vector2 rate = new Vector2(0.75f, 0.95f);
+        private Vector2 mainRate = new Vector2(0.5f, 0.75f);
+        [SerializeField]
+        private Vector2 subRate = new Vector2(0.75f, 0.95f);
         [SerializeField]
         private int windowSize = 1;
         [SerializeField]
@@ -59,7 +61,7 @@ namespace NightCity.Creators
             {
                 this.AddFrags(1);
                 this.AddSeeds(Skyscraper.VertexCount);
-                this.Geoms.Add(this.CreateBuild(center, size.x, size.z, this.height, this.rate));
+                this.Geoms.Add(this.CreateBuild(center, size.x, size.z));
                 return;
             }
 
@@ -77,24 +79,24 @@ namespace NightCity.Creators
 
                     this.AddFrags(1);
                     this.AddSeeds(Skyscraper.VertexCount);
-                    this.Geoms.AddRange(this.CreateBuilds(cen.ToVector3(center.y), field.x, field.y, this.height, this.rate));
+                    this.Geoms.AddRange(this.CreateBuilds(cen.ToVector3(center.y), field.x, field.y));
                 }
             }
         }
 
-        private BuildingGeomData CreateBuild(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
+        private BuildingGeomData CreateBuild(Vector3 center, float width, float depth)
         {
-            return this.CreateBuilds(center, width, depth, height, rate)[0];
+            return this.CreateBuilds(center, width, depth)[0];
         }
 
-        private List<BuildingGeomData> CreateBuilds(Vector3 center, float width, float depth, Vector2 height, Vector2 rate)
+        private List<BuildingGeomData> CreateBuilds(Vector3 center, float width, float depth)
         {
             var data = new List<BuildingGeomData>();
 
-            var widRate = rate.Rand();
-            var depRate = rate.Rand();
+            var widRate = this.mainRate.Rand();
+            var depRate = this.mainRate.Rand();
             var isSpecial = Random.value < this.specialRate;
-            var heiRate = isSpecial ? this.specialHeight.Rand() : height.Rand();
+            var heiRate = isSpecial ? this.specialHeight.Rand() : this.height.Rand();
 
             var wid = widRate * width;
             var dep = depRate * depth;
@@ -122,59 +124,32 @@ namespace NightCity.Creators
             var count = (uint)Random.Range(0, 3);
             for(var i = 0u; i < count; i++)
             {
-                var dir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-                var s = field * new Vector2(Random.Range(widRate, rate.y), Random.Range(depRate, rate.y));
-                var p = center.XZ() + s * 0.5f * dir;
+                size = (field * new Vector2(this.subRate.Rand(), this.subRate.Rand())).ToVector3(
+                    (isSpecial == true ? Random.Range(this.specialHeight.x, heiRate) : Random.Range(height.x, heiRate)) * 0.9f
+                );
+                size = size - size.Surplus(this.windowSize);
 
-                if(data.IsContains(d => d.IsIn(p, s)) == true)
+                var dir = (new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f))).normalized;
+                var pos = center.XZ() + size.XZ() * 0.5f * dir;
+
+                if(data.IsContains(d => d.IsIn(pos, size.XZ())) == true)
                 {
                     count--;
                     i--;
                     continue;
                 }
-
-                var s3 = s.ToVector3(
-                    isSpecial == true ? Random.Range(this.specialHeight.x, heiRate) : Random.Range(height.x, heiRate)
-                );
+                
                 data.Add(new BuildingGeomData()
                 {
-                    center = p.ToVector3(center.y),
-                    size = s3,
-                    uvRange = s3 / this.windowSize,
+                    center = pos.ToVector3(center.y),
+                    size = size,
+                    uvRange = size / this.windowSize,
                     buildType = buildType
                 });
             }
-
-
             
             this.AddProcedurals(1u, 1u + count);
-
             return data;
-
-
-
-
-
-
-
-
-
-
-            //var wid = rate.Rand() * width;
-            //var dep = rate.Rand() * depth;
-            //var hei = Random.value < this.specialRate ? this.specialHeight.Rand() : height.Rand();
-
-            //var size = new Vector3(wid, hei, dep);
-            //size = size - size.Surplus(this.windowSize);
-
-            //return new BuildingGeomData()
-            //{
-            //    center = center,
-            //    size = size,
-            //    uvRange = size / this.windowSize,
-            //    buildType = Random.value < 0.5f ? 0u : 1u,
-            //    index = this.index++
-            //};
         }
 
         private void AddProcedurals(uint verts, uint range)

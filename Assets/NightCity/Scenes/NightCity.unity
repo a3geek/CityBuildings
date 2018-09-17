@@ -194,7 +194,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 621738617}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 70, z: -710}
+  m_LocalPosition: {x: 0, y: 50, z: -710}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1619333017}
@@ -392,7 +392,8 @@ MonoBehaviour:
     height: {x: 10, y: 25}
     width: {x: 35, y: 30}
     depth: {x: 35, y: 30}
-    rate: {x: 0.75, y: 0.95}
+    mainRate: {x: 0.5, y: 0.75}
+    subRate: {x: 0.825, y: 0.95}
     windowSize: 2
     colors:
     - {r: 0.993, g: 0.89724004, b: 0.86700004, a: 0.5}
