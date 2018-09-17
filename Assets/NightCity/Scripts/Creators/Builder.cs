@@ -9,7 +9,7 @@ namespace NightCity.Creators
 {
     using Structs;
     using Utilities;
-    using Components;
+    using Managers;
 
     [Serializable]
     public class Builder
@@ -61,7 +61,7 @@ namespace NightCity.Creators
             if(size.x <= this.width.x && size.z <= this.depth.x)
             {
                 this.AddFrags(1);
-                this.AddSeeds(Skyscraper.VertexCount);
+                this.AddSeeds(SkyscraperManager.VertexCount);
                 this.Geoms.Add(this.CreateBuild(center, size.x, size.z));
                 return;
             }
@@ -79,7 +79,7 @@ namespace NightCity.Creators
                     var field = new Vector2(size.x * division.x, size.z * division.y);
 
                     this.AddFrags(1);
-                    this.AddSeeds(Skyscraper.VertexCount);
+                    this.AddSeeds(SkyscraperManager.VertexCount);
                     this.Geoms.AddRange(this.CreateBuilds(cen.ToVector3(center.y), field.x, field.y));
                 }
             }
@@ -117,7 +117,7 @@ namespace NightCity.Creators
 
             if(buildType == 1u)
             {
-                this.AddProcedurals(Skyscraper.VertexCount, 1u);
+                this.AddProcedurals(SkyscraperManager.VertexCount, 1u);
                 return data;
             }
             if(isSpecial == true)

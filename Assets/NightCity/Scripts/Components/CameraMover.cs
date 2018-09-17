@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace NightCity.Components
 {
-    using Creators;
+    using Managers;
     using Utilities;
     using Structs;
     using Random = UnityEngine.Random;
@@ -38,10 +38,10 @@ namespace NightCity.Components
         private float timer = 0f;
         private bool pause = false;
         private float rotateRate = 0f;
-        private Skyscraper skyscraper = null;
+        private SkyscraperManager skyscraper = null;
 
 
-        public void Init(Skyscraper skyscraper)
+        public void Init(SkyscraperManager skyscraper)
         {
             this.skyscraper = skyscraper;
 

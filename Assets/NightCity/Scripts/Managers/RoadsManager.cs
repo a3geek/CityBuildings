@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace NightCity.Managers
 {
     using Creators;
     using Structs;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Components/Roadloader")]
-    public class Roadloader : MonoBehaviour
+    [AddComponentMenu("Night City/Managers/Roads Manager")]
+    public class RoadsManager : MonoBehaviour
     {
         public const uint MaxVertexCount = 128u;
         public const uint PerVertex = 8u;
@@ -40,7 +40,7 @@ namespace NightCity.Components
         private int vertsCount = 1;
 
 
-        public void Init(Skyscraper skyscraper)
+        public void Init(SkyscraperManager skyscraper)
         {
             var roads = skyscraper.CityArea.Roads.Values.Select(r => (SimpleRoad)r);
 

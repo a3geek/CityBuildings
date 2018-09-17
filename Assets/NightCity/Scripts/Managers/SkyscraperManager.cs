@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace NightCity.Managers
 {
     using Structs;
     using Creators;
     
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Components/Sky Scraper")]
-    public class Skyscraper : MonoBehaviour
+    [AddComponentMenu("Night City/Managers/Sky Scraper")]
+    public class SkyscraperManager : MonoBehaviour
     {
         public const int VertexCount = 3;
 
@@ -36,14 +36,14 @@ namespace NightCity.Components
         [SerializeField]
         private Material material = null;
 
-        private WindowTexture winTex = null;
+        private WindowTextureManager winTex = null;
         private ComputeBuffer proceduralBuffer = null;
         private ComputeBuffer geomsBuffer = null;
         private ComputeBuffer seedsBuffer = null;
         private ComputeBuffer fragsBuffer = null;
 
 
-        public void Init(WindowTexture windowTexture)
+        public void Init(WindowTextureManager windowTexture)
         {
             this.winTex = windowTexture;
             

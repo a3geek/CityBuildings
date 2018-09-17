@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace NightCity.Managers
 {
     using Creators;
     using Utilities;
@@ -14,8 +14,8 @@ namespace NightCity.Components
     using Random = UnityEngine.Random;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Components/Cars Render")]
-    public class CarsRender : MonoBehaviour
+    [AddComponentMenu("Night City/Managers/Cars Manager")]
+    public class CarsManager : MonoBehaviour
     {
         public const string PropHeight = "_Height";
         public const string PropSize = "_Size";
@@ -46,10 +46,10 @@ namespace NightCity.Components
 
         private Car[] cars = new Car[0];
         private SimpleCar[] simpleCars = new SimpleCar[0];
-        private Skyscraper skyscraper = null;
+        private SkyscraperManager skyscraper = null;
 
 
-        public void Init(Skyscraper skyscraper)
+        public void Init(SkyscraperManager skyscraper)
         {
             this.skyscraper = skyscraper;
 

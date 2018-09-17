@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NightCity.Structs
 {
     using Creators;
-    using Structs;
+    using Components;
     using Utilities;
     using Random = UnityEngine.Random;
 

@@ -5,36 +5,37 @@ using UnityEngine;
 namespace NightCity
 {
     using Components;
+    using Managers;
 
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(WindowTexture))]
-    [RequireComponent(typeof(Skyscraper))]
-    [RequireComponent(typeof(Roadloader))]
-    [RequireComponent(typeof(CarsRender))]
+    [RequireComponent(typeof(WindowTextureManager))]
+    [RequireComponent(typeof(SkyscraperManager))]
+    [RequireComponent(typeof(RoadsManager))]
+    [RequireComponent(typeof(CarsManager))]
     [AddComponentMenu("Night City/Main Controller")]
     public class MainController : MonoBehaviour
     {
         [SerializeField]
         private CameraMover mover = null;
         
-        private WindowTexture windowTexture = null;
-        private Skyscraper skyScraper = null;
-        private Roadloader roadloader = null;
-        private CarsRender carsRender = null;
+        private WindowTextureManager windowTexture = null;
+        private SkyscraperManager skyScraper = null;
+        private RoadsManager roadloader = null;
+        private CarsManager carsRender = null;
 
 
         private void Awake()
         {
-            this.windowTexture = GetComponent<WindowTexture>();
+            this.windowTexture = GetComponent<WindowTextureManager>();
             this.windowTexture.Init();
 
-            this.skyScraper = GetComponent<Skyscraper>();
+            this.skyScraper = GetComponent<SkyscraperManager>();
             this.skyScraper.Init(this.windowTexture);
 
-            this.roadloader = GetComponent<Roadloader>();
+            this.roadloader = GetComponent<RoadsManager>();
             this.roadloader.Init(this.skyScraper);
 
-            this.carsRender = GetComponent<CarsRender>();
+            this.carsRender = GetComponent<CarsManager>();
             this.carsRender.Init(this.skyScraper);
 
             this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();

@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace NightCity.Structs
 {
+    using Components;
+
     [Serializable]
     public struct SimpleRoad
     {

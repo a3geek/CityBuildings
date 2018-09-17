@@ -1,4 +1,4 @@
-﻿Shader "Hidden/CarsRender"
+﻿Shader "Hidden/Cars"
 {
     Properties
     {

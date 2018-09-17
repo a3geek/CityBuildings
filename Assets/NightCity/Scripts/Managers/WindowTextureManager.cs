@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace NightCity.Managers
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Components/Window Texture")]
-    public class WindowTexture : MonoBehaviour
+    [AddComponentMenu("Night City/Managers/Window Texture Manager")]
+    public class WindowTextureManager : MonoBehaviour
     {
         public const string PropRandSeed = "randSeed";
         public const string PropWindowTex = "windowTex";

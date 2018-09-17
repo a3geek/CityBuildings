@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NightCity.Structs
 {
-    public class SplitPoint
+    public struct SplitPoint
     {
         public float HalfWidth => 0.5f * this.Width;
         public float Point { get; }
