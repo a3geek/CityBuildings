@@ -17,6 +17,7 @@ namespace NightCity.Creators
         public List<ProceduralData> Procedurals { get; } = new List<ProceduralData>();
         public List<BuildingGeomData> Geoms { get; } = new List<BuildingGeomData>();
         public List<BuildingFragData> Frags { get; } = new List<BuildingFragData>();
+        public List<DecorationData> Decos { get; } = new List<DecorationData>();
         public List<uint> Seeds { get; } = new List<uint>();
         
         [SerializeField]
@@ -108,16 +109,26 @@ namespace NightCity.Creators
             var buildType = Random.value < 0.5f ? 0u : 1u;
             data.Add(new BuildingGeomData()
             {
-                center = center,
-                size = size,
-                uvRange = size / this.windowSize,
-                buildType = buildType
+                Center = center,
+                Size = size,
+                UvRange = size / this.windowSize,
+                BuildType = buildType
             });
 
             if(buildType == 1u)
             {
                 this.AddProcedurals(Skyscraper.VertexCount, 1u);
                 return data;
+            }
+            if(isSpecial == true)
+            {
+                data.Add(new BuildingGeomData()
+                {
+                    Center = center,
+                    Size = size,
+                    UvRange = Vector3.zero,
+                    BuildType = 2u
+                });
             }
 
             var field = (new Vector2(width, depth)) * 0.5f;
@@ -141,14 +152,14 @@ namespace NightCity.Creators
                 
                 data.Add(new BuildingGeomData()
                 {
-                    center = pos.ToVector3(center.y),
-                    size = size,
-                    uvRange = size / this.windowSize,
-                    buildType = buildType
+                    Center = pos.ToVector3(center.y),
+                    Size = size,
+                    UvRange = size / this.windowSize,
+                    BuildType = buildType
                 });
             }
             
-            this.AddProcedurals(1u, 1u + count);
+            this.AddProcedurals(1u, 1u + count + (isSpecial == true ? 1u : 0u));
             return data;
         }
 
@@ -156,10 +167,10 @@ namespace NightCity.Creators
         {
             this.Procedurals.Add(new ProceduralData()
             {
-                id = (uint)this.Procedurals.Count,
-                index = this.index,
-                verts = verts,
-                range = range
+                Id = (uint)this.Procedurals.Count,
+                Index = this.index,
+                Verts = verts,
+                Range = range
             });
 
             this.index += range;
@@ -169,7 +180,7 @@ namespace NightCity.Creators
         {
             for(var i = 0; i < count; i++)
             {
-                this.Frags.Add(new BuildingFragData() { colors = this.colors[Random.Range(0, this.colors.Count)] });
+                this.Frags.Add(new BuildingFragData() { Color = this.colors[Random.Range(0, this.colors.Count)] });
             }
         }
 

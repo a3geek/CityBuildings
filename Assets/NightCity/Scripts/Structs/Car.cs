@@ -14,8 +14,8 @@ namespace NightCity.Structs
     public struct SimpleCar
     {
 #pragma warning disable 0414
-        public Vector2 pos;
-        public Vector2 dir;
+        public Vector2 Pos;
+        public Vector2 Dir;
 #pragma warning restore 0414
     }
 
@@ -134,8 +134,8 @@ namespace NightCity.Structs
         {
             return new SimpleCar()
             {
-                pos = car.pos,
-                dir = car.dir
+                Pos = car.pos,
+                Dir = car.dir
             };
         }
     }

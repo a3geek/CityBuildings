@@ -6,25 +6,34 @@ namespace NightCity.Structs
     [Serializable]
     public struct ProceduralData
     {
-        public uint id;
-        public uint index;
-        public uint verts;
-        public uint range;
+        public uint Id;
+        public uint Index;
+        public uint Verts;
+        public uint Range;
+    }
+
+    [Serializable]
+    public struct DecorationData
+    {
+        public Vector2 Center;
+        public Vector2 Size;
+        public float Height;
+        public float Offset;
     }
 
     [Serializable]
     public struct BuildingGeomData
     {
-        public Vector3 center;
-        public Vector3 size;
-        public Vector3 uvRange;
-        public uint buildType;
+        public Vector3 Center;
+        public Vector3 Size;
+        public Vector3 UvRange;
+        public uint BuildType;
 
 
         public bool IsContains(Vector2 pos)
         {
-            var min = this.center - this.size * 0.5f;
-            var max = this.center + this.size * 0.5f;
+            var min = this.Center - this.Size * 0.5f;
+            var max = this.Center + this.Size * 0.5f;
 
             return (pos.x >= min.x && pos.x <= max.x) &&
                 (pos.y >= min.z && pos.y <= max.z);
@@ -43,6 +52,6 @@ namespace NightCity.Structs
     [Serializable]
     public struct BuildingFragData
     {
-        public Color colors;
+        public Color Color;
     }
 }

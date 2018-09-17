@@ -16,19 +16,19 @@ void AppendQuad(float3 pos, float2 size, float3 forward, float3 up, float uv3, i
     g2f g;
 
     g.pos = mul(UNITY_MATRIX_VP, float4(v1.xyz, 1.0));
-    g.uv = float3(0.0, 0.0, uv3);
+    g.uv = float4(0.0, 0.0, uv3, 0.0);
     outStream.Append(g);
 
     g.pos = mul(UNITY_MATRIX_VP, float4(v2.xyz, 1.0));
-    g.uv = float3(0.0, 1.0, uv3);
+    g.uv = float4(0.0, 1.0, uv3, 0.0);
     outStream.Append(g);
 
     g.pos = mul(UNITY_MATRIX_VP, float4(v3.xyz, 1.0));
-    g.uv = float3(1.0, 0.0, uv3);
+    g.uv = float4(1.0, 0.0, uv3, 0.0);
     outStream.Append(g);
 
     g.pos = mul(UNITY_MATRIX_VP, float4(v4.xyz, 1.0));
-    g.uv = float3(1.0, 1.0, uv3);
+    g.uv = float4(1.0, 1.0, uv3, 0.0);
     outStream.Append(g);
 
     outStream.RestartStrip();

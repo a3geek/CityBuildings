@@ -59,6 +59,7 @@
 			#include "./Libs/Random.cginc"
 			#include "./Geometries/Cube.cginc"
 			#include "./Geometries/Rounded.cginc"
+            #include "./Geometries/Quad.cginc"
 
             uniform StructuredBuffer<procedural_data> _ProceduralData;
 			uniform StructuredBuffer<geom_data> _GeomData;
@@ -103,6 +104,24 @@
                         uint2 seeds = uint2(seed, _RandSeeds[_SeedStep * d.index]);
                         AppendRounded(gd.center, gd.size, gd.uvRange, id, seeds, d.id, outStream);
                     }
+                    /*else if (gd.buildType == 2)
+                    {
+                        int2 dirs[4] = { int2(1, 0), int2(0, 1), int2(-1, 0), int2(0, -1) };
+                        
+                        float3 cen = gd.center;
+                        float2 hs = float2(gd.size.x, gd.size.z) * 0.5;
+                        for (uint j = 0; j < 4; j++)
+                        {
+                            int2 dir = dirs[j];
+                            float3 c = cross(float3(dir.x, 0.0, dir.y), float3(0.0, 1.0, 0.0));
+                            float2 left = normalize(float2(c.x, c.z));
+                            
+                            float2 p = cen + dir * hs;
+                            AppendQuad(float3(p.x, gd.size.y, p.y), float2(1.0, 1.0) * 30.0,
+                                float3(dir.x, 0.0, dir.y), float3(0.0, 1.0, 0.0), -1.0, outStream
+                            );
+                        }
+                    }*/
                 }
 			}
 
