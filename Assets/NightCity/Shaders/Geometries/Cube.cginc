@@ -52,14 +52,8 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int i
 {
 	g2f v;
 
-	float wc = 1024.0 / 8.0;
-	float hc = 1024.0 / 8.0;
-	float dc = 1024.0 / 8.0;
-
-	float randWD = uvRange.x > uvRange.z ?
-		GetUvOffset(randSeed, uvRange.x, wc) :
-		GetUvOffset(randSeed, uvRange.z, dc);
-	float randH = GetUvOffset(randSeed, uvRange.y, hc);
+	float randWD = GetUvOffset(randSeed, uvRange.x > uvRange.z ? uvRange.x : uvRange.z, _WindowNumberX);
+	float randH = GetUvOffset(randSeed, uvRange.y, _WindowNumberY);
 	float2 uvOffset = float2(randWD, randH);
 
 	float3 halfSize = 0.5 * size;
@@ -75,8 +69,8 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int i
 			v.pos = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
 
             float2 uv = uvOffset + _CubeUvParam[idx] * float2(
-                IsMultipleOfTwo(i) == true ? uvRange.z / dc : uvRange.x / wc,
-                uvRange.y / hc
+                IsMultipleOfTwo(i) == true ? uvRange.z / _WindowNumberX : uvRange.x / _WindowNumberX,
+                uvRange.y / _WindowNumberY
             );
 			v.uv = float4(uv.x, uv.y, index, UnityObjectToViewPos(float4(pos, 1.0)).z);
 

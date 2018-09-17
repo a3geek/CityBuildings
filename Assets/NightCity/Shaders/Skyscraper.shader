@@ -26,13 +26,19 @@
             #pragma multi_compile _ ON_RENDER_SCENE_VIEW
 			#pragma target 5.0
 
-			struct data
+            struct procedural_data
+            {
+                uint id;
+                uint index;
+                uint verts;
+                uint range;
+            };
+			struct geom_data
 			{
 				float3 center;
 				float3 size;
 				float3 uvRange;
 				uint buildType;
-                int index;
 			};
             struct frag_data
             {
@@ -54,10 +60,13 @@
 			#include "./Geometries/Cube.cginc"
 			#include "./Geometries/Rounded.cginc"
 
-			uniform StructuredBuffer<data> _GeomData;
+            uniform StructuredBuffer<procedural_data> _ProceduralData;
+			uniform StructuredBuffer<geom_data> _GeomData;
 			uniform StructuredBuffer<uint> _RandSeeds;
             uniform StructuredBuffer<frag_data> _FragData;
 			uniform sampler2D _WindowTex;
+
+            uniform int _SeedStep;
 
 			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
 			{
@@ -74,23 +83,27 @@
 				uint id = v.id.x;
 				uint inst = v.id.y;
 
-                data d = _GeomData[inst];
-				uint seed = _RandSeeds[3 * d.index + id];
+                procedural_data d = _ProceduralData[inst];
+                if (id >= d.verts) 
+                {
+                    return;
+                }
 
-				if (d.buildType == 0)
-				{
-					if (id > 0)
-					{
-						return;
-					}
+                for (uint i = 0; i < d.range; i++)
+                {
+                    geom_data gd = _GeomData[d.index + i];
+                    uint seed = _RandSeeds[d.index];
 
-					AppendCube(d.center, d.size, d.uvRange, seed, d.index, outStream);
-				}
-				else if (d.buildType == 1)
-				{
-					uint2 seeds = uint2(seed, _RandSeeds[2 * inst]);
-					AppendRounded(d.center, d.size, d.uvRange, id, seeds, d.index, outStream);
-				}
+                    if (gd.buildType == 0)
+                    {
+                        AppendCube(gd.center, gd.size, gd.uvRange, seed, d.id, outStream);
+                    }
+                    else if (gd.buildType == 1)
+                    {
+                        uint2 seeds = uint2(seed, _RandSeeds[_SeedStep * d.index]);
+                        AppendRounded(gd.center, gd.size, gd.uvRange, id, seeds, d.id, outStream);
+                    }
+                }
 			}
 
             float4 frag(g2f i) : COLOR
