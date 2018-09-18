@@ -52,6 +52,7 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int i
 {
 	g2f v;
 
+    float depth = UnityObjectToViewPos(float4(center, 1.0)).z;
 	float randWD = GetUvOffset(randSeed, uvRange.x > uvRange.z ? uvRange.x : uvRange.z, _WindowNumberX);
 	float randH = GetUvOffset(randSeed, uvRange.y, _WindowNumberY);
 	float2 uvOffset = float2(randWD, randH);
@@ -72,7 +73,7 @@ void AppendCube(float3 center, float3 size, float3 uvRange, uint randSeed, int i
                 IsMultipleOfTwo(i) == true ? uvRange.z / _WindowNumberX : uvRange.x / _WindowNumberX,
                 uvRange.y / _WindowNumberY
             );
-			v.uv = float4(uv.x, uv.y, index, UnityObjectToViewPos(float4(pos, 1.0)).z);
+			v.uv = float4(uv.x, uv.y, index, depth);
 
 			outStream.Append(v);
 		}

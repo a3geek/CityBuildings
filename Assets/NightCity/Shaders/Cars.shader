@@ -33,7 +33,7 @@
             struct g2f
             {
                 float4 pos : SV_POSITION;
-                float3 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
             };
 
             #include "./Geometries/Quad.cginc"
@@ -41,6 +41,7 @@
             uniform float _Height, _Size;
             uniform float4 _ForwardColor, _BackColor;
             uniform StructuredBuffer<data> _GeomData;
+            uniform float _DofPower;
 
             float3 getCameraForward()
             {
@@ -77,7 +78,9 @@
                 float vdis = saturate(1.0 - dis);
                 
                 float4 c = i.uv.z >= 0.0 ? _BackColor : _ForwardColor;
-                return float4((c * vdis).rgb, saturate(0.5 - dis));
+                c = float4((c * vdis).rgb, saturate(0.5 - dis));
+
+                return lerp(c, float4(0.0, 0.0, 0.0, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
             }
 
             ENDCG

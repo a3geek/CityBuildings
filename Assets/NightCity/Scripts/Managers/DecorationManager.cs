@@ -21,9 +21,9 @@ namespace NightCity.Managers
             public float time;
         }
 
-        public const string PropData = "_data";
-        public const string PropTriangleSize = "_radius";
-        public const string PropTimesBuffer = "_times";
+        public const string PropData = "_Data";
+        public const string PropTriangleSize = "_Radius";
+        public const string PropTimesBuffer = "_Times";
 
         [SerializeField]
         private Material material = null;

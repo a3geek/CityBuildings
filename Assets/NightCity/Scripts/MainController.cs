@@ -16,9 +16,13 @@ namespace NightCity
     [AddComponentMenu("Night City/Main Controller")]
     public class MainController : MonoBehaviour
     {
+        public const string PropDofPower = "_DofPower";
+
         [SerializeField]
         private CameraMover mover = null;
-        
+        [SerializeField]
+        private float dofPower = 750f;
+            
         private WindowTextureManager windowTexture = null;
         private SkyscraperManager skyScraper = null;
         private RoadsManager roads = null;
@@ -28,6 +32,8 @@ namespace NightCity
 
         private void Awake()
         {
+            Shader.SetGlobalFloat(PropDofPower, this.dofPower);
+
             this.windowTexture = GetComponent<WindowTextureManager>();
             this.windowTexture.Init();
 

@@ -44,9 +44,9 @@
             #include "./Geometries/Sphere.cginc"
             #include "./Geometries/TriangularPyramid.cginc"
 
-            uniform StructuredBuffer<data> _data;
-            uniform StructuredBuffer<times> _times;
-            uniform float _radius;
+            uniform StructuredBuffer<data> _Data;
+            uniform StructuredBuffer<times> _Times;
+            uniform float _Radius;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
             {
@@ -63,26 +63,26 @@
                 uint id = v.id.x;
                 uint inst = v.id.y;
 
-                data d = _data[inst];
+                data d = _Data[inst];
                 
                 if (d.buildType == 0)
                 {
-                    int2 dir = _TriangularPyramidEveryDirection[id] * (d.size.xz * 0.5 - float2(_radius, _radius));
-                    float3 p = d.center + float3(dir.x, d.size.y + d.height + _radius * 0.5, dir.y);
+                    int2 dir = _TriangularPyramidEveryDirection[id] * (d.size.xz * 0.5 - float2(_Radius, _Radius));
+                    float3 p = d.center + float3(dir.x, d.size.y + d.height + _Radius * 0.5, dir.y);
 
-                    AppendSphere(p, _radius, -1 * ((int)inst + 1), outStream);
+                    AppendSphere(p, _Radius, -1 * ((int)inst + 1), outStream);
                 }
                 else if (d.buildType == 1)
                 {
-                    float3 p = d.center + float3(0.0, d.size.y + d.height + _radius * 0.5, 0.0);
+                    float3 p = d.center + float3(0.0, d.size.y + d.height + _Radius * 0.5, 0.0);
 
                     if (id == 0) {
-                        AppendSphere(p, _radius, -1 * ((int)inst + 1), outStream);
+                        AppendSphere(p, _Radius, -1 * ((int)inst + 1), outStream);
                     }
                     else if (id == 1)
                     {
-                        p.y -= (d.height + _radius * 0.5);
-                        AppendTriangularPyramid(p, float3(_radius, d.height, _radius), outStream);
+                        p.y -= (d.height + _Radius * 0.5);
+                        AppendTriangularPyramid(p, float3(_Radius, d.height, _Radius), outStream);
                     }
                 }
             }
@@ -91,7 +91,7 @@
             {
                 int index = round(i.uv.z);
                 return lerp(float4(0.0, 0.0, 0.0, 1.0), float4(1.0, 0.0, 0.0, 1.0),
-                    index >= 0 ? 0.0 : _times[abs(index) - 1].time);
+                    index >= 0 ? 0.0 : _Times[abs(index) - 1].time);
             }
 
             ENDCG

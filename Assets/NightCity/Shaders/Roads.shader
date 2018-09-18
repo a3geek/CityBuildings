@@ -39,7 +39,7 @@
             struct g2f
             {
                 float4 pos : SV_POSITION;
-                float3 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
             };
 
             #include "./Geometries/Quad.cginc"
@@ -48,6 +48,7 @@
             uniform float _BasicWidth, _Size, _Height;
             uniform float4 _Color;
             uniform StructuredBuffer<data> _GeomData;
+            uniform float _DofPower;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
             {
@@ -99,7 +100,8 @@
                 float dis = distance(i.uv.xy, float2(0.5, 0.5));
                 float vdis = saturate(1.0 - dis);
 
-                return float4((_Color * vdis).rgb, saturate(0.5 - dis));
+                float4 c = float4((_Color * vdis).rgb, saturate(0.5 - dis));
+                return lerp(c, float4(0.0, 0.0, 0.0, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
             }
 
             ENDCG
