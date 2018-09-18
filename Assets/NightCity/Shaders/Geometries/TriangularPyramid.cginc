@@ -8,7 +8,7 @@ static const int2 _TriangularPyramidEveryDirection[4] = {
 void AppendTriangularPyramid(float3 pos, float3 size, inout TriangleStream<g2f> outStream)
 {
     g2f g;
-    g.uv = 0.0;
+    g.uv = float4(0.0, 0.0, 0.0, UnityObjectToViewPos(float4(pos, 1.0)).z);
 
     float4 top = mul(UNITY_MATRIX_VP, float4(pos + float3(0.0, size.y, 0.0), 1.0));
     float2 center = float2(pos.x, pos.z);

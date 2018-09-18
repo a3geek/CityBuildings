@@ -46,7 +46,7 @@
 
             uniform StructuredBuffer<data> _Data;
             uniform StructuredBuffer<times> _Times;
-            uniform float _Radius;
+            uniform float _Radius, _DofPower;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
             {
@@ -90,8 +90,10 @@
             float4 frag(g2f i) : COLOR
             {
                 int index = round(i.uv.z);
-                return lerp(float4(0.0, 0.0, 0.0, 1.0), float4(1.0, 0.0, 0.0, 1.0),
+                float4 c = lerp(float4(0.0, 0.0, 0.0, 1.0), float4(1.0, 0.0, 0.0, 1.0),
                     index >= 0 ? 0.0 : _Times[abs(index) - 1].time);
+
+                return lerp(c, float4(0.0, 0.0, 0.0, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
             }
 
             ENDCG

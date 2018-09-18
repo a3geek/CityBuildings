@@ -27,7 +27,7 @@ float4 getPos(float3 center, float radius, float theta, float phi)
 void AppendSphere(float3 pos, float radius, float uv3, inout TriangleStream<g2f> outStream)
 {
     g2f output[SPHERE_VERTEX_COUNT];
-    float4 uv = float4(0.0, 0.0, uv3, 0.0);
+    float4 uv = float4(0.0, 0.0, uv3, UnityObjectToViewPos(float4(pos, 1.0)).z);
 
     int id = 0;
     output[id].pos = getPos(pos, radius, 0.0, 0.0);

@@ -23,6 +23,8 @@ namespace NightCity.Managers
         public const string PropBackColor = "_BackColor";
         public const string PropGeomData = "_GeomData";
 
+        public bool Validity { get; set; } = false;
+
         [SerializeField]
         private int num = 50;
         [SerializeField, Range(0f, 1f)]
@@ -62,15 +64,20 @@ namespace NightCity.Managers
             for(var i = 0; i < this.num; i++)
             {
                 var id = ids.ElementAt(Random.Range(0, ids.Count));
+
                 this.cars[i] = new Car(roads[id], this.offset);
+                this.cars[i].Update(this.skyscraper.CityArea, this.speed, this.straightRate);
+
+                this.simpleCars[i] = this.cars[i];
             }
 
             this.geomBuffer = new ComputeBuffer(this.cars.Length, Marshal.SizeOf(typeof(SimpleCar)), ComputeBufferType.Default);
+            this.geomBuffer.SetData(this.simpleCars.ToArray());
         }
 
         private void Update()
         {
-            if(this.geomBuffer == null)
+            if(this.geomBuffer == null || this.Validity == false)
             {
                 return;
             }

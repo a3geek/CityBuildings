@@ -24,8 +24,13 @@ namespace NightCity
         private Load load = null;
         [SerializeField]
         private float dofPower = 750f;
+        [SerializeField]
+        private AnimationCurve dofCurve = new AnimationCurve();
+        [SerializeField]
+        private float dofSpeed = 0.1f;
 
         private bool inited = false;
+        private float dof = 0f;
         private WindowTextureManager windowTexture = null;
         private SkyscraperManager skyScraper = null;
         private RoadsManager roads = null;
@@ -35,7 +40,7 @@ namespace NightCity
 
         private void Awake()
         {
-            Shader.SetGlobalFloat(PropDofPower, this.dofPower);
+            Shader.SetGlobalFloat(PropDofPower, this.dof);
 
             this.windowTexture = GetComponent<WindowTextureManager>();
             this.skyScraper = GetComponent<SkyscraperManager>();
@@ -52,9 +57,22 @@ namespace NightCity
 
         private void Update()
         {
-            if(this.inited == true && this.load.Validity == true && this.load.IsFinished == true)
+            if(this.inited == false)
+            {
+                return;
+            }
+
+            if(this.load.Validity == true && this.load.IsFinished == true)
             {
                 this.load.Validity = false;
+            }
+            else if(this.load.Validity == false && this.mover.Validity == false)
+            {
+                this.dof = Mathf.Clamp01(this.dof + Time.deltaTime * this.dofSpeed);
+                var dof = this.dofPower * Mathf.Clamp01(this.dofCurve.Evaluate(this.dof));
+                Shader.SetGlobalFloat(PropDofPower, dof);
+
+                this.mover.Validity = this.cars.Validity = this.dof >= 1f;
             }
         }
 

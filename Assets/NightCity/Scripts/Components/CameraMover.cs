@@ -17,6 +17,8 @@ namespace NightCity.Components
     [AddComponentMenu("Night City/Components/Camera Mover")]
     public class CameraMover : MonoBehaviour
     {
+        public bool Validity { get; set; } = false;
+
         private Road road => this.skyscraper.CityArea.Roads[this.roadID];
         private Vector2 from => this.isForward == true ? this.road.From : this.road.To;
         private Vector2 to => this.isForward == true ? this.road.To : this.road.From;
@@ -51,6 +53,18 @@ namespace NightCity.Components
 
             this.rotateRate = 1f;
             this.timer = this.autotime;
+
+            transform.rotation = this.Auto();
+        }
+
+        private void Update()
+        {
+            if(this.skyscraper == null || this.Validity == false)
+            {
+                return;
+            }
+
+            this.Manual();
             this.Auto();
         }
 
@@ -64,7 +78,7 @@ namespace NightCity.Components
             {
                 return false;
             }
-            
+
             var euler = transform.rotation.eulerAngles;
             euler.y += (this.speed * Time.deltaTime * ((right == true ? 1f : 0f) + (left == true ? -1f : 0f)));
             transform.rotation = Quaternion.Euler(euler);
@@ -74,6 +88,29 @@ namespace NightCity.Components
             this.rotateRate = 0f;
 
             return true;
+        }
+        
+        private Quaternion Auto()
+        {
+            this.timer += Time.deltaTime * (this.IsWaiting == true && this.pause == false ? 1f : 0f);
+            this.AutoMove();
+
+            if(this.IsWaiting == false)
+            {
+                this.rotateRate = Mathf.Clamp01(this.rotateRate + Time.deltaTime * this.rotateSpeed);
+            }
+
+            var pos = transform.position;
+            var field = this.skyscraper.CityArea.Field;
+            var center = this.skyscraper.CityArea.FieldCenter;
+
+            var dis = pos.XZ() - center;
+            var rot = Quaternion.LookRotation(center.ToVector3(pos.y) - pos);
+            var rate = Mathf.Clamp01(Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y))) * this.rotateRate;
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, rate);
+
+            return rot;
         }
 
         private void AutoMove()
@@ -103,38 +140,6 @@ namespace NightCity.Components
 
             transform.position = this.pause == true ? pos :
                 Vector2.Lerp(this.from, this.to, this.GetProgress()).ToVector3(pos.y);
-        }
-
-        private void Auto()
-        {
-            this.timer += Time.deltaTime * (this.IsWaiting == true && this.pause == false ? 1f : 0f);
-            this.AutoMove();
-
-            if(this.IsWaiting == false)
-            {
-                this.rotateRate = Mathf.Clamp01(this.rotateRate + Time.deltaTime * this.rotateSpeed);
-            }
-            
-            var pos = transform.position;
-            var field = this.skyscraper.CityArea.Field;
-            var center = this.skyscraper.CityArea.FieldCenter;
-
-            var dis = pos.XZ() - center;
-            var rot = Quaternion.LookRotation(center.ToVector3(pos.y) - pos);
-            var rate = Mathf.Clamp01(Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y))) * this.rotateRate;
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, rate);
-        }
-
-        private void Update()
-        {
-            if(this.skyscraper == null)
-            {
-                return;
-            }
-
-            this.Manual();
-            this.Auto();
         }
 
         private float GetProgress()
