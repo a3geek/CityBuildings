@@ -3,11 +3,6 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-        _Color("Color", Color) = (1.0, 1.0, 0.0, 1.0)
-        _Radius("Radius", Float) = 0.25
-        _Bolid("Bolid", Float) = 0.01
-
-_T("T", Range(0.0, 1.0)) = 0.0
 	}
 	SubShader
 	{
@@ -25,7 +20,7 @@ _T("T", Range(0.0, 1.0)) = 0.0
 
 			sampler2D _MainTex;
             float4 _Color;
-            float _Radius, _Bolid, _T;
+            float _Radius, _Bolid;
             uniform float _Timer;
 
 			fixed4 frag (v2f_img i) : COLOR
@@ -44,7 +39,7 @@ _T("T", Range(0.0, 1.0)) = 0.0
                 }
 
                 float r = _Radius - _Bolid;
-                float theta = saturate(_T) * UNITY_TWO_PI;
+                float theta = saturate(_Timer) * UNITY_TWO_PI;
                 float zero = UNITY_PI * 0.5;
 
                 float3 start = float3(0.0, 0.0, r);

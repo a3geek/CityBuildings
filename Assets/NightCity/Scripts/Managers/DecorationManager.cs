@@ -62,6 +62,11 @@ namespace NightCity.Managers
 
         private void Update()
         {
+            if(this.buffer == null)
+            {
+                return;
+            }
+
             for(var i = 0; i < this.times.Length; i++)
             {
                 var t = this.timers[i];

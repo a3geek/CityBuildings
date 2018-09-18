@@ -128,6 +128,11 @@ namespace NightCity.Components
 
         private void Update()
         {
+            if(this.skyscraper == null)
+            {
+                return;
+            }
+
             this.Manual();
             this.Auto();
         }

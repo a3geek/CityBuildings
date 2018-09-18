@@ -247,7 +247,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771dc5c7e70bf394a90574100d36ebc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: a71df3c0c7669d744bc7bee9f01071b6, type: 2}
+  material: {fileID: 2100000, guid: a71df3c0c7669d744bc7bee9f01071b6, type: 2}
+  speed: 0.5
+  color: {r: 0.6945156, g: 0.8773585, b: 0.39315593, a: 1}
+  radius: 0.2
+  bolid: 0.01
 --- !u!1 &1619333015
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mover: {fileID: 621738623}
+  load: {fileID: 621738624}
   dofPower: 750
 --- !u!114 &1753058801
 MonoBehaviour:

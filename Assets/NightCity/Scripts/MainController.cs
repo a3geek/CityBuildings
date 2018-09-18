@@ -21,8 +21,11 @@ namespace NightCity
         [SerializeField]
         private CameraMover mover = null;
         [SerializeField]
+        private Load load = null;
+        [SerializeField]
         private float dofPower = 750f;
-            
+
+        private bool inited = false;
         private WindowTextureManager windowTexture = null;
         private SkyscraperManager skyScraper = null;
         private RoadsManager roads = null;
@@ -35,22 +38,60 @@ namespace NightCity
             Shader.SetGlobalFloat(PropDofPower, this.dofPower);
 
             this.windowTexture = GetComponent<WindowTextureManager>();
-            this.windowTexture.Init();
-
             this.skyScraper = GetComponent<SkyscraperManager>();
-            this.skyScraper.Init(this.windowTexture);
-
             this.roads = GetComponent<RoadsManager>();
-            this.roads.Init(this.skyScraper);
-
             this.cars = GetComponent<CarsManager>();
-            this.cars.Init(this.skyScraper);
-
             this.decoration = GetComponent<DecorationManager>();
-            this.decoration.Init(this.skyScraper);
-
             this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
-            this.mover.Init(this.skyScraper);
+
+            this.load = this.load ?? Camera.main.GetComponent<Load>();
+            this.load.Init();
+
+            StartCoroutine(this.Init());
+        }
+
+        private void Update()
+        {
+            if(this.inited == true && this.load.Validity == true && this.load.IsFinished == true)
+            {
+                this.load.Validity = false;
+            }
+        }
+
+        private IEnumerator Init()
+        {
+            yield return new WaitForSeconds(0f);
+
+            var cnt = 0;
+            while(cnt < 6)
+            {
+                switch(cnt)
+                {
+                    case 0:
+                        this.windowTexture.Init();
+                        break;
+                    case 1:
+                        this.skyScraper.Init(this.windowTexture);
+                        break;
+                    case 2:
+                        this.roads.Init(this.skyScraper);
+                        break;
+                    case 3:
+                        this.cars.Init(this.skyScraper);
+                        break;
+                    case 4:
+                        this.decoration.Init(this.skyScraper);
+                        break;
+                    case 5:
+                        this.mover.Init(this.skyScraper);
+                        break;
+                }
+                
+                cnt++;
+                yield return new WaitForSeconds(0f);
+            }
+
+            this.inited = true;
         }
     }
 }

@@ -70,6 +70,11 @@ namespace NightCity.Managers
 
         private void Update()
         {
+            if(this.geomBuffer == null)
+            {
+                return;
+            }
+
             for(var i = 0; i < this.cars.Length; i++)
             {
                 var car = this.cars[i];
@@ -84,7 +89,7 @@ namespace NightCity.Managers
 
         private void OnRenderObject()
         {
-            if(this.geomBuffer.count <= 0)
+            if(this.geomBuffer == null)
             {
                 return;
             }
