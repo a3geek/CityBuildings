@@ -43,12 +43,12 @@ void AppendSphere(float3 pos, float radius, float uv3, inout TriangleStream<g2f>
         {
             float phi = SPHERE_STEP_PHI * j;
             output[id].pos = getPos(pos, radius, theta, phi);
-            output[id++].uv = float4(phi / UNITY_TWO_PI, theta / UNITY_TWO_PI, uv3, 0.0);
+            output[id++].uv = uv;
         }
     }
 
     output[id].pos = getPos(pos, radius, UNITY_PI, 0.0);
-    output[id++].uv = float4(0.0, UNITY_PI / UNITY_TWO_PI, uv3, 0.0);
+    output[id++].uv = uv;
 
     for (i = 1; i <= SPHERE_PHI_COUNT; i++)
     {

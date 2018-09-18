@@ -415,6 +415,7 @@ MonoBehaviour:
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
     decoHeight: 0.5
+    roundDecoHeight: 3
   cityarea:
     field: {x: 1000, y: 1000}
     splitter:
@@ -460,3 +461,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: a55f63c2916631242bdf84e7d45935ac, type: 2}
   radius: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  speed: 0.5
+  f: 0
