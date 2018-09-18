@@ -12,6 +12,7 @@ namespace NightCity
     [RequireComponent(typeof(SkyscraperManager))]
     [RequireComponent(typeof(RoadsManager))]
     [RequireComponent(typeof(CarsManager))]
+    [RequireComponent(typeof(DecorationManager))]
     [AddComponentMenu("Night City/Main Controller")]
     public class MainController : MonoBehaviour
     {
@@ -20,8 +21,9 @@ namespace NightCity
         
         private WindowTextureManager windowTexture = null;
         private SkyscraperManager skyScraper = null;
-        private RoadsManager roadloader = null;
-        private CarsManager carsRender = null;
+        private RoadsManager roads = null;
+        private CarsManager cars = null;
+        private DecorationManager decoration = null;
 
 
         private void Awake()
@@ -32,11 +34,14 @@ namespace NightCity
             this.skyScraper = GetComponent<SkyscraperManager>();
             this.skyScraper.Init(this.windowTexture);
 
-            this.roadloader = GetComponent<RoadsManager>();
-            this.roadloader.Init(this.skyScraper);
+            this.roads = GetComponent<RoadsManager>();
+            this.roads.Init(this.skyScraper);
 
-            this.carsRender = GetComponent<CarsManager>();
-            this.carsRender.Init(this.skyScraper);
+            this.cars = GetComponent<CarsManager>();
+            this.cars.Init(this.skyScraper);
+
+            this.decoration = GetComponent<DecorationManager>();
+            this.decoration.Init(this.skyScraper);
 
             this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
             this.mover.Init(this.skyScraper);

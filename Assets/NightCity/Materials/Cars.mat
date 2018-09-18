@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: CarsRender
+  m_Name: Cars
   m_Shader: {fileID: 4800000, guid: 9bb2dad8036a3844bb98653ba5f179b8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

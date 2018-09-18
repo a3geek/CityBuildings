@@ -15,10 +15,10 @@ namespace NightCity.Structs
     [Serializable]
     public struct DecorationData
     {
-        public Vector2 Center;
-        public Vector2 Size;
+        public Vector3 Center;
+        public Vector3 Size;
+        public uint BuildType;
         public float Height;
-        public float Offset;
     }
 
     [Serializable]

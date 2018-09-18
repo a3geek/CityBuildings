@@ -311,9 +311,10 @@ GameObject:
   - component: {fileID: 1753058798}
   - component: {fileID: 1753058800}
   - component: {fileID: 1753058799}
-  - component: {fileID: 1753058802}
   - component: {fileID: 1753058801}
   - component: {fileID: 1753058803}
+  - component: {fileID: 1753058804}
+  - component: {fileID: 1753058802}
   m_Layer: 0
   m_Name: Main Controller
   m_TagString: Untagged
@@ -413,6 +414,7 @@ MonoBehaviour:
     - {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
     specialRate: 0.025
     specialHeight: {x: 75, y: 100}
+    decoHeight: 0.5
   cityarea:
     field: {x: 1000, y: 1000}
     splitter:
@@ -445,3 +447,16 @@ MonoBehaviour:
   forward: {r: 1, g: 1, b: 1, a: 1}
   back: {r: 1, g: 0, b: 0, a: 1}
   material: {fileID: 2100000, guid: 230bcf696074960488c12a1c31b0b13f, type: 2}
+--- !u!114 &1753058804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1753058797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62485f858656cbc47a0845dec2b11299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: a55f63c2916631242bdf84e7d45935ac, type: 2}
+  radius: 0.5

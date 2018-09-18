@@ -38,6 +38,10 @@ namespace NightCity.Creators
         private float specialRate = 0.05f;
         [SerializeField]
         private Vector2 specialHeight = new Vector2(50f, 75f);
+        [Header("Decoration"), SerializeField]
+        private float decoHeight = 5f;
+        [SerializeField]
+        private float roundDecoHeight = 3f;
 
         private uint index = 0;
 
@@ -114,6 +118,17 @@ namespace NightCity.Creators
                 UvRange = size / this.windowSize,
                 BuildType = buildType
             });
+
+            if(isSpecial == true)
+            {
+                this.Decos.Add(new DecorationData()
+                {
+                    Center = center,
+                    Size = size,
+                    BuildType = buildType,
+                    Height = buildType == 0u ? this.decoHeight : this.roundDecoHeight
+                });
+            }
 
             if(buildType == 1u)
             {

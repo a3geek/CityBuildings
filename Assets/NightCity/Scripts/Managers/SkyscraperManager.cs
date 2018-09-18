@@ -13,9 +13,6 @@ namespace NightCity.Managers
     [AddComponentMenu("Night City/Managers/Sky Scraper")]
     public class SkyscraperManager : MonoBehaviour
     {
-        // ビルの上側は真っ黒にして、赤い点をつけておこう。
-
-
         public const int VertexCount = 3;
 
         public const string PropIsSceneCamera = "ON_RENDER_SCENE_VIEW";
