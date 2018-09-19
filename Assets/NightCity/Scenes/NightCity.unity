@@ -234,6 +234,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   rotateSpeed: 0.25
+  fovSpeed: 25
+  fovRange: {x: 10, y: 110}
   straightRate: 0.75
   autotime: 5
 --- !u!114 &621738624
@@ -249,7 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: a71df3c0c7669d744bc7bee9f01071b6, type: 2}
   speed: 0.5
-  color: {r: 0.6945156, g: 0.8773585, b: 0.39315593, a: 1}
+  color: {r: 0.8862967, g: 0.9339623, b: 0.54187435, a: 1}
   radius: 0.2
   bolid: 0.01
 --- !u!1 &1619333015

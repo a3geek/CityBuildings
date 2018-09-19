@@ -29,6 +29,10 @@ namespace NightCity.Components
         private float speed = 1f;
         [SerializeField]
         private float rotateSpeed = 1f;
+        [SerializeField]
+        private float fovSpeed = 1f;
+        [SerializeField]
+        private Vector2 fovRange = new Vector2(30f, 90f);
         [SerializeField, Range(0f, 1f)]
         private float straightRate = 0.75f;
         [SerializeField]
@@ -40,6 +44,7 @@ namespace NightCity.Components
         private float timer = 0f;
         private bool pause = false;
         private float rotateRate = 0f;
+        private float fov = 0f;
         private SkyscraperManager skyscraper = null;
 
 
@@ -53,6 +58,7 @@ namespace NightCity.Components
 
             this.rotateRate = 1f;
             this.timer = this.autotime;
+            this.fov = Camera.main.fieldOfView;
 
             transform.rotation = this.Auto();
         }
@@ -72,9 +78,11 @@ namespace NightCity.Components
         {
             var right = Input.GetKey(KeyCode.RightArrow);
             var left = Input.GetKey(KeyCode.LeftArrow);
+            var up = Input.GetKey(KeyCode.UpArrow);
+            var down = Input.GetKey(KeyCode.DownArrow);
             var space = Input.GetKeyDown(KeyCode.Space);
 
-            if(right == false && left == false && space == false)
+            if(right == false && left == false && space == false && up == false && down == false)
             {
                 return false;
             }
@@ -82,6 +90,11 @@ namespace NightCity.Components
             var euler = transform.rotation.eulerAngles;
             euler.y += (this.speed * Time.deltaTime * ((right == true ? 1f : 0f) + (left == true ? -1f : 0f)));
             transform.rotation = Quaternion.Euler(euler);
+
+            Camera.main.fieldOfView = Mathf.Clamp(
+                Camera.main.fieldOfView + this.fovSpeed * Time.deltaTime * (up == true ? -1f : (down == true ? 1f : 0f)),
+                this.fovRange.x, this.fovRange.y
+            );
 
             this.pause = space == true ? !this.pause : this.pause;
             this.timer = 0f;
@@ -107,6 +120,9 @@ namespace NightCity.Components
             var dis = pos.XZ() - center;
             var rot = Quaternion.LookRotation(center.ToVector3(pos.y) - pos);
             var rate = Mathf.Clamp01(Mathf.Max(Mathf.Abs(dis.x / field.x), Mathf.Abs(dis.y / field.y))) * this.rotateRate;
+
+            var fov = Camera.main.fieldOfView;
+            Camera.main.fieldOfView = fov + (this.fov - fov) * this.rotateRate;
 
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, rate);
 
