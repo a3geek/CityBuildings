@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Skybox
-  m_Shader: {fileID: 4800000, guid: 70cfdaccb53050a4b8919a3a63d009c9, type: 3}
-  m_ShaderKeywords: _SUNDISK_HIGH_QUALITY
+  m_Name: WorldClock
+  m_Shader: {fileID: 4800000, guid: 21b13ab0ccc3a934eaa2b6ef7d73dc29, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -55,35 +55,32 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AtmosphereThickness: 1
+    - _Blend: 0.05
+    - _Bolid: 0.015
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Exposure: 1.3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Horizon: -0.03
-    - _HorizonOffset: 0.85
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Offset: 0.1
     - _Parallax: 0.02
+    - _Radius: 0.42
+    - _Ring: 0.075
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDisk: 2
-    - _SunSize: 0.04
-    - _SunSizeConvergence: 5
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BotttomColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BorderColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FloorColor: {r: 0, g: 0, b: 0, a: 0}
-    - _GroundColor: {r: 0.369, g: 0.349, b: 0.341, a: 1}
-    - _HorizonColor: {r: 0, g: 0.38039216, b: 1, a: 0}
-    - _SkyTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _TopColor: {r: 0, g: 0, b: 0, a: 0}
+    - _NineColor: {r: 0.87843144, g: 0.59607846, b: 0.33333334, a: 1}
+    - _SixColor: {r: 0.22352943, g: 0.6862745, b: 0.82745105, a: 1}
+    - _ThreeColor: {r: 0.82745105, g: 0.8862746, b: 0.92549026, a: 1}
+    - _ZeroColor: {r: 0.0036044791, g: 0.096406996, b: 0.254717, a: 1}

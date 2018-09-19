@@ -6,6 +6,7 @@ namespace NightCity
 {
     using Components;
     using Managers;
+    using Utilities;
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(WindowTextureManager))]
@@ -14,9 +15,11 @@ namespace NightCity
     [RequireComponent(typeof(CarsManager))]
     [RequireComponent(typeof(DecorationManager))]
     [AddComponentMenu("Night City/Main Controller")]
-    public class MainController : MonoBehaviour
+    public class MainController : SingletonMonoBehaviour<MainController>
     {
         public const string PropDofPower = "_DofPower";
+
+        public bool IsPlaying => this.mover.Validity;
 
         [SerializeField]
         private CameraMover mover = null;
@@ -38,8 +41,9 @@ namespace NightCity
         private DecorationManager decoration = null;
 
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Shader.SetGlobalFloat(PropDofPower, this.dof);
 
             this.windowTexture = GetComponent<WindowTextureManager>();
