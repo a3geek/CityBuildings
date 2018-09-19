@@ -50,9 +50,11 @@ namespace CityBuildings.Managers
         {
             var decos = skyscraper.Builder.Decos;
 
+            this.buffer?.Release();
             this.buffer = new ComputeBuffer(decos.Count, Marshal.SizeOf(typeof(DecorationData)), ComputeBufferType.Default);
             this.buffer.SetData(decos.ToArray());
 
+            this.timesBuffer?.Release();
             this.timesBuffer = new ComputeBuffer(decos.Count, Marshal.SizeOf(typeof(Times)), ComputeBufferType.Default);
             this.timers = new float[this.buffer.count];
             this.times = new Times[this.buffer.count];
@@ -68,7 +70,7 @@ namespace CityBuildings.Managers
             this.material.SetColor(PropNightColor, this.nightColor);
             this.material.SetColor(PropNoonColor, this.noonColor);
         }
-
+        
         private void Update()
         {
             if(this.buffer == null || MainController.Instance.IsNight == false)

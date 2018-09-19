@@ -55,6 +55,7 @@ namespace CityBuildings
             StartCoroutine(this.Init());
         }
 
+        private float sr = 0.025f;
         private void Update()
         {
             if(this.ready == false)
@@ -73,6 +74,17 @@ namespace CityBuildings
             }
 
             Shader.SetGlobalInt(PropIsNight, SkyManager.Instance.Current == 0 ? 1 : 0);
+
+
+
+
+
+            if(Input.GetKeyDown(KeyCode.A))
+            {
+                this.skyScraper.Build(sr);
+                sr += 0.1f;
+                this.decoration.Init(this.skyScraper);
+            }
         }
 
         private IEnumerator Init()

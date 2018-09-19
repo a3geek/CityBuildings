@@ -19,6 +19,8 @@ namespace CityBuildings.Creators
         public List<BuildingFragData> Frags { get; } = new List<BuildingFragData>();
         public List<DecorationData> Decos { get; } = new List<DecorationData>();
         public List<uint> Seeds { get; } = new List<uint>();
+
+        public float SpecialRate => this.specialRate;
         
         [SerializeField]
         private Vector2 height = new Vector2(15f, 40f);
@@ -38,7 +40,7 @@ namespace CityBuildings.Creators
         private float specialRate = 0.05f;
         [SerializeField]
         private Vector2 specialHeight = new Vector2(50f, 75f);
-        [Header("Decoration"), SerializeField]
+        [SerializeField]
         private float decoHeight = 5f;
         [SerializeField]
         private float roundDecoHeight = 3f;
@@ -48,16 +50,28 @@ namespace CityBuildings.Creators
 
         public void CreateBuilds(Section[,] sections)
         {
+            this.CreateBuilds(sections, this.specialRate);
+        }
+
+        public void CreateBuilds(Section[,] sections, float specialRate)
+        {
+            this.Procedurals.Clear();
+            this.Geoms.Clear();
+            this.Frags.Clear();
+            this.Decos.Clear();
+            this.Seeds.Clear();
+            this.index = 0;
+
             for(var i = 0; i < sections.GetLength(0); i++)
             {
                 for(var j = 0; j < sections.GetLength(1); j++)
                 {
-                    this.CreateBuild(sections[i, j]);
+                    this.CreateBuild(sections[i, j], specialRate);
                 }
             }
         }
 
-        private void CreateBuild(Section section)
+        private void CreateBuild(Section section, float specialRate)
         {
             var size = section.Size;
             var center = section.Center;
@@ -66,7 +80,7 @@ namespace CityBuildings.Creators
             {
                 this.AddFrags(1);
                 this.AddSeeds(SkyscraperManager.VertexCount);
-                this.Geoms.Add(this.CreateBuild(center, size.x, size.z));
+                this.Geoms.Add(this.CreateBuild(center, size.x, size.z, specialRate));
                 return;
             }
 
@@ -84,23 +98,23 @@ namespace CityBuildings.Creators
 
                     this.AddFrags(1);
                     this.AddSeeds(SkyscraperManager.VertexCount);
-                    this.Geoms.AddRange(this.CreateBuilds(cen.ToVector3(center.y), field.x, field.y));
+                    this.Geoms.AddRange(this.CreateBuilds(cen.ToVector3(center.y), field.x, field.y, specialRate));
                 }
             }
         }
 
-        private BuildingGeomData CreateBuild(Vector3 center, float width, float depth)
+        private BuildingGeomData CreateBuild(Vector3 center, float width, float depth, float specialRate)
         {
-            return this.CreateBuilds(center, width, depth)[0];
+            return this.CreateBuilds(center, width, depth, specialRate)[0];
         }
 
-        private List<BuildingGeomData> CreateBuilds(Vector3 center, float width, float depth)
+        private List<BuildingGeomData> CreateBuilds(Vector3 center, float width, float depth, float specialRate)
         {
             var data = new List<BuildingGeomData>();
 
             var widRate = this.mainRate.Rand();
             var depRate = this.mainRate.Rand();
-            var isSpecial = Random.value < this.specialRate;
+            var isSpecial = Random.value < specialRate;
             var heiRate = isSpecial ? this.specialHeight.Rand() : this.height.Rand();
 
             var wid = widRate * width;

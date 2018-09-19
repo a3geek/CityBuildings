@@ -48,22 +48,35 @@ namespace CityBuildings.Managers
             this.winTex = windowTexture;
             
             this.cityarea.Create();
-            this.builder.CreateBuilds(this.cityarea.Sections);
+            this.Build();
+        }
 
+        public void Build(float specialRate = -1f)
+        {
+            this.builder.CreateBuilds(this.cityarea.Sections, specialRate < 0f ? this.builder.SpecialRate : specialRate);
             if(this.builder.Geoms.Count <= 0)
             {
                 return;
             }
 
+            this.SetBuffers();
+        }
+
+        private void SetBuffers()
+        {
+            this.proceduralBuffer?.Release();
             this.proceduralBuffer = this.CreateBuffer<ProceduralData>(this.builder.Procedurals.Count);
             this.proceduralBuffer.SetData(this.builder.Procedurals.ToArray());
 
+            this.geomsBuffer?.Release();
             this.geomsBuffer = this.CreateBuffer<BuildingGeomData>(this.builder.Geoms.Count);
             this.geomsBuffer.SetData(this.builder.Geoms.ToArray());
 
+            this.seedsBuffer?.Release();
             this.seedsBuffer = this.CreateBuffer<uint>(this.builder.Seeds.Count);
             this.seedsBuffer.SetData(this.builder.Seeds.ToArray());
 
+            this.fragsBuffer?.Release();
             this.fragsBuffer = this.CreateBuffer<BuildingFragData>(this.builder.Frags.Count);
             this.fragsBuffer.SetData(this.builder.Frags.ToArray());
         }
