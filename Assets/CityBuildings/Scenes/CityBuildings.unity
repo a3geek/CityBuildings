@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2514418, g: 0.5252374, b: 0.6319482, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -400,11 +400,19 @@ MonoBehaviour:
   width: 1024
   height: 1024
   noiseFrequency: 250
-  nightWall: {r: 0, g: 0, b: 0, a: 1}
-  nightMain: {r: 0, g: 0, b: 0, a: 1}
-  noonWall: {r: 0.990566, g: 0.990566, b: 0.85506403, a: 1}
-  noonMain: {r: 0.40784314, g: 0.60784316, b: 0.7490196, a: 0.2509804}
-  buildScalerWindowNum: 5
+  timeColors:
+  - Wall: {r: 0, g: 0, b: 0, a: 1}
+    Main: {r: 0, g: 0, b: 0, a: 1}
+    Texture: {fileID: 0}
+  - Wall: {r: 0.99215686, g: 0.99215686, b: 0.85490197, a: 1}
+    Main: {r: 0.5208259, g: 0.74542135, b: 0.8301887, a: 0.2509804}
+    Texture: {fileID: 0}
+  - Wall: {r: 0.99215686, g: 0.99215686, b: 0.85490197, a: 1}
+    Main: {r: 0.40784314, g: 0.60784316, b: 0.7490196, a: 0.2509804}
+    Texture: {fileID: 0}
+  - Wall: {r: 0.99215686, g: 0.99215686, b: 0.85490197, a: 1}
+    Main: {r: 0.7735849, g: 0.63389283, b: 0.49991098, a: 0.2509804}
+    Texture: {fileID: 0}
 --- !u!114 &1753058800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,8 +662,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffc336a42dad5e4f81c84e59b9e164c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  top: {r: 1, g: 0, b: 0, a: 1}
-  bottom: {r: 0, g: 0, b: 1, a: 1}
+  top: {r: 0.8862745, g: 0.93333334, b: 0.5411765, a: 1}
+  bottom: {r: 0.8862745, g: 0.93333334, b: 0.5411765, a: 1}
   cam: {fileID: 1948193286}
   material: {fileID: 2100000, guid: fde289385cd6b8f4c9afe0a1867ffd45, type: 2}
   render: {fileID: 1758953373}

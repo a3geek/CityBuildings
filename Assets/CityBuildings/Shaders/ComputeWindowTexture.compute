@@ -1,5 +1,4 @@
 ﻿#pragma kernel Main
-#pragma kernel Sub
 
 #define ThreadX 8
 #define ThreadY 8
@@ -108,38 +107,4 @@ void Main(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV
     windowTex[dispatchThreadID.xy] = mainColor.a <= 0.5f ?
         color_blend(float4(c.rgb, dark_alpha), float4(mainColor.rgb, dark_alpha)):
         color_blend(c, float4(mainColor.rgb, dark_alpha));
-}
-
-[numthreads(ThreadX, ThreadY, 1)]
-void Sub(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
-{
-    uint xOff = dispatchThreadID.x;
-    uint yOff = dispatchThreadID.y;
-    uint x = groupThreadID.x;
-    uint y = groupThreadID.y;
-
-    if (x < BorderY || x >= WidthOff || y < BorderY || y >= HeightOff)
-    {
-        windowTex[dispatchThreadID.xy] = float4(0.0, 0.0, 0.0, 1.0);
-        return;
-    }
-
-    float4 c = float4(1.0, 1.0, 1.0, 1.0);
-
-    uint shared_rand_state = rand_hash(groupID.x * groupID.x + groupID.y * groupID.y + randSeed * randSeed);
-    uint rand_state = rand_hash(xOff * xOff + yOff * yOff + randSeed * randSeed);
-
-    // Put random color in.
-    uint pixels = ColoringPixels + uiround(rand(rand_state, ColoringPixels));
-
-    if (rand01(rand_state) < pixels * TotalWindowPixelsMap)
-    {
-        float r = 0.25 + rand(rand_state, 0.75);
-        float g = 0.25 + rand(rand_state, 0.75);
-        float b = 0.25 + rand(rand_state, 0.75);
-
-        c = float4(r, g, b, 1.0);
-    }
-
-    windowTex[dispatchThreadID.xy] = color_blend(c, float4(0.0, 0.0, 0.0, 0.2));
 }

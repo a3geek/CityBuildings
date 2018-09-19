@@ -37,15 +37,17 @@ namespace CityBuildings.Managers
         private Material material = null;
 
         private WindowTextureManager winTex = null;
+        private SkyManager sky = null;
         private ComputeBuffer proceduralBuffer = null;
         private ComputeBuffer geomsBuffer = null;
         private ComputeBuffer seedsBuffer = null;
         private ComputeBuffer fragsBuffer = null;
 
 
-        public void Init(WindowTextureManager windowTexture)
+        public void Init(WindowTextureManager windowTexture, SkyManager sky)
         {
             this.winTex = windowTexture;
+            this.sky = sky;
             
             this.cityarea.Create();
             this.Build();
@@ -108,8 +110,7 @@ namespace CityBuildings.Managers
             this.material.SetBuffer(PropGeomData, this.geomsBuffer);
             this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
             this.material.SetBuffer(PropFragData, this.fragsBuffer);
-            this.material.SetTexture(PropWindowTex,
-                SkyManager.Instance.Current == 0 ? this.winTex.NightTex : this.winTex.NoonTex);
+            this.material.SetTexture(PropWindowTex, this.winTex[this.sky.Current]);
 
             var windowNumber = this.winTex.WindowNumber;
             this.material.SetInt(PropWindowNumberX, windowNumber.x);

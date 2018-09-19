@@ -1,13 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace CityBuildings.Managers
 {
+    using Random = UnityEngine.Random;
+
     [DisallowMultipleComponent]
     [AddComponentMenu("City Buildings/Managers/Window Texture Manager")]
     public class WindowTextureManager : MonoBehaviour
     {
+        [Serializable]
+        private class TimeColors
+        {
+            public Color Wall = Color.black;
+            public Color Main = Color.black;
+
+            [HideInInspector]
+            public RenderTexture Texture = null;
+        }
+
         public const string PropRandSeed = "randSeed";
         public const string PropWindowTex = "windowTex";
         public const string PropNoiseFrequency = "noiseFrequency";
@@ -16,18 +29,14 @@ namespace CityBuildings.Managers
         public const int ThreadX = 8;
         public const int ThreadY = 8;
 
-        public RenderTexture NightTex
+        public RenderTexture this[int index]
         {
-            get; private set;
+            get
+            {
+                return this.timeColors[index].Texture;
+            }
         }
-        public RenderTexture NoonTex
-        {
-            get; private set;
-        }
-        public RenderTexture BuildScalerTex
-        {
-            get; private set;
-        }
+
         public int Width
         {
             get { return this.width; }
@@ -50,53 +59,30 @@ namespace CityBuildings.Managers
         [SerializeField]
         private float noiseFrequency = 1f;
         [SerializeField]
-        private Color nightWall = Color.black;
-        [SerializeField]
-        private Color nightMain = Color.black;
-        [SerializeField]
-        private Color noonWall = Color.gray;
-        [SerializeField]
-        private Color noonMain = Color.blue;
-        [SerializeField]
-        private int buildScalerWindowNum = 5;
+        private List<TimeColors> timeColors = new List<TimeColors>();
         
 
-        public void Init()
+        public void Init(int index)
         {
-            this.width = Mathf.IsPowerOfTwo(this.width) == false ? Mathf.NextPowerOfTwo(this.width) : this.width;
-            this.height = Mathf.IsPowerOfTwo(this.height) == false ? Mathf.NextPowerOfTwo(this.height) : this.height;
+            if(index == 0)
+            {
+                this.width = Mathf.IsPowerOfTwo(this.width) == false ? Mathf.NextPowerOfTwo(this.width) : this.width;
+                this.height = Mathf.IsPowerOfTwo(this.height) == false ? Mathf.NextPowerOfTwo(this.height) : this.height;
 
-            this.BuildScalerTex = this.GetRenderTexture(ThreadX, ThreadY * this.buildScalerWindowNum);
+                this.cs.SetInt(PropRandSeed, Mathf.Abs(Random.Range(0, int.MaxValue)));
+                this.cs.SetFloat(PropNoiseFrequency, this.noiseFrequency);
+            }
 
-            this.cs.SetInt(PropRandSeed, Mathf.Abs(Random.Range(0, int.MaxValue)));
-            this.cs.SetFloat(PropNoiseFrequency, this.noiseFrequency);
-            this.cs.SetTexture(1, PropWindowTex, this.BuildScalerTex);
+            var colors = this.timeColors[index];
+            colors.Texture = this.GetRenderTexture(this.width, this.height);
 
-            this.cs.Dispatch(1, 1, this.buildScalerWindowNum, 1);
-        }
-
-        public void InitNight()
-        {
-            this.NightTex = this.GetRenderTexture(this.width, this.height);
-
-            this.cs.SetVector(PropWallColor, this.nightWall);
-            this.cs.SetVector(PropMainColor, this.nightMain);
-            this.cs.SetTexture(0, PropWindowTex, this.NightTex);
+            this.cs.SetVector(PropWallColor, colors.Wall);
+            this.cs.SetVector(PropMainColor, colors.Main);
+            this.cs.SetTexture(0, PropWindowTex, colors.Texture);
 
             this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
         }
-
-        public void InitNoon()
-        {
-            this.NoonTex = this.GetRenderTexture(this.width, this.height);
-
-            this.cs.SetVector(PropWallColor, this.noonWall);
-            this.cs.SetVector(PropMainColor, this.noonMain);
-            this.cs.SetTexture(0, PropWindowTex, this.NoonTex);
-
-            this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
-        }
-
+        
         private RenderTexture GetRenderTexture(int width, int height)
         {
             var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)

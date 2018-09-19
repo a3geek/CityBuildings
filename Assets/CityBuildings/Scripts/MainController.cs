@@ -90,7 +90,7 @@ namespace CityBuildings
             yield return new WaitForSeconds(0f);
 
             var cnt = 0;
-            while(cnt < 10)
+            while(cnt < 12)
             {
                 switch(cnt)
                 {
@@ -98,30 +98,33 @@ namespace CityBuildings
                         this.sky.Init();
                         break;
                     case 1:
-                        this.windowTexture.Init();
+                        this.windowTexture.Init(0);
                         break;
                     case 2:
-                        this.windowTexture.InitNight();
+                        this.windowTexture.Init(1);
                         break;
                     case 3:
-                        this.windowTexture.InitNoon();
+                        this.windowTexture.Init(2);
                         break;
                     case 4:
-                        this.skyScraper.Init(this.windowTexture);
+                        this.windowTexture.Init(3);
                         break;
                     case 5:
-                        this.buildScaler.Init(this.skyScraper);
+                        this.skyScraper.Init(this.windowTexture, this.sky);
                         break;
                     case 6:
-                        this.roads.Init(this.skyScraper);
+                        this.buildScaler.Init(this.skyScraper);
                         break;
                     case 7:
-                        this.cars.Init(this.skyScraper);
+                        this.roads.Init(this.skyScraper);
                         break;
                     case 8:
-                        this.decoration.Init(this.skyScraper);
+                        this.cars.Init(this.skyScraper);
                         break;
                     case 9:
+                        this.decoration.Init(this.skyScraper);
+                        break;
+                    case 10:
                         this.mover.Init(this.skyScraper);
                         break;
                 }
