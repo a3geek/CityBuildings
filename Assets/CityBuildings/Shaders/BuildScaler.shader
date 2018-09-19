@@ -17,11 +17,16 @@
             #include "UnityCG.cginc"
 
             uniform float _Height;
-            uniform sampler2D _Tex;
+            uniform float4 _TopColor, _BottomColor;
+            uniform float _Bolid;
 
             float4 frag(v2f_img i) : COLOR
             {
-                return i.uv.y <= _Height ? tex2D(_Tex, i.uv) : 1.0;
+                bool isBolid = i.uv.x <= _Bolid || i.uv.x >= 1.0 - _Bolid ||
+                    i.uv.y <= _Bolid || i.uv.y >= 1.0 - _Bolid;
+
+                return isBolid == true ? 1.0 : (i.uv.y <= _Height ?
+                    lerp(_BottomColor, _TopColor, i.uv.y) : 1.0);
             }
             ENDCG
         }

@@ -51,10 +51,18 @@ namespace CityBuildings.Managers
             var decos = skyscraper.Builder.Decos;
 
             this.buffer?.Release();
+            this.timesBuffer?.Release();
+
+            if(decos.Count <= 0)
+            {
+                this.timers = new float[0];
+
+                return;
+            }
+
             this.buffer = new ComputeBuffer(decos.Count, Marshal.SizeOf(typeof(DecorationData)), ComputeBufferType.Default);
             this.buffer.SetData(decos.ToArray());
 
-            this.timesBuffer?.Release();
             this.timesBuffer = new ComputeBuffer(decos.Count, Marshal.SizeOf(typeof(Times)), ComputeBufferType.Default);
             this.timers = new float[this.buffer.count];
             this.times = new Times[this.buffer.count];
@@ -73,7 +81,7 @@ namespace CityBuildings.Managers
         
         private void Update()
         {
-            if(this.buffer == null || MainController.Instance.IsNight == false)
+            if(this.timers.Length <= 0 || MainController.Instance.IsNight == false)
             {
                 return;
             }
@@ -100,7 +108,7 @@ namespace CityBuildings.Managers
 
         private void OnRenderObject()
         {
-            if(this.buffer == null)
+            if(this.timers.Length <= 0)
             {
                 return;
             }

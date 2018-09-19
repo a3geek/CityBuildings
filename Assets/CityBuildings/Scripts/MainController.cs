@@ -110,7 +110,7 @@ namespace CityBuildings
                         this.skyScraper.Init(this.windowTexture);
                         break;
                     case 5:
-                        this.buildScaler.Init(this.windowTexture);
+                        this.buildScaler.Init(this.skyScraper);
                         break;
                     case 6:
                         this.roads.Init(this.skyScraper);
