@@ -24,6 +24,10 @@ namespace CityBuildings.Managers
         {
             get; private set;
         }
+        public RenderTexture BuildScalerTex
+        {
+            get; private set;
+        }
         public int Width
         {
             get { return this.width; }
@@ -53,17 +57,27 @@ namespace CityBuildings.Managers
         private Color noonWall = Color.gray;
         [SerializeField]
         private Color noonMain = Color.blue;
+        [SerializeField]
+        private int buildScalerWindowNum = 5;
+        
 
-
-        public void InitNight()
+        public void Init()
         {
             this.width = Mathf.IsPowerOfTwo(this.width) == false ? Mathf.NextPowerOfTwo(this.width) : this.width;
             this.height = Mathf.IsPowerOfTwo(this.height) == false ? Mathf.NextPowerOfTwo(this.height) : this.height;
 
-            this.NightTex = this.GetRenderTexture();
+            this.BuildScalerTex = this.GetRenderTexture(ThreadX, ThreadY * this.buildScalerWindowNum);
 
             this.cs.SetInt(PropRandSeed, Mathf.Abs(Random.Range(0, int.MaxValue)));
             this.cs.SetFloat(PropNoiseFrequency, this.noiseFrequency);
+            this.cs.SetTexture(1, PropWindowTex, this.BuildScalerTex);
+
+            this.cs.Dispatch(1, 1, this.buildScalerWindowNum, 1);
+        }
+
+        public void InitNight()
+        {
+            this.NightTex = this.GetRenderTexture(this.width, this.height);
 
             this.cs.SetVector(PropWallColor, this.nightWall);
             this.cs.SetVector(PropMainColor, this.nightMain);
@@ -74,7 +88,7 @@ namespace CityBuildings.Managers
 
         public void InitNoon()
         {
-            this.NoonTex = this.GetRenderTexture();
+            this.NoonTex = this.GetRenderTexture(this.width, this.height);
 
             this.cs.SetVector(PropWallColor, this.noonWall);
             this.cs.SetVector(PropMainColor, this.noonMain);
@@ -83,9 +97,9 @@ namespace CityBuildings.Managers
             this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
         }
 
-        private RenderTexture GetRenderTexture()
+        private RenderTexture GetRenderTexture(int width, int height)
         {
-            var rt = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGB32)
+            var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
             {
                 enableRandomWrite = true,
                 useMipMap = false,

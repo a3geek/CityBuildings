@@ -65,7 +65,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Horizon: -0.03
-    - _HorizonOffset: 0.6
+    - _HorizonOffset: 0.85
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -82,8 +82,8 @@ Material:
     - _BotttomColor: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FloorColor: {r: 0.08627451, g: 0.07058824, b: 0.0627451, a: 0}
+    - _FloorColor: {r: 0, g: 0, b: 0, a: 0}
     - _GroundColor: {r: 0.369, g: 0.349, b: 0.341, a: 1}
-    - _HorizonColor: {r: 0.54901963, g: 0.9607843, b: 0.9529412, a: 0}
+    - _HorizonColor: {r: 0.003921569, g: 0.09803922, b: 0.25490198, a: 0}
     - _SkyTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _TopColor: {r: 0.8862745, g: 0.5372549, b: 0.21176471, a: 0}
+    - _TopColor: {r: 0, g: 0, b: 0, a: 0}

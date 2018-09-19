@@ -14,6 +14,7 @@ namespace CityBuildings
     [RequireComponent(typeof(RoadsManager))]
     [RequireComponent(typeof(CarsManager))]
     [RequireComponent(typeof(DecorationManager))]
+    [RequireComponent(typeof(SkyManager))]
     [AddComponentMenu("City Buildings/Main Controller")]
     public class MainController : SingletonMonoBehaviour<MainController>
     {
@@ -27,7 +28,7 @@ namespace CityBuildings
         [SerializeField]
         private Load load = null;
         [SerializeField]
-        private SkyManager sky = null;
+        private BuildScaler buildScaler = null;
 
         private bool ready = false;
         private WindowTextureManager windowTexture = null;
@@ -35,6 +36,7 @@ namespace CityBuildings
         private RoadsManager roads = null;
         private CarsManager cars = null;
         private DecorationManager decoration = null;
+        private SkyManager sky = null;
 
 
         protected override void Awake()
@@ -49,13 +51,14 @@ namespace CityBuildings
             this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
             this.sky = this.sky ?? SkyManager.Instance;
 
+            this.buildScaler = this.buildScaler ?? FindObjectOfType<BuildScaler>();
+
             this.load = this.load ?? Camera.main.GetComponent<Load>();
             this.load.Init();
 
             StartCoroutine(this.Init());
         }
-
-        private float sr = 0.025f;
+        
         private void Update()
         {
             if(this.ready == false)
@@ -74,17 +77,12 @@ namespace CityBuildings
             }
 
             Shader.SetGlobalInt(PropIsNight, SkyManager.Instance.Current == 0 ? 1 : 0);
+        }
 
-
-
-
-
-            if(Input.GetKeyDown(KeyCode.A))
-            {
-                this.skyScraper.Build(sr);
-                sr += 0.1f;
-                this.decoration.Init(this.skyScraper);
-            }
+        public void Rebuild(float specialRate)
+        {
+            this.skyScraper.Build(specialRate);
+            this.decoration.Init(this.skyScraper);
         }
 
         private IEnumerator Init()
@@ -92,7 +90,7 @@ namespace CityBuildings
             yield return new WaitForSeconds(0f);
 
             var cnt = 0;
-            while(cnt < 8)
+            while(cnt < 10)
             {
                 switch(cnt)
                 {
@@ -100,24 +98,30 @@ namespace CityBuildings
                         this.sky.Init();
                         break;
                     case 1:
-                        this.windowTexture.InitNight();
+                        this.windowTexture.Init();
                         break;
                     case 2:
-                        this.windowTexture.InitNoon();
+                        this.windowTexture.InitNight();
                         break;
                     case 3:
-                        this.skyScraper.Init(this.windowTexture);
+                        this.windowTexture.InitNoon();
                         break;
                     case 4:
-                        this.roads.Init(this.skyScraper);
+                        this.skyScraper.Init(this.windowTexture);
                         break;
                     case 5:
-                        this.cars.Init(this.skyScraper);
+                        this.buildScaler.Init(this.windowTexture);
                         break;
                     case 6:
-                        this.decoration.Init(this.skyScraper);
+                        this.roads.Init(this.skyScraper);
                         break;
                     case 7:
+                        this.cars.Init(this.skyScraper);
+                        break;
+                    case 8:
+                        this.decoration.Init(this.skyScraper);
+                        break;
+                    case 9:
                         this.mover.Init(this.skyScraper);
                         break;
                 }
