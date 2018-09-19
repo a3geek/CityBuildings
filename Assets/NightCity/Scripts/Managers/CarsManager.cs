@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Managers
+namespace CityBuildings.Managers
 {
     using Creators;
     using Utilities;
@@ -14,7 +14,7 @@ namespace NightCity.Managers
     using Random = UnityEngine.Random;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Managers/Cars Manager")]
+    [AddComponentMenu("City Buildings/Managers/Cars Manager")]
     public class CarsManager : MonoBehaviour
     {
         public const string PropHeight = "_Height";

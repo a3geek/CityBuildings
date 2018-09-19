@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace CityBuildings.Components
 {
     using Managers;
     using Utilities;
@@ -14,7 +14,7 @@ namespace NightCity.Components
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [AddComponentMenu("Night City/Components/Load")]
+    [AddComponentMenu("City Buildings/Components/Load")]
     public class Load : MonoBehaviour
     {
         public const string PropTimer = "_Timer";

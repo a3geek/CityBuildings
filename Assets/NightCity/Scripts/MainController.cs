@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NightCity
+namespace CityBuildings
 {
     using Components;
     using Managers;
@@ -14,26 +14,22 @@ namespace NightCity
     [RequireComponent(typeof(RoadsManager))]
     [RequireComponent(typeof(CarsManager))]
     [RequireComponent(typeof(DecorationManager))]
-    [AddComponentMenu("Night City/Main Controller")]
+    [AddComponentMenu("City Buildings/Main Controller")]
     public class MainController : SingletonMonoBehaviour<MainController>
     {
-        public const string PropDofPower = "_DofPower";
+        public const string PropIsNight = "_IsNight";
 
         public bool IsPlaying => this.mover.Validity;
+        public bool IsNight => this.sky.Current == 0;
 
         [SerializeField]
         private CameraMover mover = null;
         [SerializeField]
         private Load load = null;
         [SerializeField]
-        private float dofPower = 750f;
-        [SerializeField]
-        private AnimationCurve dofCurve = new AnimationCurve();
-        [SerializeField]
-        private float dofSpeed = 0.1f;
+        private SkyManager sky = null;
 
-        private bool inited = false;
-        private float dof = 0f;
+        private bool ready = false;
         private WindowTextureManager windowTexture = null;
         private SkyscraperManager skyScraper = null;
         private RoadsManager roads = null;
@@ -44,7 +40,6 @@ namespace NightCity
         protected override void Awake()
         {
             base.Awake();
-            Shader.SetGlobalFloat(PropDofPower, this.dof);
 
             this.windowTexture = GetComponent<WindowTextureManager>();
             this.skyScraper = GetComponent<SkyscraperManager>();
@@ -52,6 +47,7 @@ namespace NightCity
             this.cars = GetComponent<CarsManager>();
             this.decoration = GetComponent<DecorationManager>();
             this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
+            this.sky = this.sky ?? SkyManager.Instance;
 
             this.load = this.load ?? Camera.main.GetComponent<Load>();
             this.load.Init();
@@ -61,7 +57,7 @@ namespace NightCity
 
         private void Update()
         {
-            if(this.inited == false)
+            if(this.ready == false)
             {
                 return;
             }
@@ -72,12 +68,11 @@ namespace NightCity
             }
             else if(this.load.Validity == false && this.mover.Validity == false)
             {
-                this.dof = Mathf.Clamp01(this.dof + Time.deltaTime * this.dofSpeed);
-                var dof = this.dofPower * Mathf.Clamp01(this.dofCurve.Evaluate(this.dof));
-                Shader.SetGlobalFloat(PropDofPower, dof);
-
-                this.mover.Validity = this.cars.Validity = this.dof >= 1f;
+                this.sky.Validity = true;
+                this.mover.Validity = this.cars.Validity = this.sky.IsFinished;
             }
+
+            Shader.SetGlobalInt(PropIsNight, SkyManager.Instance.Current == 0 ? 1 : 0);
         }
 
         private IEnumerator Init()
@@ -85,26 +80,32 @@ namespace NightCity
             yield return new WaitForSeconds(0f);
 
             var cnt = 0;
-            while(cnt < 6)
+            while(cnt < 8)
             {
                 switch(cnt)
                 {
                     case 0:
-                        this.windowTexture.Init();
+                        this.sky.Init();
                         break;
                     case 1:
-                        this.skyScraper.Init(this.windowTexture);
+                        this.windowTexture.InitNight();
                         break;
                     case 2:
-                        this.roads.Init(this.skyScraper);
+                        this.windowTexture.InitNoon();
                         break;
                     case 3:
-                        this.cars.Init(this.skyScraper);
+                        this.skyScraper.Init(this.windowTexture);
                         break;
                     case 4:
-                        this.decoration.Init(this.skyScraper);
+                        this.roads.Init(this.skyScraper);
                         break;
                     case 5:
+                        this.cars.Init(this.skyScraper);
+                        break;
+                    case 6:
+                        this.decoration.Init(this.skyScraper);
+                        break;
+                    case 7:
                         this.mover.Init(this.skyScraper);
                         break;
                 }
@@ -113,7 +114,7 @@ namespace NightCity
                 yield return new WaitForSeconds(0f);
             }
 
-            this.inited = true;
+            this.ready = true;
         }
     }
 }

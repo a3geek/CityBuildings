@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace CityBuildings.Components
 {
     using Managers;
     using Utilities;
@@ -13,7 +13,7 @@ namespace NightCity.Components
     using Random = UnityEngine.Random;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Components/World Clock")]
+    [AddComponentMenu("City Buildings/Components/World Clock")]
     public class WorldClock : MonoBehaviour
     {
         public const string PropBorderColor = "_BorderColor";
@@ -113,7 +113,7 @@ namespace NightCity.Components
             var d = Vector2.Dot(Vector2.up * (diff.y >= 0f ? 1f : -1f), diff) / diff.magnitude - this.offset;
             var select = d <= 0.5f ? (diff.x >= 0f ? 1 : 3) : (diff.y >= 0f ? 0 : 2);
 
-            SkyboxManager.Instance.SetSky(select);
+            SkyManager.Instance.SetSky(select);
         }
 
         private void OnDestroy()

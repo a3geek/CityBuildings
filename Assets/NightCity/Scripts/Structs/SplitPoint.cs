@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NightCity.Structs
+namespace CityBuildings.Structs
 {
     public struct SplitPoint
     {

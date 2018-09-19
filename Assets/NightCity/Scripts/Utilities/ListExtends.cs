@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Utilities
+namespace CityBuildings.Utilities
 {
     using Random = UnityEngine.Random;
 

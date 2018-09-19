@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NightCity.Utilities
+namespace CityBuildings.Utilities
 {
     using Random = UnityEngine.Random;
 

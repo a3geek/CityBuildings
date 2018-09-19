@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NightCity.Structs
+namespace CityBuildings.Structs
 {
     using Components;
 

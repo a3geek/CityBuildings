@@ -23,6 +23,7 @@
 RWTexture2D<float4> windowTex;
 uint randSeed;
 float noiseFrequency;
+float4 wallColor,  mainColor;
 
 uint uiround(float v)
 {
@@ -53,7 +54,7 @@ void CSMain(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : 
 
 	if (x < BorderY || x >= WidthOff || y < BorderY || y >= HeightOff)
 	{
-		windowTex[dispatchThreadID.xy] = float4(0.0, 0.0, 0.0, 1.0);
+		windowTex[dispatchThreadID.xy] = wallColor;
 		return;
 	}
 
@@ -103,5 +104,7 @@ void CSMain(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : 
 		)
 	);
 
-	windowTex[dispatchThreadID.xy] = color_blend(c, float4(0.0, 0.0, 0.0, dark_alpha));
+    windowTex[dispatchThreadID.xy] = mainColor.a <= 0.5f ?
+        color_blend(float4(c.rgb, dark_alpha), float4(mainColor.rgb, dark_alpha)):
+        color_blend(c, float4(mainColor.rgb, dark_alpha));
 }

@@ -4,13 +4,13 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
-namespace NightCity.Managers
+namespace CityBuildings.Managers
 {
     using Structs;
     using Creators;
     
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Managers/Sky Scraper")]
+    [AddComponentMenu("City Buildings/Managers/Sky Scraper")]
     public class SkyscraperManager : MonoBehaviour
     {
         public const int VertexCount = 3;
@@ -95,12 +95,13 @@ namespace NightCity.Managers
             this.material.SetBuffer(PropGeomData, this.geomsBuffer);
             this.material.SetBuffer(PropRandSeeds, this.seedsBuffer);
             this.material.SetBuffer(PropFragData, this.fragsBuffer);
-            this.material.SetTexture(PropWindowTex, this.winTex.Tex);
+            this.material.SetTexture(PropWindowTex,
+                SkyManager.Instance.Current == 0 ? this.winTex.NightTex : this.winTex.NoonTex);
 
             var windowNumber = this.winTex.WindowNumber;
             this.material.SetInt(PropWindowNumberX, windowNumber.x);
             this.material.SetInt(PropWindowNumberY, windowNumber.y);
-            this.material.SetInt(PropSeedStep, 3);
+            this.material.SetInt(PropSeedStep, VertexCount);
 
             Graphics.DrawProcedural(MeshTopology.Points, VertexCount, this.proceduralBuffer.count);
         }

@@ -67,7 +67,8 @@
             uniform StructuredBuffer<frag_data> _FragData;
 			uniform sampler2D _WindowTex;
             uniform float _DofPower;
-            uniform int _SeedStep;
+            uniform float4 _DofColor;
+            uniform int _SeedStep, _IsNight;
 
 			v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
 			{
@@ -109,8 +110,10 @@
 
             float4 frag(g2f i) : COLOR
 			{
-                float4 col = tex2D(_WindowTex, i.uv.xy) * (i.uv.z < 0 ? 1.0 : _FragData[round(i.uv.z)].color);
-				return lerp(col, float4(0.0, 0.0, 0.0, 1.0), saturate(-1.0 * i.uv.w / _DofPower) * IS_SCENE_VIEW);
+                float4 col = tex2D(_WindowTex, i.uv.xy);
+                col = col * ((i.uv.z < 0 || _IsNight == 0 ? 1.0 : _FragData[round(i.uv.z)].color));
+
+				return lerp(col, _DofColor, saturate(-1.0 * i.uv.w / _DofPower) * IS_SCENE_VIEW);
 			}
 
 			ENDCG

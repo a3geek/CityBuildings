@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 
-namespace NightCity.Managers
+namespace CityBuildings.Managers
 {
     using Structs;
     using Creators;
     using Random = UnityEngine.Random;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Managers/Decoration Manager")]
+    [AddComponentMenu("City Buildings/Managers/Decoration Manager")]
     public class DecorationManager : MonoBehaviour
     {
         [Serializable]
@@ -24,6 +24,8 @@ namespace NightCity.Managers
         public const string PropData = "_Data";
         public const string PropTriangleSize = "_Radius";
         public const string PropTimesBuffer = "_Times";
+        public const string PropNightColor = "_NightColor";
+        public const string PropNoonColor = "_NoonColor";
 
         [SerializeField]
         private Material material = null;
@@ -33,6 +35,10 @@ namespace NightCity.Managers
         private AnimationCurve curve = new AnimationCurve();
         [SerializeField]
         private float speed = 0.1f;
+        [SerializeField]
+        private Color nightColor = Color.black;
+        [SerializeField]
+        private Color noonColor = new Color(0.76f, 0.78f, 0.79f, 1f);
         
         private ComputeBuffer buffer = null;
         private ComputeBuffer timesBuffer = null;
@@ -58,11 +64,14 @@ namespace NightCity.Managers
             }
 
             this.timesBuffer.SetData(this.times);
+
+            this.material.SetColor(PropNightColor, this.nightColor);
+            this.material.SetColor(PropNoonColor, this.noonColor);
         }
 
         private void Update()
         {
-            if(this.buffer == null)
+            if(this.buffer == null || MainController.Instance.IsNight == false)
             {
                 return;
             }

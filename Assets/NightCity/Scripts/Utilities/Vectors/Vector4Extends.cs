@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NightCity.Utilities
+namespace CityBuildings.Utilities
 {
     public static class Vector4Extends
     {

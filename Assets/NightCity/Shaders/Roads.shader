@@ -49,6 +49,7 @@
             uniform float4 _Color;
             uniform StructuredBuffer<data> _GeomData;
             uniform float _DofPower;
+            uniform float4 _DofColor;
 
             v2g vert(uint id : SV_VertexID, uint inst : SV_InstanceID)
             {
@@ -101,7 +102,7 @@
                 float vdis = saturate(1.0 - dis);
 
                 float4 c = float4((_Color * vdis).rgb, saturate(0.5 - dis));
-                return lerp(c, float4(0.0, 0.0, 0.0, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
+                return lerp(c, float4(_DofColor.rgb, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
             }
 
             ENDCG

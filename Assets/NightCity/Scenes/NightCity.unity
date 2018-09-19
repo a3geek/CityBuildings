@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.41815153, g: 0.7407956, b: 0.7695313, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -157,9 +157,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   border: {r: 1, g: 1, b: 1, a: 1}
   zero: {r: 0.003604479, g: 0.096407, b: 0.254717, a: 1}
-  three: {r: 0.8274511, g: 0.8862746, b: 0.9254903, a: 1}
-  six: {r: 0.2235294, g: 0.6862745, b: 0.8274511, a: 1}
-  nine: {r: 0.8784314, g: 0.5960785, b: 0.3333333, a: 1}
+  three: {r: 0.54901963, g: 0.9607843, b: 0.9529412, a: 1}
+  six: {r: 0.15294118, g: 0.67058825, b: 0.83137256, a: 1}
+  nine: {r: 0.8862745, g: 0.5372549, b: 0.21176471, a: 1}
   cam: {fileID: 1948193286}
   radius: 0.5
   bolid: 0.015
@@ -400,6 +400,10 @@ MonoBehaviour:
   width: 1024
   height: 1024
   noiseFrequency: 250
+  nightWall: {r: 0, g: 0, b: 0, a: 1}
+  nightMain: {r: 0, g: 0, b: 0, a: 1}
+  noonWall: {r: 0.990566, g: 0.990566, b: 0.85506403, a: 1}
+  noonMain: {r: 0.40784317, g: 0.60784316, b: 0.7490196, a: 0.2509804}
 --- !u!114 &1753058800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,32 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mover: {fileID: 621738623}
   load: {fileID: 621738624}
-  dofPower: 750
-  dofCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dofSpeed: 0.25
+  sky: {fileID: 0}
 --- !u!114 &1753058801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563,6 +542,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speed: 0.5
+  nightColor: {r: 0, g: 0, b: 0, a: 1}
+  noonColor: {r: 0.76, g: 0.78, b: 0.79, a: 1}
 --- !u!114 &1753058805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,27 +557,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - Top: {r: 0, g: 0, b: 0, a: 0}
-    Horizon: {r: 0, g: 0.38039216, b: 1, a: 0}
+    Horizon: {r: 0.003921569, g: 0.09803922, b: 0.25490198, a: 0}
     Floor: {r: 0, g: 0, b: 0, a: 0}
     HorizonLine: -0.03
     HorizonOffset: 0.85
+    dof: {r: 0, g: 0, b: 0, a: 1}
+    dofPower: 750
   - Top: {r: 0.54901963, g: 0.9607843, b: 0.9529412, a: 0}
     Horizon: {r: 0.9607843, g: 0.4627451, b: 0, a: 0}
     Floor: {r: 0.14901961, g: 0.12941177, b: 0.11764706, a: 0}
     HorizonLine: -0.03
     HorizonOffset: 0.55
+    dof: {r: 0.78653437, g: 0.9528302, b: 0.9496626, a: 1}
+    dofPower: 1000
   - Top: {r: 0.15294118, g: 0.67058825, b: 0.83137256, a: 0}
     Horizon: {r: 1, g: 1, b: 1, a: 0}
     Floor: {r: 0.13333334, g: 0.1254902, b: 0.12156863, a: 0}
     HorizonLine: -0.03
     HorizonOffset: 0.45
+    dof: {r: 0.7698469, g: 0.902266, b: 0.9433962, a: 1}
+    dofPower: 1000
   - Top: {r: 0.8862745, g: 0.5372549, b: 0.21176471, a: 0}
     Horizon: {r: 0.54901963, g: 0.9607843, b: 0.9529412, a: 0}
     Floor: {r: 0.08627451, g: 0.07058824, b: 0.0627451, a: 0}
     HorizonLine: -0.03
     HorizonOffset: 0.6
+    dof: {r: 0.8773585, g: 0.7981258, b: 0.7242346, a: 1}
+    dofPower: 1000
   bloom: {fileID: 621738622}
   skybox: {fileID: 2100000, guid: 0a723ecff0644f34082d25fd5258780f, type: 2}
+  dofCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dofSpeed: 0.25
 --- !u!1 &1948193283
 GameObject:
   m_ObjectHideFlags: 0

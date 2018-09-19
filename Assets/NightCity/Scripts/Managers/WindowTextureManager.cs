@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NightCity.Managers
+namespace CityBuildings.Managers
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Managers/Window Texture Manager")]
+    [AddComponentMenu("City Buildings/Managers/Window Texture Manager")]
     public class WindowTextureManager : MonoBehaviour
     {
         public const string PropRandSeed = "randSeed";
         public const string PropWindowTex = "windowTex";
         public const string PropNoiseFrequency = "noiseFrequency";
+        public const string PropWallColor = "wallColor";
+        public const string PropMainColor = "mainColor";
         public const int ThreadX = 8;
         public const int ThreadY = 8;
 
-        public RenderTexture Tex
+        public RenderTexture NightTex
+        {
+            get; private set;
+        }
+        public RenderTexture NoonTex
         {
             get; private set;
         }
@@ -39,14 +45,47 @@ namespace NightCity.Managers
         private int height = 1024;
         [SerializeField]
         private float noiseFrequency = 1f;
+        [SerializeField]
+        private Color nightWall = Color.black;
+        [SerializeField]
+        private Color nightMain = Color.black;
+        [SerializeField]
+        private Color noonWall = Color.gray;
+        [SerializeField]
+        private Color noonMain = Color.blue;
 
 
-        public void Init()
+        public void InitNight()
         {
             this.width = Mathf.IsPowerOfTwo(this.width) == false ? Mathf.NextPowerOfTwo(this.width) : this.width;
             this.height = Mathf.IsPowerOfTwo(this.height) == false ? Mathf.NextPowerOfTwo(this.height) : this.height;
 
-            this.Tex = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGB32)
+            this.NightTex = this.GetRenderTexture();
+
+            this.cs.SetInt(PropRandSeed, Mathf.Abs(Random.Range(0, int.MaxValue)));
+            this.cs.SetFloat(PropNoiseFrequency, this.noiseFrequency);
+
+            this.cs.SetVector(PropWallColor, this.nightWall);
+            this.cs.SetVector(PropMainColor, this.nightMain);
+            this.cs.SetTexture(0, PropWindowTex, this.NightTex);
+
+            this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
+        }
+
+        public void InitNoon()
+        {
+            this.NoonTex = this.GetRenderTexture();
+
+            this.cs.SetVector(PropWallColor, this.noonWall);
+            this.cs.SetVector(PropMainColor, this.noonMain);
+            this.cs.SetTexture(0, PropWindowTex, this.NoonTex);
+
+            this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
+        }
+
+        private RenderTexture GetRenderTexture()
+        {
+            var rt = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGB32)
             {
                 enableRandomWrite = true,
                 useMipMap = false,
@@ -55,13 +94,9 @@ namespace NightCity.Managers
                 wrapMode = TextureWrapMode.Repeat,
                 autoGenerateMips = false
             };
-            this.Tex.Create();
+            rt.Create();
 
-            this.cs.SetInt(PropRandSeed, Mathf.Abs(Random.Range(0, int.MaxValue)));
-            this.cs.SetFloat(PropNoiseFrequency, this.noiseFrequency);
-            this.cs.SetTexture(0, PropWindowTex, this.Tex);
-
-            this.cs.Dispatch(0, this.width / ThreadX, this.height / ThreadY, 1);
+            return rt;
         }
     }
 }

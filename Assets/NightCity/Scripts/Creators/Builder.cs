@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace NightCity.Creators
+namespace CityBuildings.Creators
 {
     using Structs;
     using Utilities;
@@ -151,7 +151,7 @@ namespace NightCity.Creators
             for(var i = 0u; i < count; i++)
             {
                 size = (field * new Vector2(this.subRate.Rand(), this.subRate.Rand())).ToVector3(
-                    (isSpecial == true ? Random.Range(this.specialHeight.x, heiRate) : Random.Range(height.x, heiRate)) * 0.9f
+                    (isSpecial == true ? Random.Range(this.specialHeight.x, heiRate) * 0.9f : this.height.Rand())
                 );
                 size = size - size.Surplus(this.windowSize);
 

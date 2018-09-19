@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Managers
+namespace CityBuildings.Managers
 {
     using Creators;
     using Structs;
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("Night City/Managers/Roads Manager")]
+    [AddComponentMenu("City Buildings/Managers/Roads Manager")]
     public class RoadsManager : MonoBehaviour
     {
         public const uint MaxVertexCount = 128u;

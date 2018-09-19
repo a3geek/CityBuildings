@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using UnityEngine;
 
-namespace NightCity.Components
+namespace CityBuildings.Components
 {
     using Managers;
     using Utilities;
@@ -14,7 +14,7 @@ namespace NightCity.Components
     
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [AddComponentMenu("Night City/Components/Camera Mover")]
+    [AddComponentMenu("City Buildings/Components/Camera Mover")]
     public class CameraMover : MonoBehaviour
     {
         public bool Validity { get; set; } = false;

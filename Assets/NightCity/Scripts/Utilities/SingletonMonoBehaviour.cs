@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NightCity.Utilities
+namespace CityBuildings.Utilities
 {
     /// <summary>
     /// シングルトンを実装
