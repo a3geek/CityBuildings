@@ -23,6 +23,8 @@ namespace CityBuildings.Creators
         private FieldSplitter splitter = new FieldSplitter();
         [SerializeField, Space]
         private float interval = 20f;
+        [SerializeField]
+        private float bolid = 0.4f;
 
 
         public void Create()
@@ -86,7 +88,7 @@ namespace CityBuildings.Creators
             var mag = (to - from).sqrMagnitude;
             this.MaxDistance = Mathf.Max(this.MaxDistance, mag);
 
-            var road = new Road(from, to, fromOffset, toOffset, width, this.interval);
+            var road = new Road(from, to, fromOffset, toOffset, width, this.interval, this.bolid);
             this.Roads[road.Id] = road;
 
             return road.Id;

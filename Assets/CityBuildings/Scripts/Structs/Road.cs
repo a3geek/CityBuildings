@@ -18,6 +18,7 @@ namespace CityBuildings.Structs
         public float Interval;
         public float Magnitude;
         public Vector2 Direction;
+        public float Bolid;
 #pragma warning restore 0414
     }
 
@@ -42,6 +43,7 @@ namespace CityBuildings.Structs
         public int ToPointID => this.toPointID;
         public float Magnitude => this.magnitude;
         public Vector2 Direction => this.direction;
+        public float Bolid => this.bolid;
 
         [SerializeField]
         private Vector2 from;
@@ -55,6 +57,8 @@ namespace CityBuildings.Structs
         private float width;
         [SerializeField]
         private float interval;
+        [SerializeField]
+        private float bolid;
 
         [NonSerialized]
         private int id;
@@ -68,7 +72,7 @@ namespace CityBuildings.Structs
         private Vector2 direction;
 
 
-        public Road(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width, float interval)
+        public Road(Vector2 from, Vector2 to, float fromOffset, float toOffset, float width, float interval, float bolid)
         {
             this.id = ID;
             this.from = from;
@@ -77,6 +81,7 @@ namespace CityBuildings.Structs
             this.toOffset = toOffset;
             this.width = width;
             this.interval = interval;
+            this.bolid = bolid;
 
             var dir = (to - from);
             this.direction = dir.normalized;
@@ -109,7 +114,8 @@ namespace CityBuildings.Structs
                 Width = road.width,
                 Interval = road.interval,
                 Magnitude = mag,
-                Direction = road.direction
+                Direction = road.direction,
+                Bolid = road.bolid
             };
         }
     }

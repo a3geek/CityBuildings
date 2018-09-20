@@ -19,6 +19,7 @@ namespace CityBuildings.Managers
         public const uint MaxPointPerGeom = MaxVertexCount / PerVertex;
 
         public const string PropColor = "_Color";
+        public const string PropLineColor = "_LineColor";
         public const string PropSize = "_Size";
         public const string PropBasicWidth = "_BasicWidth";
         public const string PropHeight = "_Height";
@@ -27,6 +28,8 @@ namespace CityBuildings.Managers
 
         [SerializeField]
         private Color color = new Color(0.99f, 0.75f, 0.70f, 1f);
+        [SerializeField]
+        private Color line = Color.white;
         [SerializeField]
         private float size = 1f;
         [SerializeField]
@@ -61,6 +64,7 @@ namespace CityBuildings.Managers
             this.material.SetPass(0);
 
             this.material.SetColor(PropColor, this.color);
+            this.material.SetColor(PropLineColor, this.line);
             this.material.SetFloat(PropSize, this.size);
             this.material.SetFloat(PropBasicWidth, this.basicWidth);
             this.material.SetFloat(PropHeight, this.height);
