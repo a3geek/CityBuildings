@@ -439,6 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.8627451, b: 0.7019608, a: 1}
+  line: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
   size: 5
   basicWidth: 30
   height: 1
@@ -492,6 +493,7 @@ MonoBehaviour:
       sub:
         width: 18
     interval: 20
+    bolid: 0.4
   material: {fileID: 2100000, guid: 613a8fc5426a3ac44abda8b63f1a4dd1, type: 2}
 --- !u!114 &1753058803
 MonoBehaviour:
