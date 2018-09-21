@@ -46,7 +46,7 @@ namespace CityBuildings.Managers
         private Times[] times = new Times[0];
         
 
-        public void Init(SkyscraperManager skyscraper)
+        public void Initialize(SkyscraperManager skyscraper)
         {
             var decos = skyscraper.Builder.Decos;
 

@@ -52,9 +52,9 @@ namespace CityBuildings.Managers
         private Car[] cars = new Car[0];
         private SimpleCar[] simpleCars = new SimpleCar[0];
         private SkyscraperManager skyscraper = null;
+        
 
-
-        public void Init(SkyscraperManager skyscraper)
+        public void Initialize(SkyscraperManager skyscraper)
         {
             this.skyscraper = skyscraper;
 

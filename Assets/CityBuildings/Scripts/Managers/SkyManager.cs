@@ -14,7 +14,7 @@ namespace CityBuildings.Managers
 
     [DisallowMultipleComponent]
     [AddComponentMenu("City Buildings/Managers/Sky Manager")]
-    public class SkyManager : SingletonMonoBehaviour<SkyManager>
+    public class SkyManager : MonoBehaviour
     {
         public const string PropDofColor = "_DofColor";
         public const string PropDofPower = "_DofPower";
@@ -75,7 +75,7 @@ namespace CityBuildings.Managers
             DestroyImmediate(this.skybox);
         }
 
-        public void Init()
+        public void Initialize()
         {
             this.bloom = this.bloom ?? Camera.main.GetComponent<Bloom>();
 

@@ -48,7 +48,7 @@ namespace CityBuildings.Components
         private SkyscraperManager skyscraper = null;
 
 
-        public void Init(SkyscraperManager skyscraper)
+        public void Initialize(SkyscraperManager skyscraper)
         {
             this.skyscraper = skyscraper;
 

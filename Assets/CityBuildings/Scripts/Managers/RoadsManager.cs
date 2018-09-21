@@ -46,7 +46,7 @@ namespace CityBuildings.Managers
         private int vertsCount = 1;
 
 
-        public void Init(SkyscraperManager skyscraper)
+        public void Initialize(SkyscraperManager skyscraper)
         {
             var roads = skyscraper.CityArea.Roads.Values.Select(r => (SimpleRoad)r);
 

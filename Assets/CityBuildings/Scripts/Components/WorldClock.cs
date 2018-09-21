@@ -112,7 +112,7 @@ namespace CityBuildings.Components
             var d = Vector2.Dot(Vector2.up * (diff.y >= 0f ? 1f : -1f), diff) / diff.magnitude - this.offset;
             var select = d <= 0.5f ? (diff.x >= 0f ? 1 : 3) : (diff.y >= 0f ? 0 : 2);
 
-            SkyManager.Instance.SetSky(select);
+            MainController.Instance.Sky.SetSky(select);
         }
 
         private void OnDestroy()

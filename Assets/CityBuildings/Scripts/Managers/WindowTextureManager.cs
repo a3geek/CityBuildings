@@ -62,7 +62,7 @@ namespace CityBuildings.Managers
         private List<TimeColors> timeColors = new List<TimeColors>();
         
 
-        public void Init(int index)
+        public void Initialize(int index)
         {
             if(index == 0)
             {

@@ -40,7 +40,7 @@ namespace CityBuildings.Components
         private float height = 0f;
         
 
-        public void Init(SkyscraperManager skyscraper)
+        public void Initialize(SkyscraperManager skyscraper)
         {
             this.cam = this.cam ?? GetComponentInParent<Camera>();
             this.render = this.render ?? GetComponent<MeshRenderer>();

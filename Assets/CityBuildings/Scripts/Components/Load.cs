@@ -39,7 +39,7 @@ namespace CityBuildings.Components
         private float timer = 0f;
 
 
-        public void Init()
+        public void Initialize()
         {
             this.material.SetFloat(PropTimer, 0f);
             this.material.SetColor(PropColor, this.color);

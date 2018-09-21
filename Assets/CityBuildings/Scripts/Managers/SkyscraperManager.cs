@@ -44,7 +44,7 @@ namespace CityBuildings.Managers
         private ComputeBuffer fragsBuffer = null;
 
 
-        public void Init(WindowTextureManager windowTexture, SkyManager sky)
+        public void Initialize(WindowTextureManager windowTexture, SkyManager sky)
         {
             this.winTex = windowTexture;
             this.sky = sky;

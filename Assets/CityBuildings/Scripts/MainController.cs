@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,13 @@ namespace CityBuildings
         public const string PropIsNight = "_IsNight";
 
         public bool IsPlaying => this.mover.Validity;
-        public bool IsNight => this.sky.Current == 0;
+        public bool IsNight => this.Sky.Current == 0;
+        public WindowTextureManager WindowTexture { get; private set; }
+        public SkyscraperManager SkyScraper { get; private set; }
+        public RoadsManager Roads { get; private set; }
+        public CarsManager Cars { get; private set; }
+        public DecorationManager Decoration { get; private set; }
+        public SkyManager Sky { get; private set; }
 
         [SerializeField]
         private CameraMover mover = null;
@@ -31,34 +38,42 @@ namespace CityBuildings
         private BuildScaler buildScaler = null;
 
         private bool ready = false;
-        private WindowTextureManager windowTexture = null;
-        private SkyscraperManager skyScraper = null;
-        private RoadsManager roads = null;
-        private CarsManager cars = null;
-        private DecorationManager decoration = null;
-        private SkyManager sky = null;
+        private List<Action> initializes = new List<Action>();
 
 
         protected override void Awake()
         {
             base.Awake();
 
-            this.windowTexture = GetComponent<WindowTextureManager>();
-            this.skyScraper = GetComponent<SkyscraperManager>();
-            this.roads = GetComponent<RoadsManager>();
-            this.cars = GetComponent<CarsManager>();
-            this.decoration = GetComponent<DecorationManager>();
-            this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
-            this.sky = this.sky ?? SkyManager.Instance;
+            this.WindowTexture = GetComponent<WindowTextureManager>();
+            this.SkyScraper = GetComponent<SkyscraperManager>();
+            this.Roads = GetComponent<RoadsManager>();
+            this.Cars = GetComponent<CarsManager>();
+            this.Decoration = GetComponent<DecorationManager>();
+            this.Sky = GetComponent<SkyManager>();
 
+            this.mover = this.mover ?? Camera.main.GetComponent<CameraMover>();
+            this.load = this.load ?? Camera.main.GetComponent<Load>();
             this.buildScaler = this.buildScaler ?? FindObjectOfType<BuildScaler>();
 
-            this.load = this.load ?? Camera.main.GetComponent<Load>();
-            this.load.Init();
+            this.initializes = new List<Action>()
+            {
+                () => this.Sky.Initialize(),
+                () => this.WindowTexture.Initialize(0),
+                () => this.WindowTexture.Initialize(1),
+                () => this.WindowTexture.Initialize(2),
+                () => this.WindowTexture.Initialize(3),
+                () => this.SkyScraper.Initialize(this.WindowTexture, this.Sky),
+                () => this.buildScaler.Initialize(this.SkyScraper),
+                () => this.Roads.Initialize(this.SkyScraper),
+                () => this.Cars.Initialize(this.SkyScraper),
+                () => this.Decoration.Initialize(this.SkyScraper),
+                () => this.mover.Initialize(this.SkyScraper)
+            };
 
-            StartCoroutine(this.Init());
+            StartCoroutine(this.Initialize());
         }
-        
+
         private void Update()
         {
             if(this.ready == false)
@@ -72,64 +87,29 @@ namespace CityBuildings
             }
             else if(this.load.Validity == false && this.mover.Validity == false)
             {
-                this.sky.Validity = true;
-                this.mover.Validity = this.cars.Validity = this.sky.IsFinished;
+                this.Sky.Validity = true;
+                this.mover.Validity = this.Cars.Validity = this.Sky.IsFinished;
             }
 
-            Shader.SetGlobalInt(PropIsNight, SkyManager.Instance.Current == 0 ? 1 : 0);
+            Shader.SetGlobalInt(PropIsNight, this.Sky.Current == 0 ? 1 : 0);
         }
 
         public void Rebuild(float specialRate)
         {
-            this.skyScraper.Build(specialRate);
-            this.decoration.Init(this.skyScraper);
+            this.SkyScraper.Build(specialRate);
+            this.Decoration.Initialize(this.SkyScraper);
         }
 
-        private IEnumerator Init()
+        private IEnumerator Initialize()
         {
+            this.load.Initialize();
             yield return new WaitForSeconds(0f);
 
             var cnt = 0;
-            while(cnt < 12)
+            while(cnt < this.initializes.Count)
             {
-                switch(cnt)
-                {
-                    case 0:
-                        this.sky.Init();
-                        break;
-                    case 1:
-                        this.windowTexture.Init(0);
-                        break;
-                    case 2:
-                        this.windowTexture.Init(1);
-                        break;
-                    case 3:
-                        this.windowTexture.Init(2);
-                        break;
-                    case 4:
-                        this.windowTexture.Init(3);
-                        break;
-                    case 5:
-                        this.skyScraper.Init(this.windowTexture, this.sky);
-                        break;
-                    case 6:
-                        this.buildScaler.Init(this.skyScraper);
-                        break;
-                    case 7:
-                        this.roads.Init(this.skyScraper);
-                        break;
-                    case 8:
-                        this.cars.Init(this.skyScraper);
-                        break;
-                    case 9:
-                        this.decoration.Init(this.skyScraper);
-                        break;
-                    case 10:
-                        this.mover.Init(this.skyScraper);
-                        break;
-                }
-                
-                cnt++;
+                this.initializes[cnt++]();
+
                 yield return new WaitForSeconds(0f);
             }
 
