@@ -50,6 +50,8 @@ namespace CityBuildings.Components
         [SerializeField]
         private float blend = 0.05f;
         [SerializeField]
+        private float margin = 0.05f;
+        [SerializeField]
         private Material material = null;
         [SerializeField]
         private Renderer render = null;
@@ -62,6 +64,10 @@ namespace CityBuildings.Components
         {
             this.cam = this.cam ?? GetComponentInParent<Camera>();
             this.render = this.render ?? GetComponent<MeshRenderer>();
+
+            var p = this.cam.ViewportToWorldPoint(new Vector3(this.margin, 1f - this.margin, 0f)).XY();
+            var s = transform.localScale.XY() * 0.5f;
+            transform.position = new Vector3(p.x, p.y, transform.position.z) + new Vector3(s.x, -s.y, 0f);
 
             this.center = transform.position.XY();
             this.range = new Vector2(

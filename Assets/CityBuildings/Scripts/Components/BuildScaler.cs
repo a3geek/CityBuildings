@@ -32,6 +32,8 @@ namespace CityBuildings.Components
         private Renderer render = null;
         [SerializeField]
         private Vector2 range = new Vector2(0f, 0.75f);
+        [SerializeField]
+        private float margin = 0.05f;
 
         private Rect field = new Rect();
         private bool downing = false;
@@ -42,6 +44,10 @@ namespace CityBuildings.Components
         {
             this.cam = this.cam ?? GetComponentInParent<Camera>();
             this.render = this.render ?? GetComponent<MeshRenderer>();
+
+            var p = this.cam.ViewportToWorldPoint(new Vector3(1f - this.margin, 1f - this.margin, 0f)).XY();
+            var s = transform.localScale.XY() * 0.5f;
+            transform.position = new Vector3(p.x, p.y, transform.position.z) - new Vector3(s.x, s.y, 0f);
 
             var center = transform.position.XY();
             var size = transform.localScale.XY();

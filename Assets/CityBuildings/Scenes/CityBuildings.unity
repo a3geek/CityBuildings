@@ -166,6 +166,7 @@ MonoBehaviour:
   ring: 0.075
   offset: 0.1
   blend: 0.05
+  margin: 0.05
   material: {fileID: 2100000, guid: 3de1ae42ce62a134fafe9e3b95a399b4, type: 2}
   render: {fileID: 293279644}
 --- !u!23 &293279644
@@ -672,6 +673,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: fde289385cd6b8f4c9afe0a1867ffd45, type: 2}
   render: {fileID: 1758953373}
   range: {x: 0, y: 0.75}
+  margin: 0.05
 --- !u!23 &1758953373
 MeshRenderer:
   m_ObjectHideFlags: 0
