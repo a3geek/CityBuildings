@@ -443,6 +443,7 @@ MonoBehaviour:
   size: 5
   basicWidth: 30
   height: 1
+  power: 2
   material: {fileID: 2100000, guid: dcef1d25fc79ccb4693c43a40d4a18ca, type: 2}
 --- !u!114 &1753058802
 MonoBehaviour:
@@ -512,6 +513,7 @@ MonoBehaviour:
   offset: 2.5
   size: 5
   height: 0
+  power: 1.5
   forward: {r: 1, g: 1, b: 1, a: 1}
   back: {r: 1, g: 0, b: 0, a: 1}
   material: {fileID: 2100000, guid: 230bcf696074960488c12a1c31b0b13f, type: 2}

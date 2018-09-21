@@ -70,16 +70,7 @@ namespace CityBuildings.Components
             );
 
             this.material = new Material(this.material);
-            this.material.SetColor(PropBorderColor, this.border);
-            this.material.SetColor(PropZeroColro, this.zero);
-            this.material.SetColor(PropThreeColor, this.three);
-            this.material.SetColor(PropSixColor, this.six);
-            this.material.SetColor(PropNineColor, this.nine);
-            this.material.SetFloat(PropRadius, this.radius);
-            this.material.SetFloat(PropBolid, this.bolid);
-            this.material.SetFloat(PropRing, this.ring);
-            this.material.SetFloat(PropOffset, this.offset);
-            this.material.SetFloat(PropBlend, this.blend);
+            this.SetProps();
 
             this.render.material = this.material;
             this.render.enabled = false;
@@ -95,6 +86,8 @@ namespace CityBuildings.Components
             {
                 this.render.enabled = true;
             }
+
+            this.SetProps();
 
             if(Input.GetMouseButtonDown(0) == false)
             {
@@ -119,6 +112,20 @@ namespace CityBuildings.Components
         private void OnDestroy()
         {
             DestroyImmediate(this.material);
+        }
+
+        private void SetProps()
+        {
+            this.material.SetColor(PropBorderColor, this.border);
+            this.material.SetColor(PropZeroColro, this.zero);
+            this.material.SetColor(PropThreeColor, this.three);
+            this.material.SetColor(PropSixColor, this.six);
+            this.material.SetColor(PropNineColor, this.nine);
+            this.material.SetFloat(PropRadius, this.radius);
+            this.material.SetFloat(PropBolid, this.bolid);
+            this.material.SetFloat(PropRing, this.ring);
+            this.material.SetFloat(PropOffset, this.offset);
+            this.material.SetFloat(PropBlend, this.blend);
         }
     }
 }

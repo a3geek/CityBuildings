@@ -25,6 +25,7 @@ namespace CityBuildings.Managers
         public const string PropHeight = "_Height";
         public const string PropMaxPointPerGeom = "_MaxPointPerGeom";
         public const string PropGeomData = "_GeomData";
+        public const string PropPower = "_Power";
 
         [SerializeField]
         private Color color = new Color(0.99f, 0.75f, 0.70f, 1f);
@@ -36,6 +37,8 @@ namespace CityBuildings.Managers
         private float basicWidth = 24f;
         [SerializeField]
         private float height = 0f;
+        [SerializeField]
+        private float power = 1f;
         [SerializeField]
         private Material material = null;
 
@@ -70,6 +73,7 @@ namespace CityBuildings.Managers
             this.material.SetFloat(PropHeight, this.height);
             this.material.SetBuffer(PropGeomData, this.geomBuffer);
             this.material.SetFloat(PropMaxPointPerGeom, MaxPointPerGeom);
+            this.material.SetFloat(PropPower, this.power);
 
             Graphics.DrawProcedural(MeshTopology.Points, this.vertsCount, this.geomBuffer.count);
         }

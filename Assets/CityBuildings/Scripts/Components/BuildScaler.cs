@@ -35,7 +35,8 @@ namespace CityBuildings.Components
 
         private Rect field = new Rect();
         private bool downing = false;
-
+        private float height = 0f;
+        
 
         public void Init(SkyscraperManager skyscraper)
         {
@@ -46,13 +47,10 @@ namespace CityBuildings.Components
             var size = transform.localScale.XY();
 
             this.field = new Rect(center - 0.5f * size, size);
+            this.height = skyscraper.Builder.SpecialRate / (this.range.y - this.range.x);
 
             this.material = new Material(this.material);
-            this.material.SetFloat(PropHeight,
-                skyscraper.Builder.SpecialRate / (this.range.y - this.range.x)
-            );
-            this.material.SetColor(PropTopColor, this.top);
-            this.material.SetColor(PropBottomColor, this.bottom);
+            this.SetProps(this.height);
 
             this.render.material = this.material;
             this.render.enabled = false;
@@ -69,6 +67,12 @@ namespace CityBuildings.Components
                 this.render.enabled = true;
             }
 
+            this.UpdateHeight();
+            this.SetProps(this.height);
+        }
+
+        private bool UpdateHeight()
+        {
             var down = Input.GetMouseButtonDown(0);
             var repeat = Input.GetMouseButton(0);
             var up = Input.GetMouseButtonUp(0);
@@ -76,14 +80,14 @@ namespace CityBuildings.Components
             if(down == false && repeat == false && up == false)
             {
                 this.downing = false;
-                return;
+                return false;
             }
 
             var p = Input.mousePosition;
             var pos = this.cam.ScreenToWorldPoint(new Vector3(p.x, p.y, 0f));
             if(this.field.Contains(pos.XY()) == false && this.downing == false)
             {
-                return;
+                return false;
             }
 
             this.downing = down == true ? true :
@@ -93,12 +97,21 @@ namespace CityBuildings.Components
             var rate = height / this.field.height;
 
             var range = this.range.x + (this.range.y - this.range.x) * rate;
-            this.material.SetFloat(PropHeight, rate);
+            this.height = rate;
 
             if(up == true)
             {
                 MainController.Instance.Rebuild(range);
             }
+
+            return true;
+        }
+
+        private void SetProps(float height)
+        {
+            this.material.SetFloat(PropHeight, this.height);
+            this.material.SetColor(PropTopColor, this.top);
+            this.material.SetColor(PropBottomColor, this.bottom);
         }
     }
 }

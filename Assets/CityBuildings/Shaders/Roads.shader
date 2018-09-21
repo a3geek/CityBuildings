@@ -49,6 +49,7 @@
             uniform float _BasicWidth, _Size, _Height;
             uniform float4 _Color, _LineColor;
             uniform StructuredBuffer<data> _GeomData;
+            uniform float _Power;
             uniform float _DofPower;
             uniform float4 _DofColor;
             uniform int _IsNight;
@@ -125,13 +126,13 @@
             {
                 if (_IsNight == 0)
                 {
-                    return _LineColor;
+                    return _LineColor * _Power;
                 }
 
                 float dis = distance(i.uv.xy, float2(0.5, 0.5));
                 float vdis = saturate(1.0 - dis);
 
-                float4 c = float4((_Color * vdis).rgb, saturate(0.5 - dis));
+                float4 c = float4((_Color * vdis).rgb, saturate(0.5 - dis)) * _Power;
                 return lerp(c, float4(_DofColor.rgb, 0.0), saturate(-1.0 * i.uv.w / _DofPower));
             }
 

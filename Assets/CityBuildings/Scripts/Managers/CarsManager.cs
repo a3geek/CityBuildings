@@ -19,6 +19,7 @@ namespace CityBuildings.Managers
     {
         public const string PropHeight = "_Height";
         public const string PropSize = "_Size";
+        public const string PropPower = "_Power";
         public const string PropForwardColor = "_ForwardColor";
         public const string PropBackColor = "_BackColor";
         public const string PropGeomData = "_GeomData";
@@ -37,6 +38,8 @@ namespace CityBuildings.Managers
         private float size = 1f;
         [SerializeField]
         private float height = 0f;
+        [SerializeField]
+        private float power = 1f;
         [SerializeField]
         private Color forward = Color.white;
         [SerializeField]
@@ -105,6 +108,7 @@ namespace CityBuildings.Managers
 
             this.material.SetFloat(PropHeight, this.height);
             this.material.SetFloat(PropSize, this.size);
+            this.material.SetFloat(PropPower, this.power);
             this.material.SetColor(PropForwardColor, this.forward);
             this.material.SetColor(PropBackColor, this.back);
             this.material.SetBuffer(PropGeomData, this.geomBuffer);

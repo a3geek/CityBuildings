@@ -70,9 +70,17 @@ namespace CityBuildings.Managers
             Shader.SetGlobalFloat(PropDofPower, dof);
         }
 
+        private void OnDestroy()
+        {
+            DestroyImmediate(this.skybox);
+        }
+
         public void Init()
         {
             this.bloom = this.bloom ?? Camera.main.GetComponent<Bloom>();
+
+            this.skybox = new Material(this.skybox);
+            RenderSettings.skybox = this.skybox;
 
             this.SetSky(Current);
             Shader.SetGlobalFloat(PropDofPower, 0f);
