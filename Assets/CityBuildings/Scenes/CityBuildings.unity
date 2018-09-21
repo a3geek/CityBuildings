@@ -568,7 +568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - Top: {r: 0, g: 0, b: 0, a: 0}
-    Horizon: {r: 0.003921569, g: 0.09803922, b: 0.25490198, a: 0}
+    Horizon: {r: 0.06323426, g: 0.21287048, b: 0.46226418, a: 0}
     Floor: {r: 0, g: 0, b: 0, a: 0}
     HorizonLine: -0.03
     HorizonOffset: 0.85
