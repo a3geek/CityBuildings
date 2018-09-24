@@ -29,9 +29,11 @@ namespace CityBuildings.Creators
         [SerializeField]
         private Vector2 depth = new Vector2(35f, 20f);
         [SerializeField]
-        private Vector2 mainRate = new Vector2(0.5f, 0.75f);
+        private Vector2 cylinderMainRate = new Vector2(0.8f, 0.95f);
         [SerializeField]
-        private Vector2 subRate = new Vector2(0.75f, 0.95f);
+        private Vector2 rectangularMainRate = new Vector2(0.4f, 0.6f);
+        [SerializeField]
+        private Vector2 rectangularSubRate = new Vector2(0.7f, 0.95f);
         [SerializeField]
         private int windowSize = 1;
         [SerializeField]
@@ -111,9 +113,10 @@ namespace CityBuildings.Creators
         private List<BuildingGeomData> CreateBuilds(Vector3 center, float width, float depth, float specialRate)
         {
             var data = new List<BuildingGeomData>();
+            var buildType = Random.value < 0.5f ? 0u : 1u;
 
-            var widRate = this.mainRate.Rand();
-            var depRate = this.mainRate.Rand();
+            var widRate = buildType == 0u ? this.rectangularMainRate.Rand() : this.cylinderMainRate.Rand();
+            var depRate = buildType == 0u ? this.rectangularMainRate.Rand() : this.cylinderMainRate.Rand();
             var isSpecial = Random.value < specialRate;
             var heiRate = isSpecial ? this.specialHeight.Rand() : this.height.Rand();
 
@@ -124,7 +127,6 @@ namespace CityBuildings.Creators
             var size = new Vector3(wid, hei, dep);
             size = size - size.Surplus(this.windowSize);
 
-            var buildType = Random.value < 0.5f ? 0u : 1u;
             data.Add(new BuildingGeomData()
             {
                 Center = center,
@@ -164,7 +166,7 @@ namespace CityBuildings.Creators
             var count = (uint)Random.Range(0, 3);
             for(var i = 0u; i < count; i++)
             {
-                size = (field * new Vector2(this.subRate.Rand(), this.subRate.Rand())).ToVector3(
+                size = (field * new Vector2(this.rectangularSubRate.Rand(), this.rectangularSubRate.Rand())).ToVector3(
                     (isSpecial == true ? Random.Range(this.specialHeight.x, heiRate) * 0.9f : this.height.Rand())
                 );
                 size = size - size.Surplus(this.windowSize);
